@@ -8,6 +8,9 @@ sub_excluded_folder_android
 ai-real-time-server
 
 ### IntelliJ IDEA ###
+.idea
+.idea/
+.idea/*
 .idea/modules.xml
 .idea/jarRepositories.xml
 .idea/compiler.xml
