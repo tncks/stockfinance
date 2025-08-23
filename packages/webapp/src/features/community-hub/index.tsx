@@ -54,7 +54,7 @@ const leaderboard = [
 ];
 
 function myChartFun() {
-  const chartOptions = { layout: { textColor: 'black', background: { type: 'solid', color: 'white' } } };
+  const chartOptions = { width: 400, height: 300 };
   const chart = createChart(document.getElementById('my-container'), chartOptions);
   const areaSeries = chart.addSeries(AreaSeries, {
     lineColor: '#2962FF', topColor: '#2962FF',
@@ -96,8 +96,9 @@ function myChartFun() {
 
 
 export function CommunityHub() {
-  myChartFun();
+
   const [newPost, setNewPost] = useState("");
+  //myChartFun();
 
   const handlePost = () => {
     if (!newPost.trim()) {
@@ -197,45 +198,34 @@ export function CommunityHub() {
       {/* Sidebar */}
       <div className="space-y-6">
         {/* Leaderboard */}
-        <Card className="bg-gradient-to-br from-card to-card/80 border-border/50">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-primary" />
-              Top Traders
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4" id="my-container">
+        <div className="space-y-4" id="my-container">
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<hr/>
+<hr/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+        </div>
 
-            </div>
-          </CardContent>
-        </Card>
 
-        {/* Market Sentiment */}
-        <Card className="bg-gradient-to-br from-card to-card/80 border-border/50">
-          <CardHeader>
-            <CardTitle>Market Sentiment</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between">
-              <span className="text-sm">Bullish</span>
-              <div className="flex items-center gap-2">
-                <TrendingUp className="h-4 w-4 text-bull" />
-                <span className="font-semibold text-bull">68%</span>
-              </div>
-            </div>
-            <div className="w-full bg-secondary rounded-full h-2">
-              <div className="bg-bull h-2 rounded-full" style={{ width: '68%' }}></div>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm">Bearish</span>
-              <div className="flex items-center gap-2">
-                <TrendingDown className="h-4 w-4 text-bear" />
-                <span className="font-semibold text-bear">32%</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
       </div>
     </div>
   );
