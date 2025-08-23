@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model DailyPrices {
+  baseDate          BigInt  @map("기준일자")
+  stockCode    String  @map("종목코드")
+  stockName    String? @map("종목명")
+  marketType   String? @map("시장구분")
+  dept          String? @map("소속부")
+  closePrice   BigInt? @map("종가")
+  diff          BigInt? @map("대비")
+  changeRate   Float?  @map("등락률")
+  openPrice    BigInt? @map("시가")
+  highPrice    BigInt? @map("고가")
+  lowPrice     BigInt? @map("저가")
+  volume        BigInt? @map("거래량")
+  tradeValue   BigInt? @map("거래대금")
+  marketCap    BigInt? @map("시가총액")
+  listedShares BigInt? @map("상장주식수")
+
+  @@id([baseDate, stockCode])
+}
+
+model StockInfo {
+  stockCodeKr String? @map("종목코드KR")
+  stockCode    String  @id @map("종목코드")
+  stockName    String? @map("종목명")
+  stockShort   String? @map("종목약명")
+  stockNameEn String? @map("종목명EN")
+  listingDate  BigInt? @map("상장일")
+  marketType   String? @map("시장구분")
+  securityType String? @map("증권구분")
+  dept          String? @map("소속부")
+  stockClass   String? @map("주식종류")
+  faceValue    BigInt? @map("액면가")
+  listedShares BigInt? @map("상장주식수")
+}
+
+model StockLivePrice {
+  baseDate          BigInt? @map("기준일자")
+  stockCode    String  @id @map("종목코드")
+  stockName    String? @map("종목명")
+  marketType   String? @map("시장구분")
+  dept          String? @map("소속부")
+  closePrice   BigInt? @map("종가")
+  diff          BigInt? @map("대비")
+  changeRate   Float?  @map("등락률")
+  openPrice    BigInt? @map("시가")
+  highPrice    BigInt? @map("고가")
+  lowPrice     BigInt? @map("저가")
+  volume        BigInt? @map("거래량")
+  tradeValue   BigInt? @map("거래대금")
+  marketCap    BigInt? @map("시가총액")
+  listedShares BigInt? @map("상장주식수")
+}
+
+model TestUnStockTestRm {
+  dateKr       BigInt? @map("기준일자_한국")
+  dateUs       BigInt? @map("기준일자_미국")
+  stockCode    String  @id @map("종목코드")
+  stockName    String? @map("종목명")
+  marketType   String? @map("시장구분")
+  dept          String? @map("소속부")
+  closePriceKr BigInt? @map("종가_원화")
+  closePriceUs Float? @map("종가_달러")
+  diff          Float?  @map("대비")
+  changeRate   Float?  @map("등락률")
+  openPrice    Float?  @map("시가")
+  highPrice    Float?  @map("고가")
+  lowPrice     Float?  @map("저가")
+  volume        BigInt? @map("거래량")
+  tradeValue   Float?  @map("거래대금")
+  marketCap    Float?  @map("시가총액")
+  listedShares BigInt? @map("상장주식수")
+}
+
+
+
+
+
