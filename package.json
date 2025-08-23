@@ -2,7 +2,7 @@
   "name": "stockfinance-monorepo",
   "version": "1.0.0",
   "private": true,
-  "workspaces": [
-    "packages/*"
-  ]
+  "scripts": {
+    "build": "cd packages/server && npm install && cd ../../ && cd packages/webapp && npm install && npm run build"
+  }
 }
