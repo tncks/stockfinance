@@ -54,8 +54,9 @@ const leaderboard = [
 ];
 
 function myChartFun() {
-  const chartOptions = { width: 400, height: 300 };
-  const chart = createChart(document.getElementById('my-container'), chartOptions);
+  const chartOptions = { width: 80, height: 60 };
+  const ele = document.getElementById('my-container');
+  const chart = createChart(ele, chartOptions);
   const areaSeries = chart.addSeries(AreaSeries, {
     lineColor: '#2962FF', topColor: '#2962FF',
     bottomColor: 'rgba(41, 98, 255, 0.28)',
@@ -91,14 +92,13 @@ function myChartFun() {
   ]);
 
   chart.timeScale().fitContent();
-  return 0;
 }
 
 
 export function CommunityHub() {
 
   const [newPost, setNewPost] = useState("");
-  //myChartFun();
+
 
   const handlePost = () => {
     if (!newPost.trim()) {
@@ -110,6 +110,7 @@ export function CommunityHub() {
     setNewPost("");
   };
 
+  setTimeout(() => {  myChartFun();  }, 1600);
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       {/* Community Feed */}
@@ -198,7 +199,7 @@ export function CommunityHub() {
       {/* Sidebar */}
       <div className="space-y-6">
         {/* Leaderboard */}
-        <div className="space-y-4" id="my-container">
+        <div className="space-y-4">
 <br/>
 <br/>
 <br/>
@@ -209,6 +210,7 @@ export function CommunityHub() {
 <br/>
 <br/>
 <hr/>
+          <div  id="my-container"></div>
 <hr/>
 <br/>
 <br/>
