@@ -7,7 +7,7 @@ import { Avatar, AvatarFallback } from "@/shared/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { MessageSquare, TrendingUp, TrendingDown, Heart, Share } from "lucide-react";
 import { toast } from "sonner";
-import { createChart, AreaSeries, LineSeries, CandlestickSeries } from 'lightweight-charts';
+import { createChart, AreaSeries, CandlestickSeries } from 'lightweight-charts';
 
 const communityPosts = [
   {
@@ -54,7 +54,7 @@ const leaderboard = [
 ];
 
 function myChartFun() {
-  const chartOptions = { width: 80, height: 60 };
+  const chartOptions = { width: 320, height: 240 };
   const ele = document.getElementById('my-container');
   const chart = createChart(ele, chartOptions);
   const areaSeries = chart.addSeries(AreaSeries, {
