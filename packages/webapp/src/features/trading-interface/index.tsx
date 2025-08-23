@@ -4,10 +4,10 @@ import { Button } from "@/shared/ui/button";
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
-//import { Badge } from "@/shared/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Search, TrendingUp, TrendingDown } from "lucide-react";
 import { toast } from "sonner";
+import { ZodError } from "zod";
 import { tradeOrderSchema } from "@/shared/lib/validations";
 
 const stockList = [
@@ -58,9 +58,13 @@ export function TradingInterface() {
       // Reset form
       setQuantity('');
       setPrice('');
-    } catch (error: any) {
-      const errorMessage = error.errors?.[0]?.message || "Invalid order data";
-      toast.error(errorMessage);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        const errorMessage = error.errors?.[0]?.message || "Invalid order data";
+        toast.error(errorMessage);
+      } else {
+        toast.error("An unexpected error occurred.");
+      }
     }
   };
 

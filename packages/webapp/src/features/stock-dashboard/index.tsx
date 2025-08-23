@@ -63,15 +63,14 @@ export function BIAssistant() {
                     throw supabaseError;
                 }
 
-                // if (data) {   // error block
-                //     // If data is successfully fetched, update the state
-                //     // @ts-ignore
-                //     setStocks(data);
-                // }  // error block end (troubleshooted)
-            } catch (err: any) {
+            } catch (err: unknown) {
                 // If any error occurs during the process, update the error state
                 console.error("Error fetching stock data:", err);
-                setError(`Failed to load data: ${err.message}`);
+                if (err instanceof Error) {
+                  setError(`Failed to load data: ${err.message}`);
+                } else {
+                  setError("An unknown error occurred");
+                }
             } finally {
                 // Whether it succeeds or fails, stop loading
                 setLoading(false);
