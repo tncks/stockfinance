@@ -92,6 +92,13 @@ function myChartFun() {
   ]);
 
   chart.timeScale().fitContent();
+  // logo 최소화 숨기기 실행
+  const logo = document.getElementById('tv-attr-logo');
+  if (logo) {
+    logo.style.width = '1px';   // 강제로 width를 1px로
+    logo.style.overflow = 'hidden'; // 필요시 텍스트 잘리게
+  }
+  // 끝
 }
 
 
