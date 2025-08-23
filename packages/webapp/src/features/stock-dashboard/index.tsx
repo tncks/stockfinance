@@ -69,7 +69,7 @@ export function BIAssistant() {
                 if (err instanceof Error) {
                   setError(`Failed to load data: ${err.message}`);
                 } else {
-                  setError("An unknown error occurred");
+                  setError("아직 주식 데이터가 없나 봅니다. 확인해보세요. 혹은 와이파이 연결 문제 등 다른 가능성도 고려할 수 있어요.");
                 }
             } finally {
                 // Whether it succeeds or fails, stop loading
