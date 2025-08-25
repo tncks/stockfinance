@@ -75,7 +75,7 @@ export function TradingDashboard() {
             </div>
             <div className="flex items-center gap-4">
               <Badge variant="secondary" className="text-lg px-4 py-2">
-                Virtual Money: $50,000
+                모의예수금: &#8361;5,000,000
               </Badge>
             </div>
           </div>
@@ -89,13 +89,13 @@ export function TradingDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">${totalPortfolioValue.toFixed(2)}</div>
-                <p className="text-xs text-muted-foreground">Total investment value</p>
+                <p className="text-xs text-muted-foreground">합산투자금액(예상값)</p>
               </CardContent>
             </Card>
 
             <Card className="bg-gradient-to-br from-card to-card/80 border-border/50">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Today's P&L</CardTitle>
+                <CardTitle className="text-sm font-medium">오늘의 P&L</CardTitle>
                 {totalGain >= 0 ?
                     <TrendingUp className="h-4 w-4 text-bull" /> :
                     <TrendingDown className="h-4 w-4 text-bear" />
@@ -118,7 +118,7 @@ export function TradingDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-accent">#127</div>
-                <p className="text-xs text-muted-foreground">Global leaderboard</p>
+                <p className="text-xs text-muted-foreground">글로벌 리더보드</p>
               </CardContent>
             </Card>
           </div>
@@ -126,11 +126,11 @@ export function TradingDashboard() {
           {/* Main Content Tabs */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
             <TabsList className="grid w-full grid-cols-5 bg-secondary/50">
-              <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="trade">Trade</TabsTrigger>
-              <TabsTrigger value="portfolio">Portfolio</TabsTrigger>
-              <TabsTrigger value="community">Community</TabsTrigger>
-              <TabsTrigger value="bssistant">BI Assistant</TabsTrigger>
+              <TabsTrigger value="overview">컴포넌트-A(오버뷰)</TabsTrigger>
+              <TabsTrigger value="trade">컴포넌트-B(트레이드)</TabsTrigger>
+              <TabsTrigger value="portfolio">컴포넌트-C(포트폴리오)</TabsTrigger>
+              <TabsTrigger value="community">컴포넌트-D(커뮤니티)</TabsTrigger>
+              <TabsTrigger value="bssistant">컴포넌트-E(어시스턴트)</TabsTrigger>
             </TabsList>
 
             <TabsContent value="overview" className="space-y-6">
