@@ -3,6 +3,7 @@ const tradingRoutes = require('./trading.routes');  // 기존
 const stockRoutes = require('./stockRoutes'); // (추가)
 const transactionRoutes = require('./transactionRoutes'); //
 const userRoutes = require('./userRoutes'); //
+const authRoutes = require('./authRoutes'); // Gemini 추가
 
 const router = Router();
 
@@ -11,6 +12,7 @@ router.use('/trading', tradingRoutes); // 기존
 router.use('/stocks', stockRoutes);  // 0824: code update: (추가) 라우트 연결
 router.use('/transactions', transactionRoutes); // /api/buy, /api/sell 경로가 됨(이라고 GPT가 말함)   (<- 경로명, 경로 위치 등 경로 설정 이유로 에러 발생 가능! 추후 확인 필요)
 router.use('/users', userRoutes); // /api/users/:userId/holdings, /api/users/:userId/balance 경로가 됨(이라고 GPT가 말함)  (<- 에러 발생 가능! 추후 확인 필요)
+router.use('/auth', authRoutes); // Gemini 추가: /api/v1/auth 경로가 됩니다.
 
 module.exports = router;
 

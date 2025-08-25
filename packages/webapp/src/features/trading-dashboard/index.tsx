@@ -57,6 +57,7 @@ const portfolioItems = [
 
 export function TradingDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
+  const backendApiUrl = 'http://localhost:3001'; // added
 
   const totalPortfolioValue = portfolioItems.reduce((sum, item) => sum + item.totalValue, 0);
   const totalGain = portfolioItems.reduce((sum, item) => sum + item.gain, 0);
@@ -171,6 +172,15 @@ export function TradingDashboard() {
               <BIAssistant />
             </TabsContent>
           </Tabs>
+
+           <div style={{ padding: '2rem' }}>
+             <a href={`${backendApiUrl}/api/v1/auth/google`} style={{ textDecoration: 'none' }}>
+               <button style={{ padding: '10px 15px', cursor: 'pointer' }}>
+                 구글 계정으로 시작하기
+               </button>
+             </a>
+           </div>
+
         </div>
       </div>
   );
