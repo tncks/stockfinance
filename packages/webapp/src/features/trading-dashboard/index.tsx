@@ -57,7 +57,7 @@ const portfolioItems = [
 
 export function TradingDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
-  const backendApiUrl = 'https://stockfinance.vercel.app:3000'; // added
+  const backendApiUrl = 'https://stockfinance.vercel.app'; // added
 
   const totalPortfolioValue = portfolioItems.reduce((sum, item) => sum + item.totalValue, 0);
   const totalGain = portfolioItems.reduce((sum, item) => sum + item.gain, 0);
