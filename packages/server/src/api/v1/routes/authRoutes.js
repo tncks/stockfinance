@@ -1,11 +1,15 @@
 const express = require('express');
 const {createClient} = require('@supabase/supabase-js');
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = process.env.JWT_SECRET;
 const supabaseUrl = process.env.MY_SUPABASE_URL;
 const supabaseAnonKey = process.env.MY_SUPABASE_ANON_KEY;
 
 const router = express.Router();
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+
 
 router.get('/google', async (req, res) => {
     // 프로덕션/개발 환경에 따른 서버 URL 설정
@@ -29,7 +33,7 @@ router.get('/google', async (req, res) => {
         return res.status(500).json({error: 'Internal server error 500'})
     }
 
-    res.redirect(`https://stockfinance.vercel.app` /*data.url*/);
+    res.redirect(data.url);
 });
 
 
@@ -67,11 +71,18 @@ router.get('/google_callback', async (req, res) => {
         }
 
         console.log('로그인 성공');
-        console.log('사용자 정보:', {
-            id: data.user.id,
-            email: data.user.email,
-            name: data.user.user_metadata?.full_name
-        });
+        // console.log('사용자 정보:', {
+        //     id: data.user.id,
+        //     email: data.user.email,
+        //     name: data.user.user_metadata?.full_name
+        // });
+
+        // JWT 발급
+        const token = jwt.sign(
+            { id: data.user.id, email: data.user.email },
+            JWT_SECRET,
+            { expiresIn: "6h" }
+        );
 
         // 성공 파라미터 구성
         const successParams = new URLSearchParams({
@@ -82,7 +93,8 @@ router.get('/google_callback', async (req, res) => {
             email: data.user.email || '',
             name: data.user.user_metadata?.full_name || data.user.user_metadata?.name || '',
             avatar_url: data.user.user_metadata?.avatar_url || '',
-            login_success: 'true'
+            login_success: 'true',
+            authToken: token
         });
 
         const successUrl = `${clientUrl}?${successParams.toString()}`;
@@ -94,6 +106,43 @@ router.get('/google_callback', async (req, res) => {
         res.redirect(`${clientUrl}?error=${encodeURIComponent(err.message)}`);
     }
 });
+
+
+
+// 소셜 로그인 처리 완료 후 토큰 발급
+// 실제로는 구글 OAuth callback 에서 사용자 정보 받아서 처리해야 함
+//router.get('/google/callback', (req, res) => {
+  // DO SOMETHING ..
+
+  //   // (안쓸듯->) 팝업 창 닫고 프론트엔드로 토큰 전달
+  //   res.send(`
+  //   <script>
+  //     window.opener.postMessage(, "*");
+  //     window.close();
+  //   </script>
+  // `); //(참고용블럭)
+//});
+
+
+
+// 토큰 검증 API
+router.get('/verify', (req, res) => {
+    const authHeader = req.headers['Authorization'];
+    if (!authHeader) return res.status(401).json({ error: "No token" });
+
+    const token = authHeader.split(' ')[1];
+    if (!token) return res.status(401).json({ error: "Invalid token" });
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        // DB에서 사용자 정보 조회했다고 가정
+        const user = {'test_dev_code':202}
+        res.json(user);
+    } catch (err) {
+        return res.status(403).json({ error: "Token expired or invalid" });
+    }
+});
+
 
 
 module.exports = router;

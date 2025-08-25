@@ -74,6 +74,7 @@ const useGoogleAuth = () => {
         try {
             const token = localStorage.getItem('authToken');
             if (token) {
+                console.log('checkAuthStatus 함수 내부: token이 실제 정상 존재합니다! 성공.')
                 // 토큰 검증 및 사용자 정보 가져오기
                 const response = await fetch(myUrl + '/api/v1/auth/verify', {
                     headers: {
@@ -87,8 +88,11 @@ const useGoogleAuth = () => {
                 } else {
                     localStorage.removeItem('authToken');
                 }
+            } else {
+                console.log('checkAuthStatus 함수 내부: token이 존재하지 않습니다.. 실패.');
             }
         } catch (err) {
+            console.log('checkAuthStatus 함수 내부: token이 존재하지 않는 것 같고 에러가 난 것 같습니다.. 실패.');
             console.error('Auth status check failed:', err);
         }
     };
