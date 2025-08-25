@@ -1,4 +1,4 @@
-import {useState} from "react";
+import { useState, useEffect } from "react";
 import {Card, CardContent, CardHeader, CardTitle} from "@/shared/ui/card";
 import {Button} from "@/shared/ui/button";
 import {Badge} from "@/shared/ui/badge";
@@ -8,7 +8,7 @@ import {TradingInterface} from "@/features/trading-interface";
 import {CommunityHub} from "@/features/community-hub";
 import {BIAssistant} from "@/features/stock-dashboard";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/shared/ui/tabs";
-import {DollarSign, TrendingUp, TrendingDown, Users, Bot} from "lucide-react";
+import {DollarSign, TrendingUp, TrendingDown, AlertCircle, Users, Bot} from "lucide-react";
 
 
 // Mock data
@@ -56,20 +56,166 @@ const portfolioItems = [
     }
 ];
 
-export function TradingDashboard() {
-    const GoogleLoginButtonHandle = () => {
+// 구글 로그인 훅
+const useGoogleAuth = () => {
+    const [user, setUser] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
 
-        // 서버 URL 설정 (환경에 따라)
-                const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || (process.env.NODE_ENV === 'production' ? 'https://stockfinance.vercel.app' : 'http://localhost:3001');
+    // 페이지 로드 시 로그인 상태 확인
+    useEffect(() => {
+        checkAuthStatus();
+        // URL 파라미터에서 로그인 결과 확인
+        handleAuthCallback();
+    }, []);
 
+    const checkAuthStatus = async () => {
+        try {
+            const token = localStorage.getItem('authToken');
+            if (token) {
+                // 토큰 검증 및 사용자 정보 가져오기
+                const response = await fetch('/api/v1/auth/verify', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
 
-        // 기존 구조에 맞춰 수정된 URL
-        window.location.href = `${API_BASE_URL}/api/v1/auth/google`;
+                if (response.ok) {
+                    const userData = await response.json();
+                    setUser(userData);
+                } else {
+                    localStorage.removeItem('authToken');
+                }
+            }
+        } catch (err) {
+            console.error('Auth status check failed:', err);
+        }
+    };
 
+    const handleAuthCallback = () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+        const error = urlParams.get('error');
+
+        if (token) {
+            localStorage.setItem('authToken', token);
+            // URL에서 파라미터 제거
+            window.history.replaceState({}, document.title, window.location.pathname);
+            checkAuthStatus();
+        } else if (error) {
+            setError(`로그인 실패: ${error}`);
+        }
+    };
+
+    const initiateGoogleLogin = () => {
+        setIsLoading(true);
+        setError(null);
+
+        // 환경 변수 설정
+        const API_BASE_URL = process.env.NODE_ENV === 'production'
+            ? 'https://stockfinance.vercel.app'
+            : 'http://localhost:3001';
+
+        // 현재 페이지 URL을 redirect_uri로 설정
+        const currentUrl = window.location.origin + window.location.pathname;
+        const authUrl = `${API_BASE_URL}/api/v1/auth/google?redirect_uri=${encodeURIComponent(currentUrl)}`;
+
+        // 팝업으로 로그인 창 열기 (404 에러 방지)
+        const popup = window.open(authUrl, 'googleLogin', 'width=500,height=600');
+
+        // 팝업 상태 모니터링
+        const checkPopup = setInterval(() => {
+            try {
+                if (popup.closed) {
+                    clearInterval(checkPopup);
+                    setIsLoading(false);
+                    checkAuthStatus(); // 로그인 상태 재확인
+                }
+            } catch (err) {
+                // 팝업이 다른 도메인으로 리다이렉트되면 접근 불가
+                clearInterval(checkPopup);
+                setIsLoading(false);
+            }
+        }, 1000);
+
+        // 타임아웃 설정
+        setTimeout(() => {
+            if (!popup.closed) {
+                popup.close();
+                clearInterval(checkPopup);
+                setIsLoading(false);
+                setError('로그인 시간이 초과되었습니다.');
+            }
+        }, 30000);
+    };
+
+    const logout = () => {
+        localStorage.removeItem('authToken');
+        setUser(null);
+        setError(null);
+    };
+
+    return { user, isLoading, error, initiateGoogleLogin, logout };
+};
+
+// 구글 로그인 버튼 컴포넌트
+const GoogleLoginButton = () => {
+    const { user, isLoading, error, initiateGoogleLogin, logout } = useGoogleAuth();
+
+    if (user) {
+        return (
+            <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                    <span>&nbsp;.&nbsp;</span>
+                    <span>안녕하세요 신규유저님</span>
+                </div>
+                <button
+                    onClick={logout}
+                    className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                >
+                    <span>&nbsp;.&nbsp;</span>
+                    <span>로그아웃</span>
+                </button>
+            </div>
+        );
     }
 
+    return (
+        <div className="space-y-2">
+            {error && (
+                <div className="flex items-center gap-2 text-red-500 text-sm">
+                    <AlertCircle className="h-4 w-4" />
+                    {error}
+                </div>
+            )}
 
-        const [activeTab, setActiveTab] = useState("overview");
+            <button
+                onClick={initiateGoogleLogin}
+                disabled={isLoading}
+                className="flex items-center gap-3 px-6 py-3 bg-white border border-gray-300 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+                {isLoading ? (
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-500"></div>
+                ) : (
+                    <svg className="h-5 w-5" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    </svg>
+                )}
+                <span className="text-gray-700 font-medium">
+          {isLoading ? '로그인 중...' : 'Google로 시작하기'}
+        </span>
+            </button>
+        </div>
+    );
+};
+
+export function TradingDashboard() {
+
+
+    const [activeTab, setActiveTab] = useState("overview");
 
     const totalPortfolioValue = portfolioItems.reduce((sum, item) => sum + item.totalValue, 0);
     const totalGain = portfolioItems.reduce((sum, item) => sum + item.gain, 0);
@@ -90,6 +236,7 @@ export function TradingDashboard() {
                         <Badge variant="secondary" className="text-lg px-4 py-2">
                             모의예수금: &#8361;5,000,000
                         </Badge>
+                        <GoogleLoginButton />
                     </div>
                 </div>
 
@@ -185,13 +332,13 @@ export function TradingDashboard() {
                     </TabsContent>
                 </Tabs>
 
-                <div style={{padding: '2rem'}}>
-                    <span>
-                        <button style={{padding: '10px 15px', cursor: 'pointer'}} onClick={GoogleLoginButtonHandle}>
-                            구글 계정으로 시작하기
-                        </button>
-                    </span>
-                </div>
+                {/*<div style={{padding: '2rem'}}>*/}
+                {/*    <span>*/}
+                {/*        <button style={{padding: '10px 15px', cursor: 'pointer'}} onClick={GoogleLoginButtonHandle}>*/}
+                {/*            구글 계정으로 시작하기*/}
+                {/*        </button>*/}
+                {/*    </span>*/}
+                {/*</div>*/}
 
             </div>
         </div>
