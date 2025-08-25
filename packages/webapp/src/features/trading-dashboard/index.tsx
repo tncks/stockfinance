@@ -70,11 +70,12 @@ const useGoogleAuth = () => {
     }, []);
 
     const checkAuthStatus = async () => {
+        const myUrl = `http://49.50.132.4:3000`;
         try {
             const token = localStorage.getItem('authToken');
             if (token) {
                 // 토큰 검증 및 사용자 정보 가져오기
-                const response = await fetch('/api/v1/auth/verify', {
+                const response = await fetch(myUrl + '/api/v1/auth/verify', {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -112,13 +113,11 @@ const useGoogleAuth = () => {
         setError(null);
 
         // 환경 변수 설정
-        const API_BASE_URL = process.env.NODE_ENV === 'production'
-            ? 'https://stockfinance.vercel.app'
-            : 'http://localhost:3001';
+        const API_BASE_URL = `http://49.50.132.4:3000`;
 
         // 현재 페이지 URL을 redirect_uri로 설정
-        const currentUrl = window.location.origin + window.location.pathname;
-        const authUrl = `${API_BASE_URL}/api/v1/auth/google?redirect_uri=${encodeURIComponent(currentUrl)}`;
+        //const currentUrl = window.location.origin + window.location.pathname;
+        const authUrl = `${API_BASE_URL}/api/v1/auth/google`;
 
         // 팝업으로 로그인 창 열기 (404 에러 방지)
         const popup = window.open(authUrl, 'googleLogin', 'width=500,height=600');
@@ -146,7 +145,7 @@ const useGoogleAuth = () => {
                 setIsLoading(false);
                 setError('로그인 시간이 초과되었습니다.');
             }
-        }, 30000);
+        }, 60000);
     };
 
     const logout = () => {
