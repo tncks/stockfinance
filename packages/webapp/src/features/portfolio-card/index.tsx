@@ -37,22 +37,22 @@ export function PortfolioCard({ item }: PortfolioCardProps) {
       <CardContent className="space-y-3">
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div>
-            <p className="text-muted-foreground">Shares</p>
+            <p className="text-muted-foreground">보유수량</p>
             <p className="font-medium">{item.shares}</p>
           </div>
           <div>
-            <p className="text-muted-foreground">Avg Price</p>
+            <p className="text-muted-foreground">주당 가격(평균)</p>
             <p className="font-medium">${item.avgPrice.toFixed(2)}</p>
           </div>
         </div>
         <div className="border-t border-border/50 pt-3">
           <div className="flex justify-between items-center">
             <div>
-              <p className="text-sm text-muted-foreground">Current Value</p>
+              <p className="text-sm text-muted-foreground">현재 총 평가액</p>
               <p className="text-lg font-bold">${item.totalValue.toFixed(2)}</p>
             </div>
             <div className="text-right">
-              <p className="text-sm text-muted-foreground">P&L</p>
+              <p className="text-sm text-muted-foreground">등락(대비)</p>
               <p className={`text-lg font-bold ${isPositive ? 'text-bull' : 'text-bear'}`}>
                 {isPositive ? '+' : ''}${item.gain.toFixed(2)}
               </p>

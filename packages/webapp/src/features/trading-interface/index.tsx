@@ -11,11 +11,11 @@ import { ZodError } from "zod";
 import { tradeOrderSchema } from "@/shared/lib/validations";
 
 const stockList = [
-  { symbol: 'AAPL', name: 'Apple Inc.', price: 163.75, change: 2.45, changePercent: 1.52 },
-  { symbol: 'GOOGL', name: 'Alphabet Inc.', price: 2650.75, change: -15.30, changePercent: -0.57 },
-  { symbol: 'TSLA', name: 'Tesla Inc.', price: 750.25, change: 8.90, changePercent: 1.20 },
-  { symbol: 'MSFT', name: 'Microsoft Corp.', price: 415.30, change: 5.20, changePercent: 1.27 },
-  { symbol: 'AMZN', name: 'Amazon.com Inc.', price: 3420.15, change: -25.85, changePercent: -0.75 },
+  { symbol: 'AAPL', name: '애플', price: 163.75, change: 2.45, changePercent: 1.52 },
+  { symbol: 'GOOGL', name: '알파벳', price: 2650.75, change: -15.30, changePercent: -0.57 },
+  { symbol: 'TSLA', name: '테슬라', price: 750.25, change: 8.90, changePercent: 1.20 },
+  { symbol: 'MSFT', name: '마이크로소프트', price: 415.30, change: 5.20, changePercent: 1.27 },
+  { symbol: 'AMZN', name: '아마존', price: 3420.15, change: -25.85, changePercent: -0.75 },
 ];
 
 export function TradingInterface() {
@@ -60,7 +60,7 @@ export function TradingInterface() {
       setPrice('');
     } catch (error) {
       if (error instanceof ZodError) {
-        const errorMessage = error.errors?.[0]?.message || "Invalid order data";
+        const errorMessage = error.errors?.[0]?.message || "Invalid order data";   // 할일-투두: 코드 수정 필요 (나중에) 유지보수하기.
         toast.error(errorMessage);
       } else {
         toast.error("An unexpected error occurred.");

@@ -12,45 +12,45 @@ import { DollarSign, TrendingUp, TrendingDown, Users, Bot } from "lucide-react";
 
 // Mock data
 const stockData = [
-  { time: '9:30', price: 150.25 },
-  { time: '10:00', price: 152.10 },
-  { time: '10:30', price: 148.75 },
-  { time: '11:00', price: 155.30 },
-  { time: '11:30', price: 157.85 },
-  { time: '12:00', price: 159.40 },
-  { time: '12:30', price: 161.20 },
-  { time: '1:00', price: 163.75 },
+  { time: '9:30', price: 150 },
+  { time: '10:00', price: 152 },
+  { time: '10:30', price: 148 },
+  { time: '11:00', price: 155 },
+  { time: '11:30', price: 157 },
+  { time: '12:00', price: 159 },
+  { time: '12:30', price: 161 },
+  { time: '1:00', price: 163 },
 ];
 
 const portfolioItems = [
   {
     symbol: 'AAPL',
-    name: 'Apple Inc.',
+    name: '애플',
     shares: 10,
-    avgPrice: 150.00,
-    currentPrice: 163.75,
-    totalValue: 1637.50,
-    gain: 137.50,
+    avgPrice: 150,
+    currentPrice: 163,
+    totalValue: 1637,
+    gain: 137,
     gainPercent: 9.17
   },
   {
     symbol: 'TSLA',
-    name: 'Tesla Inc.',
+    name: '테슬라',
     shares: 5005,
-    avgPrice: 800.00,
-    currentPrice: 750.25,
-    totalValue: 3751.25,
-    gain: -248.75,
+    avgPrice: 800,
+    currentPrice: 750,
+    totalValue: 3751,
+    gain: -248,
     gainPercent: -6.22
   },
   {
     symbol: 'GOOGL',
-    name: 'Alphabet Inc.',
+    name: '알파벳',
     shares: 3,
-    avgPrice: 2500.00,
-    currentPrice: 2650.75,
-    totalValue: 7952.25,
-    gain: 452.25,
+    avgPrice: 2500,
+    currentPrice: 2650,
+    totalValue: 7952,
+    gain: 452,
     gainPercent: 6.03
   }
 ];
@@ -71,7 +71,7 @@ export function TradingDashboard() {
               <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                 Stocks Trading Simulator
               </h1>
-              <p className="text-muted-foreground mt-2">Practice trading without the risk</p>
+              <p className="text-muted-foreground mt-2">$</p>
             </div>
             <div className="flex items-center gap-4">
               <Badge variant="secondary" className="text-lg px-4 py-2">
@@ -84,7 +84,7 @@ export function TradingDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <Card className="bg-gradient-to-br from-card to-card/80 border-border/50">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Portfolio Value</CardTitle>
+                <CardTitle className="text-sm font-medium">포트폴리오 자산</CardTitle>
                 <DollarSign className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -106,14 +106,14 @@ export function TradingDashboard() {
                   {totalGain >= 0 ? '+' : ''}${totalGain.toFixed(2)}
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  {totalGain >= 0 ? '+' : ''}{totalGainPercent.toFixed(2)}% change
+                  {totalGain >= 0 ? '+' : ''}{totalGainPercent.toFixed(2)}%
                 </p>
               </CardContent>
             </Card>
 
             <Card className="bg-gradient-to-br from-card to-card/80 border-border/50">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Rank</CardTitle>
+                <CardTitle className="text-sm font-medium">랭킹</CardTitle>
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
