@@ -189,11 +189,11 @@ export function TradingDashboard() {
                 </Tabs>
 
                 <div style={{padding: '2rem'}}>
-                    <a href={`/auth/google`} style={{textDecoration: 'none'}}>
+                    <span>
                         <button style={{padding: '10px 15px', cursor: 'pointer'}} onClick={GoogleLoginButtonHandle}>
                             구글 계정으로 시작하기
                         </button>
-                    </a>
+                    </span>
                 </div>
 
             </div>
