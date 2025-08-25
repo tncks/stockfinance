@@ -120,8 +120,8 @@ const useGoogleAuth = () => {
         const API_BASE_URL = `http://49.50.132.4:3000`;
 
         // 현재 페이지 URL을 redirect_uri로 설정
-        //const currentUrl = window.location.origin + window.location.pathname;
-        const authUrl = `${API_BASE_URL}/api/v1/auth/google`;
+        const currentUrl = window.location.origin + window.location.pathname;
+        const authUrl = `${API_BASE_URL}/api/v1/auth/google?redirect_uri=${encodeURIComponent(currentUrl)}`;
 
         // 팝업으로 로그인 창 열기 (404 에러 방지)
         const popup = window.open(authUrl, 'googleLogin', 'width=500,height=600');

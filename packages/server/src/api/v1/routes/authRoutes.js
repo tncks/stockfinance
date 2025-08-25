@@ -17,10 +17,13 @@ router.get('/google', async (req, res) => {
 
     const redirectTo = `${serverUrl}/api/v1/auth/google_callback`;
 
+    const clientURLFromRequest = req.query.redirect_uri;
+
     const {data, error} = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
             redirectTo,
+            state: clientURLFromRequest
             // queryParams: {
             //     access_type: 'offline',
             //     prompt: 'consent',
@@ -39,22 +42,23 @@ router.get('/google', async (req, res) => {
 
 // Google OAuth 콜백 처리
 router.get('/google_callback', async (req, res) => {
+
+    const { code, state, error: oauthError } = req.query;
+    const clientURL = state || `https://stockfinance.vercel.app`;
+
     try {
         console.log('Google 콜백 처리 시작');
         console.log('Query params:', req.query);
 
-        const { code, state, error: oauthError } = req.query;
-        const clientUrl = 'https://stockfinance.vercel.app';
-
         // OAuth 에러 체크
         if (oauthError) {
             console.error('OAuth 에러:', oauthError);
-            return res.redirect(`${clientUrl}?error=${encodeURIComponent(oauthError)}`);
+            return res.redirect(`${clientURL}?error=${encodeURIComponent(oauthError)}`);
         }
 
         if (!code) {
             console.error('인증 코드가 없습니다');
-            return res.redirect(`${clientUrl}?error=no_code`);
+            return res.redirect(`${clientURL}?error=no_code`);
         }
 
         // Supabase에서 세션 교환
@@ -62,12 +66,12 @@ router.get('/google_callback', async (req, res) => {
 
         if (error) {
             console.error('세션 교환 에러:', error);
-            return res.redirect(`${clientUrl}?error=${encodeURIComponent(error.message)}`);
+            return res.redirect(`${clientURL}?error=${encodeURIComponent(error.message)}`);
         }
 
         if (!data.session || !data.user) {
             console.error('세션 또는 사용자 정보가 없습니다');
-            return res.redirect(`${clientUrl}?error=no_session_or_user`);
+            return res.redirect(`${clientURL}?error=no_session_or_user`);
         }
 
         console.log('로그인 성공');
@@ -97,13 +101,13 @@ router.get('/google_callback', async (req, res) => {
             authToken: token
         });
 
-        const successUrl = `${clientUrl}?${successParams.toString()}`;
+        const successUrl = `${clientURL}?${successParams.toString()}`;
         res.redirect(successUrl);
 
     } catch (err) {
         console.error('콜백 처리 중 예상치 못한 에러:', err);
-        const clientUrl = process.env.CLIENT_URL || 'https://stockfinance.vercel.app';
-        res.redirect(`${clientUrl}?error=${encodeURIComponent(err.message)}`);
+        const clientURL = state || 'https://stockfinance.vercel.app';
+        res.redirect(`${clientURL}?error=${encodeURIComponent(err.message)}`);
     }
 });
 
