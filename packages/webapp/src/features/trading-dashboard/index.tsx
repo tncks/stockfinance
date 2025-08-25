@@ -174,7 +174,7 @@ export function TradingDashboard() {
           </Tabs>
 
            <div style={{ padding: '2rem' }}>
-             <a href={`/api/v1/auth/google`} style={{ textDecoration: 'none' }}>
+             <a href={`/auth/google`} style={{ textDecoration: 'none' }}>
                <button style={{ padding: '10px 15px', cursor: 'pointer' }}>
                  구글 계정으로 시작하기
                </button>
