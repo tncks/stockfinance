@@ -36,7 +36,7 @@ const portfolioItems = [
   {
     symbol: 'TSLA',
     name: '테슬라',
-    shares: 5005,
+    shares: 5,
     avgPrice: 800,
     currentPrice: 750,
     totalValue: 3751,
@@ -69,7 +69,7 @@ export function TradingDashboard() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                Stocks Trading Simulator
+                웹로고넣는위치텍스트를로고로대체하기
               </h1>
               <p className="text-muted-foreground mt-2">$</p>
             </div>
@@ -95,7 +95,7 @@ export function TradingDashboard() {
 
             <Card className="bg-gradient-to-br from-card to-card/80 border-border/50">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">오늘의 P&L</CardTitle>
+                <CardTitle className="text-sm font-medium">오늘의 등락</CardTitle>
                 {totalGain >= 0 ?
                     <TrendingUp className="h-4 w-4 text-bull" /> :
                     <TrendingDown className="h-4 w-4 text-bear" />
@@ -138,8 +138,8 @@ export function TradingDashboard() {
               <StockChart
                   symbol="AAPL"
                   data={stockData}
-                  currentPrice={163.75}
-                  change={13.75}
+                  currentPrice={163}
+                  change={13}
                   changePercent={9.17}
               />
 

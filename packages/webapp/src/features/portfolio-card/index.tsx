@@ -52,7 +52,7 @@ export function PortfolioCard({ item }: PortfolioCardProps) {
               <p className="text-lg font-bold">${item.totalValue.toFixed(2)}</p>
             </div>
             <div className="text-right">
-              <p className="text-sm text-muted-foreground">등락(대비)</p>
+              <p className="text-sm text-muted-foreground">등락</p>
               <p className={`text-lg font-bold ${isPositive ? 'text-bull' : 'text-bear'}`}>
                 {isPositive ? '+' : ''}${item.gain.toFixed(2)}
               </p>

@@ -20,28 +20,6 @@ const communityPosts = [
         comments: 8,
         tags: ["AAPL", "BullishCall"],
         gain: 15
-    },
-    {
-        id: 2,
-        user: "StockWizard",
-        avatar: "SW",
-        time: "4 hours ago",
-        content: "TSLA looking bearish on the tech",
-        likes: 18,
-        comments: 12,
-        tags: ["TSLA", "TechnicalAnalysis"],
-        gain: -3
-    },
-    {
-        id: 3,
-        user: "InvestorSarah",
-        avatar: "IS",
-        time: "6 hours ago",
-        content: "Diversification is key",
-        likes: 31,
-        comments: 15,
-        tags: ["Strategy", "RiskManagement"],
-        gain: 8
     }
 ];
 
@@ -102,7 +80,8 @@ export function CommunityHub() {
 
 
     const handlePost = () => {
-        if (!newPost.trim()) {
+        return; // 임시로 비활성화 시킴. 지금은 아무일도 일어나지 않습니다!
+        if (!newPost.trim()) {  // 기존 코드들.
             toast.error("Please write something before posting");
             return;
         }
@@ -114,7 +93,7 @@ export function CommunityHub() {
     setTimeout(() => {
       console.log(' ');  // 차트 프론트에 보여주기 기능은 임시 비활성화 상태
         //myChartFun();
-    }, 1600); //1600 == 1.6초임.
+    }, 1300); //1300 == 1.3초임.
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Community Feed */}
@@ -122,22 +101,22 @@ export function CommunityHub() {
                 {/* New Post */}
                 <Card className="bg-gradient-to-br from-card to-card/80 border-border/50">
                     <CardHeader>
-                        <CardTitle>Share Your Thoughts</CardTitle>
+                        <CardTitle>커뮤1</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <Textarea
-                            placeholder="Share your trading insights, strategies, or market observations..."
+                            placeholder="텍스트내용입력.."
                             value={newPost}
                             onChange={(e) => setNewPost(e.target.value)}
                             className="min-h-[100px]"
                         />
                         <div className="flex justify-between items-center">
                             <div className="flex gap-2">
-                                <Badge variant="outline">#Trading</Badge>
-                                <Badge variant="outline">#MarketAnalysis</Badge>
+                                <Badge variant="outline">#해시태그배지1</Badge>
+                                <Badge variant="outline">#해시태그배지2</Badge>
                             </div>
                             <Button onClick={handlePost} className="bg-primary hover:bg-primary/90">
-                                Post
+                                올리기
                             </Button>
                         </div>
                     </CardContent>

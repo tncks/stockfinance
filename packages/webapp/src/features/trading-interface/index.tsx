@@ -11,11 +11,11 @@ import { ZodError } from "zod";
 import { tradeOrderSchema } from "@/shared/lib/validations";
 
 const stockList = [
-  { symbol: 'AAPL', name: '애플', price: 163.75, change: 2.45, changePercent: 1.52 },
-  { symbol: 'GOOGL', name: '알파벳', price: 2650.75, change: -15.30, changePercent: -0.57 },
-  { symbol: 'TSLA', name: '테슬라', price: 750.25, change: 8.90, changePercent: 1.20 },
-  { symbol: 'MSFT', name: '마이크로소프트', price: 415.30, change: 5.20, changePercent: 1.27 },
-  { symbol: 'AMZN', name: '아마존', price: 3420.15, change: -25.85, changePercent: -0.75 },
+  { symbol: 'AAPL', name: '애플', price: 163, change: 2, changePercent: 1.52 },
+  { symbol: 'GOOGL', name: '알파벳', price: 2650, change: -15, changePercent: -0.57 },
+  { symbol: 'TSLA', name: '테슬라', price: 750, change: 8, changePercent: 1.20 },
+  { symbol: 'MSFT', name: '마이크로소프트', price: 415, change: 5, changePercent: 1.27 },
+  { symbol: 'AMZN', name: '아마존', price: 3420, change: -25, changePercent: -0.75 },
 ];
 
 export function TradingInterface() {
@@ -73,11 +73,11 @@ export function TradingInterface() {
       {/* Stock List */}
       <Card className="lg:col-span-2 bg-gradient-to-br from-card to-card/80 border-border/50">
         <CardHeader>
-          <CardTitle>Market Watch</CardTitle>
+          <CardTitle>주식 상황</CardTitle>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search stocks..."
+              placeholder="입력하여 검색 시작..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10"
@@ -121,7 +121,7 @@ export function TradingInterface() {
       {/* Trading Panel */}
       <Card className="bg-gradient-to-br from-card to-card/80 border-border/50">
         <CardHeader>
-          <CardTitle>Place Order</CardTitle>
+          <CardTitle>여기서 매수매도 주문을 진행하다</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <Tabs value={action} onValueChange={setAction}>
@@ -136,7 +136,7 @@ export function TradingInterface() {
             
             <TabsContent value={action} className="space-y-4 mt-4">
               <div className="space-y-2">
-                <Label>Selected Stock</Label>
+                <Label>목록 상 선택된 주식</Label>
                 <div className="p-3 bg-secondary/50 rounded-md">
                   {selectedStock ? (
                     <div>
@@ -146,13 +146,13 @@ export function TradingInterface() {
                       </div>
                     </div>
                   ) : (
-                    <div className="text-muted-foreground">Select a stock from the list</div>
+                    <div className="text-muted-foreground">목록 상의 주식 중 선택하기</div>
                   )}
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label>Order Type</Label>
+                <Label>주문의 종류</Label>
                 <Select value={orderType} onValueChange={setOrderType}>
                   <SelectTrigger>
                     <SelectValue />
@@ -165,10 +165,10 @@ export function TradingInterface() {
               </div>
 
               <div className="space-y-2">
-                <Label>Quantity</Label>
+                <Label>주문수량</Label>
                   <Input
                     type="number"
-                    placeholder="Number of shares"
+                    placeholder="1"
                     value={quantity}
                     onChange={(e) => setQuantity(e.target.value)}
                     min="1"

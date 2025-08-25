@@ -13,11 +13,6 @@ export function BIAssistant() {
 
     const [inputMessage, setInputMessage] = useState("");
 
-    const handleSendMessage = () => {
-        return;
-
-
-    };
 
 
 
@@ -97,10 +92,10 @@ export function BIAssistant() {
                 <CardHeader className="border-b border-border/50">
                     <CardTitle className="flex items-center gap-2">
                         <div className="p-2 bg-accent/10 rounded-full">
-                            <Bot className="h-5 w-5 text-accent"/>
+                            &nbsp;
                         </div>
                         주식
-                        <Badge variant="secondary" className="ml-auto">Online</Badge>
+                        <Badge variant="secondary" className="ml-auto">?</Badge>
                     </CardTitle>
                 </CardHeader>
 
@@ -113,7 +108,7 @@ export function BIAssistant() {
                             <Table>
                                 <TableHeader>
                                     <TableRow>
-                                        <TableHead>화면</TableHead>
+                                        <TableHead>종목</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -141,12 +136,9 @@ export function BIAssistant() {
                                 placeholder="입력..."
                                 value={inputMessage}
                                 onChange={(e) => setInputMessage(e.target.value)}
-                                onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                                 className="flex-1"
                             />
-                            <Button onClick={handleSendMessage} className="bg-accent hover:bg-accent/90">
-                                <Send className="h-4 w-4"/>
-                            </Button>
+
                         </div>
                     </div>
                 </CardContent>
