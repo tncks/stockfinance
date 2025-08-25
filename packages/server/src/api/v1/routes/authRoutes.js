@@ -102,7 +102,22 @@ router.get('/google_callback', async (req, res) => {
         });
 
         const successUrl = `${clientURL}?${successParams.toString()}`;
-        res.redirect(successUrl);
+        //res.redirect(successUrl); // disabled for now.
+        // modified:
+        // introducing m2 approach)
+
+        res.send(`
+        <script>
+            try {
+                // Pass the token back to the main window
+                window.opener.postMessage({ authToken: "${token}" }, "${clientURL}");
+                window.close();
+            } catch (e) {
+                // Fallback to URL redirection if postMessage fails for some reason
+                window.location.href = "${clientURL}?authToken=${token}";
+            }
+        </script>
+    `);
 
     } catch (err) {
         console.error('콜백 처리 중 예상치 못한 에러:', err);

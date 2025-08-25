@@ -62,11 +62,20 @@ const useGoogleAuth = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    // 페이지 로드 시 로그인 상태 확인
     useEffect(() => {
+        const handleMessage = (event) => {
+            if (event.data?.authToken) {
+                localStorage.setItem('authToken', event.data.authToken);
+                setUser(event.data.user); // 필요시 사용자 정보
+            }
+        };
+        window.addEventListener('message', handleMessage);
+
         checkAuthStatus();
         // URL 파라미터에서 로그인 결과 확인
         handleAuthCallback();
+
+        return () => window.removeEventListener('message', handleMessage);
     }, []);
 
     const checkAuthStatus = async () => {

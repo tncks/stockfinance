@@ -8,7 +8,7 @@ const authRoutes = require('./api/v1/routes/authRoutes');
 // (1)
 app.use(cors({
 
-    origin: ['https://stockfinance.vercel.app', 'http://localhost:3000'],
+    origin: ['https://stockfinance.vercel.app', 'http://localhost:3000', 'http://49.50.132.4'],
     credentials: true
 
 }));
