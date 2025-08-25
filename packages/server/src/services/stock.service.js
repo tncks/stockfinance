@@ -58,8 +58,7 @@ async function fetchAndInsertStockData() {
 
 const initializeStockData = () => {
     fetchAndInsertStockData();
-    // Optionally, set up a recurring fetch interval
-    // setInterval(fetchAndInsertStockData, 1000 * 60 * 60); // e.g., every hour
+
 };
 
 const getCachedData = () => {
