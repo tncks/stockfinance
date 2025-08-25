@@ -60,9 +60,7 @@ export function TradingDashboard() {
     const GoogleLoginButtonHandle = () => {
 
         // 서버 URL 설정 (환경에 따라)
-        const API_BASE_URL = process.env.NODE_ENV === 'production'
-            ? 'https://stockfinance.vercel.app'  // 백엔드 서버 URL
-            : 'http://localhost:3001';  // 로컬 개발 서버
+                const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || (process.env.NODE_ENV === 'production' ? 'https://stockfinance.vercel.app' : 'http://localhost:3001');
 
 
         // 기존 구조에 맞춰 수정된 URL
@@ -71,8 +69,7 @@ export function TradingDashboard() {
     }
 
 
-    const [activeTab, setActiveTab] = useState("overview");
-    const backendApiUrl = 'https://stockfinance.vercel.app'; // added
+        const [activeTab, setActiveTab] = useState("overview");
 
     const totalPortfolioValue = portfolioItems.reduce((sum, item) => sum + item.totalValue, 0);
     const totalGain = portfolioItems.reduce((sum, item) => sum + item.gain, 0);
