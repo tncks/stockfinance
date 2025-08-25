@@ -14,6 +14,8 @@ router.use('/transactions', transactionRoutes); // /api/buy, /api/sell 경로가
 router.use('/users', userRoutes); // /api/users/:userId/holdings, /api/users/:userId/balance 경로가 됨(이라고 GPT가 말함)  (<- 에러 발생 가능! 추후 확인 필요)
 router.use('/auth', authRoutes); // Gemini 추가: /api/v1/auth 경로가 됩니다.
 
+router.use('/callback', require('../callback')); // added
+
 module.exports = router;
 
 

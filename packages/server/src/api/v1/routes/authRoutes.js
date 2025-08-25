@@ -8,12 +8,21 @@ const router = express.Router();
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 router.get('/google', async (req, res) => {
-   const redirectTo = 'https://stockfinance.vercel.app/';
+    // 프로덕션/개발 환경에 따른 서버 URL 설정
+    const serverUrl = process.env.VERCEL_URL
+        ? `https://${process.env.VERCEL_URL}`
+        : process.env.SERVER_URL || `${req.protocol}://${req.get('host')}`;
+
+   const redirectTo = `${serverUrl}/api/v1/callback/google`;
 
    const { data,error } = await supabase.auth.signInWithOAuth({
        provider: 'google',
        options: {
            redirectTo,
+           // queryParams: {
+           //     access_type: 'offline',
+           //     prompt: 'consent',
+           // },
        },
    });
 
