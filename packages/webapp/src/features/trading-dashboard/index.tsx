@@ -6,7 +6,7 @@ import {Badge} from "@/shared/ui/badge";
 import {PortfolioCard} from "@/features/portfolio-card";
 import {TradingInterface} from "@/features/trading-interface";
 import {CommunityHub} from "@/features/community-hub";
-import {BIAssistant} from "@/features/stock-dashboard";
+import {StockDashboard} from "@/features/stock-dashboard";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/shared/ui/tabs";
 import {DollarSign, TrendingUp, TrendingDown, AlertCircle, Users} from "lucide-react";
 import {createChart, LineSeries} from 'lightweight-charts';  // , CandlestickSeries
@@ -388,7 +388,7 @@ export function TradingDashboard() {
                         <TabsTrigger value="trade">컴포넌트-B(트레이드)</TabsTrigger>
                         <TabsTrigger value="portfolio">컴포넌트-C(포트폴리오)</TabsTrigger>
                         <TabsTrigger value="community">컴포넌트-D(커뮤니티)</TabsTrigger>
-                        <TabsTrigger value="bssistant">컴포넌트-E(어시스턴트)</TabsTrigger>
+                        <TabsTrigger value="sboard">컴포넌트-E(종목화면)</TabsTrigger>
                     </TabsList>
 
                     <TabsContent value="overview" className="space-y-6">
@@ -436,8 +436,8 @@ export function TradingDashboard() {
                         <CommunityHub/>
                     </TabsContent>
 
-                    <TabsContent value="bssistant">
-                        <BIAssistant/>
+                    <TabsContent value="sboard">
+                        <StockDashboard/>
                     </TabsContent>
                 </Tabs>
 

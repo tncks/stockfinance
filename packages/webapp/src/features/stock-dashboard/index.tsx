@@ -6,6 +6,9 @@ import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from '@/s
 import {Input} from "@/shared/ui/input";
 import {createChart, LineData, LineSeries} from "lightweight-charts";
 
+import styles from './StockDashboard.module.css';  // M1 CSS Module import
+import './StockDashboard.module.css'; // M2
+
 // ============================================================================
 // 1. 상수 및 타입 정의 (Constants & Types)
 // - 애플리케이션 전역에서 사용될 상수와 타입을 중앙에서 관리합니다.
@@ -166,13 +169,7 @@ const StockChart = React.memo(({chartData, stockName}: { chartData: LineData[], 
         };
     }, [chartData]); // 데이터가 준비되면 차트를 생성합니다.
 
-    setInterval(() => {
-        const logo = document.getElementById('tv-attr-logo');
-        if (logo) {
-            logo.style.width = '1px';   // width를 1px로
-            logo.style.overflow = 'hidden';
-        }
-    },1000);
+
 
     return (
         <Card className="lg:col-span-2 flex flex-col h-full">
@@ -180,7 +177,7 @@ const StockChart = React.memo(({chartData, stockName}: { chartData: LineData[], 
                 <CardTitle>{stockName} 일별 주가</CardTitle>
             </CardHeader>
             <CardContent className="flex-1 -mt-4">
-                <div ref={chartContainerRef} id="my-container" className="w-full h-full min-h-[400px]"/>
+                <div ref={chartContainerRef} className="w-full h-full min-h-[400px]"/>
             </CardContent>
         </Card>
     );
@@ -234,7 +231,7 @@ const StockList = React.memo(({stocks}: { stocks: Stock[] }) => {
 // - 애플리케이션의 상태를 관리하고 하위 컴포넌트를 조합합니다.
 // ============================================================================
 
-export function BIAssistant() {
+export function StockDashboard() {
     const {status, data, error} = useDashboardData();
 
     if (status === 'loading' || status === 'idle') {
