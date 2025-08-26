@@ -1,13 +1,10 @@
-import {ScrollArea} from "@/shared/ui/scroll-area";
-import React, {useEffect, useMemo, useRef, useState} from "react";
-import {supabase} from '@/shared/lib/supabaseClient';
-import {Card, CardContent, CardHeader, CardTitle} from '@/shared/ui/card';
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from '@/shared/ui/table';
-import {Input} from "@/shared/ui/input";
-import {createChart, LineData, LineSeries} from "lightweight-charts";
-
-import styles from './StockDashboard.module.css';  // M1 CSS Module import
-import './StockDashboard.module.css'; // M2
+import { ScrollArea } from "@/shared/ui/scroll-area";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { supabase } from "@/shared/lib/supabaseClient";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
+import { Input } from "@/shared/ui/input";
+import { createChart, IChartApi, ISeriesApi, LineData } from "lightweight-charts";
 
 // ============================================================================
 // 1. 상수 및 타입 정의 (Constants & Types)
@@ -15,21 +12,19 @@ import './StockDashboard.module.css'; // M2
 // ============================================================================
 
 const CONSTANTS = {
-    DEFAULT_CHART_STOCK_NAME: '기아', // 기본값으로 변경
     DB_TABLES: {
-        LIVE_PRICES: 'StockLivePrice',
-        DAILY_PRICES: 'DailyPrices',
+        LIVE_PRICES: "StockLivePrice",
+        DAILY_PRICES: "DailyPrices",
     },
     API_KEYS: {
-        STOCK_CODE: '종목코드',
-        STOCK_NAME: '종목명',
-        HIGH_PRICE: '고가',
-        LOW_PRICE: '저가',
-        BASE_DATE: '기준일자',
-    }
+        STOCK_CODE: "종목코드",
+        STOCK_NAME: "종목명",
+        HIGH_PRICE: "고가",
+        LOW_PRICE: "저가",
+        BASE_DATE: "기준일자",
+    },
 } as const;
 
-// 컴포넌트 내부에서 사용할 데이터 모델 (영문 카멜케이스)
 type Stock = {
     code: string;
     name: string;
@@ -37,51 +32,42 @@ type Stock = {
     low: number;
 };
 
-// API 응답 데이터 타입
-type StockApiResponse = {
-    [CONSTANTS.API_KEYS.STOCK_CODE]: string;
-    [CONSTANTS.API_KEYS.STOCK_NAME]: string;
-    [CONSTANTS.API_KEYS.HIGH_PRICE]: number;
-    [CONSTANTS.API_KEYS.LOW_PRICE]: number;
-};
-
-type ChartApiResponse = {
-    [CONSTANTS.API_KEYS.BASE_DATE]: number;
-    [CONSTANTS.API_KEYS.HIGH_PRICE]: number;
-};
-
+type StockApiResponse = Record<typeof CONSTANTS.API_KEYS[keyof typeof CONSTANTS.API_KEYS], any>;
+type ChartApiResponse = Record<typeof CONSTANTS.API_KEYS[keyof typeof CONSTANTS.API_KEYS], any>;
 
 // ============================================================================
-// 2. API 서비스 계층 (Service Layer)
-// - 데이터 fetching 및 변환 로직을 담당합니다. 컴포넌트로부터 완전히 분리됩니다.
+// 2. 서비스 계층 (Service Layer)
+// - 데이터 소스(API, DB)와의 모든 통신을 담당합니다.
 // ============================================================================
 
 const stockService = {
-    /**
-     * 주식 목록과 특정 종목의 차트 데이터를 병렬로 가져옵니다.
-     * @returns {Promise<{stocks: Stock[], chartData: LineData[]}>} 정제된 데이터
-     */
-    async fetchDashboardData(selectedStockName: string = CONSTANTS.DEFAULT_CHART_STOCK_NAME) {
-        const [stockResponse, chartResponse] = await Promise.all([
-            supabase.from(CONSTANTS.DB_TABLES.LIVE_PRICES).select('종목코드,종목명,고가,저가').order('종목명'),
-            supabase.from(CONSTANTS.DB_TABLES.DAILY_PRICES).select('기준일자,고가')
-                .eq('종목명', selectedStockName) // 동적으로 선택된 종목
-                .gte('기준일자', 20250810)
-                .lte('기준일자', 20250814)
-                .order('기준일자')
-        ]);
+    async getStocks(): Promise<Stock[]> {
+        const { data, error } = await supabase
+            .from(CONSTANTS.DB_TABLES.LIVE_PRICES)
+            .select("종목코드,종목명,고가,저가")
+            .order("종목명");
 
-        if (stockResponse.error) throw new Error(`주식 목록 로딩 실패: ${stockResponse.error.message}`);
-        if (chartResponse.error) throw new Error(`차트 데이터 로딩 실패: ${chartResponse.error.message}`);
+        if (error) throw new Error(error.message);
+        if (!data) throw new Error("주식 목록 데이터가 없습니다.");
 
-        // API 응답을 내부 모델로 변환
-        const stocks = stockResponse.data.map(this.transformStock);
-        const chartData = chartResponse.data.map(this.transformChartData);
-
-        return {stocks, chartData};
+        return data.map(this.transformStock);
     },
 
-    /** API 응답을 Stock 타입으로 변환합니다. */
+    async getChartData(stockName: string): Promise<LineData[]> {
+        const { data, error } = await supabase
+            .from(CONSTANTS.DB_TABLES.DAILY_PRICES)
+            .select("기준일자,고가")
+            .eq("종목명", stockName)
+            .gte("기준일자", 20250810)
+            .lte("기준일자", 20250814)
+            .order("기준일자");
+
+        if (error) throw new Error(error.message);
+        if (!data) throw new Error("차트 데이터가 없습니다.");
+
+        return data.map(this.transformChartData);
+    },
+
     transformStock(apiStock: StockApiResponse): Stock {
         return {
             code: apiStock[CONSTANTS.API_KEYS.STOCK_CODE],
@@ -91,7 +77,6 @@ const stockService = {
         };
     },
 
-    /** API 응답을 LineData 타입으로 변환합니다. */
     transformChartData(apiChartItem: ChartApiResponse): LineData {
         const dateStr = String(apiChartItem[CONSTANTS.API_KEYS.BASE_DATE]);
         return {
@@ -101,124 +86,156 @@ const stockService = {
     },
 };
 
-
 // ============================================================================
-// 3. 커스텀 훅 (Custom Hook)
-// - 비동기 데이터 로딩 및 상태 관리 로직을 캡슐화합니다.
+// 3. 커스텀 훅 (Custom Hooks)
+// - UI 상태 관리와 서비스 계층 호출을 담당합니다.
 // ============================================================================
 
 type AsyncState<T> = {
-    status: 'idle' | 'loading' | 'success' | 'error';
+    status: "idle" | "loading" | "success" | "error";
     data: T | null;
     error: string | null;
 };
 
-function useDashboardData(selectedStockName: string) {
-    const [state, setState] = useState<AsyncState<{ stocks: Stock[], chartData: LineData[] }>>({
-        status: 'idle',
+function useStockList() {
+    const [state, setState] = useState<AsyncState<Stock[]>>({
+        status: "idle",
         data: null,
         error: null,
     });
 
     useEffect(() => {
-        setState(s => ({...s, status: 'loading'}));
-        stockService.fetchDashboardData(selectedStockName)
-            .then(data => {
-                setState({status: 'success', data, error: null});
+        setState((s) => ({ ...s, status: "loading", data: null }));
+        stockService.getStocks()
+            .then((data) => {
+                setState({ status: "success", data, error: null });
             })
-            .catch(error => {
-                setState({status: 'error', data: null, error: error.message});
+            .catch((error) => {
+                setState({ status: "error", data: null, error: error.message });
             });
-    }, [selectedStockName]); // selectedStockName이 변경될 때마다 재실행
+    }, []);
 
     return state;
 }
 
+function useChartData(selectedStockName: string | null) {
+    const [state, setState] = useState<AsyncState<LineData[]>>({
+        status: "idle",
+        data: null,
+        error: null,
+    });
+
+    useEffect(() => {
+        if (!selectedStockName) {
+            setState({ status: "idle", data: null, error: null });
+            return;
+        }
+
+        setState((s) => ({ ...s, status: "loading", data: null }));
+        stockService.getChartData(selectedStockName)
+            .then((data) => {
+                setState({ status: "success", data, error: null });
+            })
+            .catch((error) => {
+                setState({ status: "error", data: null, error: error.message });
+            });
+    }, [selectedStockName]);
+
+    return state;
+}
 
 // ============================================================================
 // 4. 프레젠테이션 컴포넌트 (Presentational Components)
-// - 데이터를 받아 UI를 그리는 역할에만 집중합니다.
+// - 순수하게 UI를 렌더링하는 역할만 담당합니다.
 // ============================================================================
 
-/** 차트를 렌더링하는 컴포넌트 */
-const StockChart = React.memo(({chartData, stockName, isLoading}: {
-    chartData: LineData[],
-    stockName: string,
-    isLoading?: boolean
-}) => {
+type StockChartProps = {
+    chartData: LineData[];
+    stockName: string;
+    isLoading?: boolean;
+};
+
+const StockChart = React.memo(({ chartData, stockName, isLoading }: StockChartProps) => {
     const chartContainerRef = useRef<HTMLDivElement>(null);
+    const chartRef = useRef<IChartApi | null>(null);
+    const seriesRef = useRef<ISeriesApi<"Area"> | null>(null);
 
     useEffect(() => {
-        if (!chartContainerRef.current || chartData.length === 0) return;
+        if (!chartContainerRef.current) return;
 
-        const chart = createChart(chartContainerRef.current, {
-            width: chartContainerRef.current.clientWidth,
-            height: chartContainerRef.current.clientHeight,
-            layout: {background: {color: "#131722"}, textColor: "#d1d4dc"},
-            grid: {vertLines: {color: "#334158"}, horzLines: {color: "#334158"}},
-        });
+        if (!chartRef.current) {
+            const chart = createChart(chartContainerRef.current, {
+                width: chartContainerRef.current.clientWidth,
+                height: chartContainerRef.current.clientHeight,
+                layout: { background: { color: "#131722" }, textColor: "#d1d4dc" },
+                grid: { vertLines: { color: "#334158" }, horzLines: { color: "#334158" } },
+            });
 
-        const series = chart.addSeries(LineSeries, {
-            lineColor: '#009688', topColor: 'rgba(0, 150, 136, 0.4)', bottomColor: 'rgba(0, 150, 136, 0.0)'
-        });
-        series.setData(chartData);
-        chart.timeScale().fitContent();
+            seriesRef.current = chart.addAreaSeries({
+                lineColor: "#009688",
+                topColor: "rgba(0, 150, 136, 0.4)",
+                bottomColor: "rgba(0, 150, 136, 0.0)",
+            });
+            chartRef.current = chart;
+        }
 
-        const handleResize = () => chart.resize(chartContainerRef.current!.clientWidth, chartContainerRef.current!.clientHeight);
-        window.addEventListener('resize', handleResize);
+        seriesRef.current.setData(chartData);
+        chartRef.current.timeScale().fitContent();
 
-        return () => {
-            window.removeEventListener('resize', handleResize);
-            chart.remove();
+        const handleResize = () => {
+            if (chartRef.current && chartContainerRef.current) {
+                chartRef.current.resize(
+                    chartContainerRef.current.clientWidth,
+                    chartContainerRef.current.clientHeight
+                );
+            }
         };
-    }, [chartData]); // 데이터가 준비되면 차트를 생성합니다.
+        window.addEventListener("resize", handleResize);
+
+        return () => window.removeEventListener("resize", handleResize);
+    }, [chartData]);
+
+    useEffect(() => {
+        return () => {
+            chartRef.current?.remove();
+        };
+    }, []);
 
     return (
-        <Card className="lg:col-span-2 flex flex-col h-full">
+        <Card className="lg:col-span-2 flex flex-col h-full relative">
             <CardHeader>
-                <CardTitle>
-                    {stockName} 일별 주가
-                    {isLoading && <span className="ml-2 text-sm text-blue-500">(로딩 중...)</span>}
-                </CardTitle>
+                <CardTitle>{stockName} 일별 주가</CardTitle>
             </CardHeader>
             <CardContent className="flex-1 -mt-4">
-                {isLoading ? (
-                    <div className="w-full h-full min-h-[400px] flex items-center justify-center">
-                        <div className="text-gray-500">차트 데이터를 불러오는 중...</div>
+                {(isLoading || chartData.length === 0) && (
+                    <div className="absolute inset-0 bg-slate-800 bg-opacity-50 flex items-center justify-center z-10">
+                        <p className="text-white">
+                            {isLoading ? "차트 데이터를 불러오는 중..." : "표시할 데이터가 없습니다."}
+                        </p>
                     </div>
-                ) : chartData.length === 0 ? (
-                    <div className="w-full h-full min-h-[400px] flex items-center justify-center">
-                        <div className="text-gray-500">{stockName}의 차트 데이터가 없습니다.</div>
-                    </div>
-                ) : (
-                    <div ref={chartContainerRef} className="w-full h-full min-h-[400px]"/>
                 )}
+                <div ref={chartContainerRef} className="w-full h-full min-h-[400px]" />
             </CardContent>
         </Card>
     );
 });
+StockChart.displayName = "StockChart";
 
-/** 주식 목록을 렌더링하는 컴포넌트 */
-const StockList = React.memo(({
-                                  stocks,
-                                  selectedStock,
-                                  onStockSelect
-                              }: {
-    stocks: Stock[],
-    selectedStock: string,
-    onStockSelect: (stockName: string) => void
-}) => {
+type StockListProps = {
+    stocks: Stock[];
+    selectedStock: string | null;
+    onStockSelect: (stockName: string) => void;
+};
+
+const StockList = React.memo(({ stocks, selectedStock, onStockSelect }: StockListProps) => {
     const [searchTerm, setSearchTerm] = useState("");
 
     const filteredStocks = useMemo(() => {
         if (!searchTerm) return stocks;
-        return stocks.filter(stock => stock.name.toLowerCase().includes(searchTerm.toLowerCase()));
+        return stocks.filter((stock) =>
+            stock.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
     }, [stocks, searchTerm]);
-
-    const handleStockClick = (stockName: string, event: React.MouseEvent) => {
-        event.preventDefault();
-        onStockSelect(stockName)
-    }
 
     return (
         <Card className="lg:col-span-1 flex flex-col h-full">
@@ -232,21 +249,25 @@ const StockList = React.memo(({
             <CardContent className="flex-1 p-0">
                 <ScrollArea className="h-[580px]">
                     <Table>
-                        <TableHeader><TableRow><TableHead>전체 종목</TableHead></TableRow></TableHeader>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>전체 종목</TableHead>
+                            </TableRow>
+                        </TableHeader>
                         <TableBody>
-                            {filteredStocks.map(stock => (
+                            {filteredStocks.map((stock) => (
                                 <TableRow
                                     key={stock.code}
-                                    className={`cursor-pointer hover:bg-gray-50 transition-colors ${
-                                        selectedStock === stock.name ? 'border-l-4 border-blue-500' : ''
+                                    className={`cursor-pointer hover:bg-muted/50 transition-colors ${
+                                        selectedStock === stock.name ? "bg-muted" : ""
                                     }`}
-                                    onClick={(e) => handleStockClick(stock.name, e)}
+                                    onClick={() => onStockSelect(stock.name)}
                                 >
                                     <TableCell>
                                         <div className="font-medium">{stock.name}</div>
                                         <div className="text-sm text-muted-foreground">
-                                            {stock.code} | 고가: {stock.high.toLocaleString()}원,
-                                            저가: {stock.low.toLocaleString()}원
+                                            {stock.code} | 고가: {stock.high.toLocaleString()}원, 저가:{" "}
+                                            {stock.low.toLocaleString()}원
                                         </div>
                                     </TableCell>
                                 </TableRow>
@@ -258,46 +279,52 @@ const StockList = React.memo(({
         </Card>
     );
 });
-
+StockList.displayName = "StockList";
 
 // ============================================================================
 // 5. 컨테이너 컴포넌트 (Container Component)
-// - 애플리케이션의 상태를 관리하고 하위 컴포넌트를 조합합니다.
+// - 여러 컴포넌트와 훅을 조합하여 페이지를 구성합니다.
 // ============================================================================
 
 export function StockDashboard() {
-    const [selectedStockName, setSelectedStockName] = useState(CONSTANTS.DEFAULT_CHART_STOCK_NAME);
-    const {status, data, error} = useDashboardData(selectedStockName);
+    const [selectedStockName, setSelectedStockName] = useState<string | null>(null);
+
+    const stockListState = useStockList();
+    const chartDataState = useChartData(selectedStockName);
+
+    useEffect(() => {
+        if (stockListState.data && stockListState.data.length > 0 && !selectedStockName) {
+            setSelectedStockName(stockListState.data[0].name);
+        }
+    }, [stockListState.data, selectedStockName]);
 
     const handleStockSelect = (stockName: string) => {
         setSelectedStockName(stockName);
     };
 
-    if (status === 'loading' || status === 'idle') {
-        return <div className="p-4">데이터를 불러오는 중...</div>;
+    if (stockListState.status === "loading" || stockListState.status === "idle") {
+        return <div className="p-4">주식 목록을 불러오는 중...</div>;
     }
 
-    if (status === 'error') {
-        return <div className="p-4 text-red-500">오류 발생: {error}</div>;
+    if (stockListState.status === "error") {
+        return <div className="p-4 text-red-500">오류 발생: {stockListState.error}</div>;
     }
 
-    // status === 'success'
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[700px]">
             <StockChart
-                chartData={data!.chartData}
-                stockName={selectedStockName}
-                isLoading={status === 'loading'}
+                chartData={chartDataState.data || []}
+                stockName={selectedStockName || "종목을 선택하세요"}
+                isLoading={chartDataState.status === "loading"}
             />
             <StockList
-                stocks={data!.stocks}
+                stocks={stockListState.data || []}
                 selectedStock={selectedStockName}
                 onStockSelect={handleStockSelect}
             />
         </div>
     );
 }
-
 
 
 // 주식 Holding 관련 API 등 목적은 화면에 가져와서 프론트 단에 출력하기, 코드 도입 검토.. ->
