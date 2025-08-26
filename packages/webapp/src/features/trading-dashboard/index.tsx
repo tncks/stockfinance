@@ -200,10 +200,11 @@ const GoogleLoginButton = () => {
                     {error}
                 </div>
             )}
-
+            {/*기존         : disabled={isLoading}*/}
+            {/*임시(비활성중): disabled={true}*/}
             <button
                 onClick={initiateGoogleLogin}
-                disabled={isLoading}
+                disabled={true}
                 className="flex items-center gap-3 px-6 py-3 bg-white border border-gray-300 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
                 {isLoading ? (
