@@ -9,13 +9,14 @@ import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from '@/s
 import {createChart, LineSeries} from 'lightweight-charts';  // , CandlestickSeries
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/shared/ui/tabs";
 
-let lineSeries;
+
 
 
 // 잠깐 순서 정리: useEffect() 호출 -> 내부 로직 실행 -> fetchStockData[LivePrice] & fetchChartData[DailyPrices] -> setStocks() 통해 stocks 에 값 담김 -> setSCharts() 통해 scharts 에 값 담김 -> myChartFun() 언제 실행? -> setTimeout 언제 실행? 순서 어케?
 
 export function BIAssistant() {
 
+    let lineSeries;
     const [inputMessage, setInputMessage] = useState("");
     const chartContainerRef = useRef<HTMLDivElement>(null);
     const chartInstanceRef = useRef<any>(null); // 차트 인스턴스 참조용
@@ -325,7 +326,7 @@ export function BIAssistant() {
                     {/* Debug:Testing chart... */}
                     <div className="space-y-4">
                         <br/>
-                        <div ref={chartContainerRef}></div>
+                        <div ref={chartContainerRef} className="w-full h-[400px]"></div>
                         <br/>
                     </div>
 
