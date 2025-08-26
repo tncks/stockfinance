@@ -198,6 +198,7 @@ export function BIAssistant() {
                     .from('DailyPrices')
                     .select(graphSTR)
                     .gte('기준일자', 20250810)
+                    .lte('기준일자', 20250814)
                     .eq('종목명', '기아')
                     .order('기준일자', {ascending: true});
 
