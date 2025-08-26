@@ -217,6 +217,8 @@ export function BIAssistant() {
                         time: `${String(d.base_date).substring(0, 4)}-${String(d.base_date).substring(4, 6)}-${String(d.base_date).substring(6, 8)}`,
                         value: d.stock_highest
                     }));
+                    console.log('KIA-KIA-consoleLOG:');
+                    console.log(chartKIAsTestData);                    // 예상 콘솔 출력 결과 : 첫번째값: '2024-12-22', 두번째값: 32
 
                     //
                     if (lineSeriesRef.current) {
