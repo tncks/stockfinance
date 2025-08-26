@@ -24,11 +24,8 @@ module.exports = router;
 
 GPT의 말 : 백엔드 사용을 위한 추가 팁:
 
-- 환경 설정: my-backend 폴더에 .env 파일을 만들고 DATABASE_URL="mysql://user:password@localhost:3306/your_database_name"와 같이 데이터베이스 연결 정보를 입력해야 합니다.
+- 환경 설정: prisma 마이그레이션: 백엔드 코드를 실행하기 전에 npx prisma migrate dev --name init 명령어를 실행하여 데이터베이스 스키마를 동기화해야 합니다.
 
-- Prisma 마이그레이션: 백엔드 코드를 실행하기 전에 npx prisma migrate dev --name init 명령어를 실행하여 데이터베이스 스키마를 동기화해야 합니다.
-
-- 의존성 설치: npm install express prisma @prisma/client 명령어를 실행하여 필요한 라이브러리를 설치합니다.
  */
 
 // 한편

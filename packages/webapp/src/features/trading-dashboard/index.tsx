@@ -9,19 +9,73 @@ import {CommunityHub} from "@/features/community-hub";
 import {BIAssistant} from "@/features/stock-dashboard";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/shared/ui/tabs";
 import {DollarSign, TrendingUp, TrendingDown, AlertCircle, Users, Bot} from "lucide-react";
+import {createChart, AreaSeries, CandlestickSeries} from 'lightweight-charts';
+
+
+
+
+function myChartFun() {
+    const chartOptions = {width: 320, height: 240};
+    const ele = document.getElementById('my-container');
+    const chart = createChart(ele, chartOptions);
+    const areaSeries = chart.addSeries(AreaSeries, {
+        lineColor: '#2962FF', topColor: '#2962FF',
+        bottomColor: 'rgba(41, 98, 255, 0.28)',
+    });
+    areaSeries.setData([
+        {time: '2024-12-22', value: 32},
+        {time: '2024-12-23', value: 31},
+        {time: '2024-12-24', value: 27},
+        {time: '2024-12-25', value: 27},
+        {time: '2024-12-26', value: 25},
+        {time: '2024-12-27', value: 28},
+        {time: '2024-12-28', value: 25},
+        {time: '2024-12-29', value: 23},
+        {time: '2024-12-30', value: 22},
+        {time: '2024-12-31', value: 22},
+    ]);
+
+    // const candlestickSeries = chart.addSeries(CandlestickSeries, {
+    //     upColor: '#26a69a', downColor: '#ef5350', borderVisible: false,
+    //     wickUpColor: '#26a69a', wickDownColor: '#ef5350',
+    // });
+    // candlestickSeries.setData([
+    //     {time: '2024-12-22', open: 75.16, high: 82.84, low: 36.16, close: 45.72},
+    //     {time: '2024-12-23', open: 45.12, high: 53.90, low: 45.12, close: 48.09},
+    //     {time: '2024-12-24', open: 60.71, high: 60.71, low: 53.39, close: 59.29},
+    //     {time: '2024-12-25', open: 68.26, high: 68.26, low: 59.04, close: 60.50},
+    //     {time: '2024-12-26', open: 67.71, high: 105.85, low: 66.67, close: 91.04},
+    //     {time: '2024-12-27', open: 91.04, high: 121.40, low: 82.70, close: 111.40},
+    //     {time: '2024-12-28', open: 111.51, high: 142.83, low: 103.34, close: 131.25},
+    //     {time: '2024-12-29', open: 131.33, high: 151.17, low: 77.68, close: 96.43},
+    //     {time: '2024-12-30', open: 106.33, high: 110.20, low: 90.39, close: 98.10},
+    //     {time: '2024-12-31', open: 109.87, high: 114.69, low: 85.66, close: 111.26},
+    // ]);
+
+    chart.timeScale().fitContent();
+    // logo 최소화 숨기기 실행
+    const logo = document.getElementById('tv-attr-logo');
+    if (logo) {
+        logo.style.width = '1px';   // width를 1px로
+        logo.style.overflow = 'hidden';
+    }
+
+}
+
+
 
 
 // Mock data
-const stockData = [
-    {time: '9:30', price: 150},
-    {time: '10:00', price: 152},
-    {time: '10:30', price: 148},
-    {time: '11:00', price: 155},
-    {time: '11:30', price: 157},
-    {time: '12:00', price: 159},
-    {time: '12:30', price: 161},
-    {time: '1:00', price: 163},
-];
+// const stockData = [
+//     {time: '9:30', price: 150},
+//     {time: '10:00', price: 152},
+//     {time: '10:30', price: 148},
+//     {time: '11:00', price: 155},
+//     {time: '11:30', price: 157},
+//     {time: '12:00', price: 159},
+//     {time: '12:30', price: 161},
+//     {time: '1:00', price: 163},
+// ];
 
 const portfolioItems = [
     {
@@ -234,6 +288,11 @@ export function TradingDashboard() {
     const totalGain = portfolioItems.reduce((sum, item) => sum + item.gain, 0);
     const totalGainPercent = (totalGain / (totalPortfolioValue - totalGain)) * 100;
 
+    setTimeout(() => {
+        console.log(' ');  // 차트 프론트에 보여주기 기능은 임시 비활성화 상태
+        myChartFun();
+    }, 1300); //1300 == 1.3초임.
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/20">
             <div className="container mx-auto p-6 space-y-6">
@@ -308,13 +367,24 @@ export function TradingDashboard() {
 
                     <TabsContent value="overview" className="space-y-6">
                         {/* Featured Stock Chart */}
-                        <StockChart
-                            symbol="AAPL"
-                            data={stockData}
-                            currentPrice={163}
-                            change={13}
-                            changePercent={9.17}
-                        />
+                        {/*<StockChart*/}
+                        {/*    symbol="AAPL"*/}
+                        {/*    data={stockData}*/}
+                        {/*    currentPrice={163}*/}
+                        {/*    change={13}*/}
+                        {/*    changePercent={9.17}*/}
+                        {/*/>*/}
+                        {/* My Stock Chart */}
+                        <div className="space-y-6">
+                            {/* Debug:Testing chart... */}
+                            <div className="space-y-4">
+                                <br/>
+                                <div id="my-container"></div>
+                                <br/>
+                            </div>
+
+
+                        </div>
 
                         {/* Quick Portfolio Overview */}
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -345,13 +415,7 @@ export function TradingDashboard() {
                     </TabsContent>
                 </Tabs>
 
-                {/*<div style={{padding: '2rem'}}>*/}
-                {/*    <span>*/}
-                {/*        <button style={{padding: '10px 15px', cursor: 'pointer'}} onClick={GoogleLoginButtonHandle}>*/}
-                {/*            구글 계정으로 시작하기*/}
-                {/*        </button>*/}
-                {/*    </span>*/}
-                {/*</div>*/}
+
 
             </div>
         </div>
