@@ -172,7 +172,15 @@ const StockChart = React.memo(({ chartData, stockName, isLoading }: StockChartPr
             });
 
             seriesRef.current = chart.addSeries(LineSeries, {
-                lineColor: '#009688', topColor: 'rgba(0, 150, 136, 0.4)', bottomColor: 'rgba(0, 150, 136, 0.0)'
+                lineColor: '#009688', topColor: 'rgba(0, 150, 136, 0.4)', bottomColor: 'rgba(0, 150, 136, 0.0)',
+                priceFormat: {
+                    type: 'price', // price | volume | percent | custom
+                    minMove: 0.01,
+                    precision: 2,
+                    formatter: (price) => {
+                        return '$' + price.toFixed(2);
+                    },
+                }
             });
             chartRef.current = chart;
         }
