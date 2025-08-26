@@ -215,6 +215,11 @@ const StockList = React.memo(({
         return stocks.filter(stock => stock.name.toLowerCase().includes(searchTerm.toLowerCase()));
     }, [stocks, searchTerm]);
 
+    const handleStockClick = (stockName: string, event: React.MouseEvent) => {
+        event.preventDefault();
+        onStockSelect(stockName)
+    }
+
     return (
         <Card className="lg:col-span-1 flex flex-col h-full">
             <CardHeader>
@@ -235,7 +240,7 @@ const StockList = React.memo(({
                                     className={`cursor-pointer hover:bg-gray-50 transition-colors ${
                                         selectedStock === stock.name ? 'border-l-4 border-blue-500' : ''
                                     }`}
-                                    onClick={() => onStockSelect(stock.name)}
+                                    onClick={(e) => handleStockClick(stock.name, e)}
                                 >
                                     <TableCell>
                                         <div className="font-medium">{stock.name}</div>
