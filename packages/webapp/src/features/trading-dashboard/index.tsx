@@ -316,7 +316,7 @@ export function TradingDashboard() {
 
     setTimeout(() => {
         console.log(' ');  // 차트 프론트에 보여주기 기능은 임시 비활성화 상태
-        myChartFun();
+        //myChartFun();
     }, 1300); //1300 == 1.3초임.
 
     return (
