@@ -1,12 +1,9 @@
-
-
-import { ScrollArea } from "@/shared/ui/scroll-area";
-
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { supabase } from '@/shared/lib/supabaseClient';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
-import { Input } from "@/shared/ui/input";
+import {ScrollArea} from "@/shared/ui/scroll-area";
+import React, {useEffect, useMemo, useRef, useState} from "react";
+import {supabase} from '@/shared/lib/supabaseClient';
+import {Card, CardContent, CardHeader, CardTitle} from '@/shared/ui/card';
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from '@/shared/ui/table';
+import {Input} from "@/shared/ui/input";
 import {createChart, LineData, LineSeries} from "lightweight-charts";
 
 // ============================================================================
@@ -78,7 +75,7 @@ const stockService = {
         const stocks = stockResponse.data.map(this.transformStock);
         const chartData = chartResponse.data.map(this.transformChartData);
 
-        return { stocks, chartData };
+        return {stocks, chartData};
     },
 
     /** API 응답을 Stock 타입으로 변환합니다. */
@@ -121,13 +118,13 @@ function useDashboardData() {
     });
 
     useEffect(() => {
-        setState(s => ({ ...s, status: 'loading' }));
+        setState(s => ({...s, status: 'loading'}));
         stockService.fetchDashboardData()
             .then(data => {
-                setState({ status: 'success', data, error: null });
+                setState({status: 'success', data, error: null});
             })
             .catch(error => {
-                setState({ status: 'error', data: null, error: error.message });
+                setState({status: 'error', data: null, error: error.message});
             });
     }, []);
 
@@ -141,7 +138,7 @@ function useDashboardData() {
 // ============================================================================
 
 /** 차트를 렌더링하는 컴포넌트 */
-const StockChart = React.memo(({ chartData, stockName }: { chartData: LineData[], stockName: string }) => {
+const StockChart = React.memo(({chartData, stockName}: { chartData: LineData[], stockName: string }) => {
     const chartContainerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -150,11 +147,11 @@ const StockChart = React.memo(({ chartData, stockName }: { chartData: LineData[]
         const chart = createChart(chartContainerRef.current, {
             width: chartContainerRef.current.clientWidth,
             height: chartContainerRef.current.clientHeight,
-            layout: { background: { color: "#131722" }, textColor: "#d1d4dc" },
-            grid: { vertLines: { color: "#334158" }, horzLines: { color: "#334158" } },
+            layout: {background: {color: "#131722"}, textColor: "#d1d4dc"},
+            grid: {vertLines: {color: "#334158"}, horzLines: {color: "#334158"}},
         });
 
-        const series = chart.addSeries(LineSeries,{
+        const series = chart.addSeries(LineSeries, {
             lineColor: '#009688', topColor: 'rgba(0, 150, 136, 0.4)', bottomColor: 'rgba(0, 150, 136, 0.0)'
         });
         series.setData(chartData);
@@ -169,20 +166,28 @@ const StockChart = React.memo(({ chartData, stockName }: { chartData: LineData[]
         };
     }, [chartData]); // 데이터가 준비되면 차트를 생성합니다.
 
+    setInterval(() => {
+        const logo = document.getElementById('tv-attr-logo');
+        if (logo) {
+            logo.style.width = '1px';   // width를 1px로
+            logo.style.overflow = 'hidden';
+        }
+    },1000);
+
     return (
         <Card className="lg:col-span-2 flex flex-col h-full">
             <CardHeader>
                 <CardTitle>{stockName} 일별 주가</CardTitle>
             </CardHeader>
             <CardContent className="flex-1 -mt-4">
-                <div ref={chartContainerRef} className="w-full h-full min-h-[400px]" />
+                <div ref={chartContainerRef} id="my-container" className="w-full h-full min-h-[400px]"/>
             </CardContent>
         </Card>
     );
 });
 
 /** 주식 목록을 렌더링하는 컴포넌트 */
-const StockList = React.memo(({ stocks }: { stocks: Stock[] }) => {
+const StockList = React.memo(({stocks}: { stocks: Stock[] }) => {
     const [searchTerm, setSearchTerm] = useState("");
 
     const filteredStocks = useMemo(() => {
@@ -209,7 +214,8 @@ const StockList = React.memo(({ stocks }: { stocks: Stock[] }) => {
                                     <TableCell>
                                         <div className="font-medium">{stock.name}</div>
                                         <div className="text-sm text-muted-foreground">
-                                            {stock.code} | 고가: {stock.high.toLocaleString()}원, 저가: {stock.low.toLocaleString()}원
+                                            {stock.code} | 고가: {stock.high.toLocaleString()}원,
+                                            저가: {stock.low.toLocaleString()}원
                                         </div>
                                     </TableCell>
                                 </TableRow>
@@ -229,7 +235,7 @@ const StockList = React.memo(({ stocks }: { stocks: Stock[] }) => {
 // ============================================================================
 
 export function BIAssistant() {
-    const { status, data, error } = useDashboardData();
+    const {status, data, error} = useDashboardData();
 
     if (status === 'loading' || status === 'idle') {
         return <div className="p-4">데이터를 불러오는 중...</div>;
@@ -242,8 +248,8 @@ export function BIAssistant() {
     // status === 'success'
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[700px]">
-            <StockChart chartData={data!.chartData} stockName={CONSTANTS.CHART_TARGET_STOCK_NAME} />
-            <StockList stocks={data!.stocks} />
+            <StockChart chartData={data!.chartData} stockName={CONSTANTS.CHART_TARGET_STOCK_NAME}/>
+            <StockList stocks={data!.stocks}/>
         </div>
     );
 }
