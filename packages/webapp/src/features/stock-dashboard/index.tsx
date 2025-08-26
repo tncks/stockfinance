@@ -233,7 +233,7 @@ const StockList = React.memo(({
                                 <TableRow
                                     key={stock.code}
                                     className={`cursor-pointer hover:bg-gray-50 transition-colors ${
-                                        selectedStock === stock.name ? 'bg-blue-50 border-l-4 border-blue-500' : ''
+                                        selectedStock === stock.name ? 'border-l-4 border-blue-500' : ''
                                     }`}
                                     onClick={() => onStockSelect(stock.name)}
                                 >
