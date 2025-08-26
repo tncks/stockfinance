@@ -15,7 +15,7 @@ import './StockDashboard.module.css'; // M2
 // ============================================================================
 
 const CONSTANTS = {
-    CHART_TARGET_STOCK_NAME: '기아',
+    DEFAULT_CHART_STOCK_NAME: '기아', // 기본값으로 변경
     DB_TABLES: {
         LIVE_PRICES: 'StockLivePrice',
         DAILY_PRICES: 'DailyPrices',
@@ -61,11 +61,11 @@ const stockService = {
      * 주식 목록과 특정 종목의 차트 데이터를 병렬로 가져옵니다.
      * @returns {Promise<{stocks: Stock[], chartData: LineData[]}>} 정제된 데이터
      */
-    async fetchDashboardData() {
+    async fetchDashboardData(selectedStockName: string = CONSTANTS.DEFAULT_CHART_STOCK_NAME) {
         const [stockResponse, chartResponse] = await Promise.all([
             supabase.from(CONSTANTS.DB_TABLES.LIVE_PRICES).select('종목코드,종목명,고가,저가').order('종목명'),
             supabase.from(CONSTANTS.DB_TABLES.DAILY_PRICES).select('기준일자,고가')
-                .eq('종목명', CONSTANTS.CHART_TARGET_STOCK_NAME)
+                .eq('종목명', selectedStockName) // 동적으로 선택된 종목
                 .gte('기준일자', 20250810)
                 .lte('기준일자', 20250814)
                 .order('기준일자')
@@ -113,7 +113,7 @@ type AsyncState<T> = {
     error: string | null;
 };
 
-function useDashboardData() {
+function useDashboardData(selectedStockName: string) {
     const [state, setState] = useState<AsyncState<{ stocks: Stock[], chartData: LineData[] }>>({
         status: 'idle',
         data: null,
@@ -122,14 +122,14 @@ function useDashboardData() {
 
     useEffect(() => {
         setState(s => ({...s, status: 'loading'}));
-        stockService.fetchDashboardData()
+        stockService.fetchDashboardData(selectedStockName)
             .then(data => {
                 setState({status: 'success', data, error: null});
             })
             .catch(error => {
                 setState({status: 'error', data: null, error: error.message});
             });
-    }, []);
+    }, [selectedStockName]); // selectedStockName이 변경될 때마다 재실행
 
     return state;
 }
@@ -141,7 +141,11 @@ function useDashboardData() {
 // ============================================================================
 
 /** 차트를 렌더링하는 컴포넌트 */
-const StockChart = React.memo(({chartData, stockName}: { chartData: LineData[], stockName: string }) => {
+const StockChart = React.memo(({chartData, stockName, isLoading}: {
+    chartData: LineData[],
+    stockName: string,
+    isLoading?: boolean
+}) => {
     const chartContainerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -169,22 +173,41 @@ const StockChart = React.memo(({chartData, stockName}: { chartData: LineData[], 
         };
     }, [chartData]); // 데이터가 준비되면 차트를 생성합니다.
 
-
-
     return (
         <Card className="lg:col-span-2 flex flex-col h-full">
             <CardHeader>
-                <CardTitle>{stockName} 일별 주가</CardTitle>
+                <CardTitle>
+                    {stockName} 일별 주가
+                    {isLoading && <span className="ml-2 text-sm text-blue-500">(로딩 중...)</span>}
+                </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 -mt-4">
-                <div ref={chartContainerRef} className="w-full h-full min-h-[400px]"/>
+                {isLoading ? (
+                    <div className="w-full h-full min-h-[400px] flex items-center justify-center">
+                        <div className="text-gray-500">차트 데이터를 불러오는 중...</div>
+                    </div>
+                ) : chartData.length === 0 ? (
+                    <div className="w-full h-full min-h-[400px] flex items-center justify-center">
+                        <div className="text-gray-500">{stockName}의 차트 데이터가 없습니다.</div>
+                    </div>
+                ) : (
+                    <div ref={chartContainerRef} className="w-full h-full min-h-[400px]"/>
+                )}
             </CardContent>
         </Card>
     );
 });
 
 /** 주식 목록을 렌더링하는 컴포넌트 */
-const StockList = React.memo(({stocks}: { stocks: Stock[] }) => {
+const StockList = React.memo(({
+                                  stocks,
+                                  selectedStock,
+                                  onStockSelect
+                              }: {
+    stocks: Stock[],
+    selectedStock: string,
+    onStockSelect: (stockName: string) => void
+}) => {
     const [searchTerm, setSearchTerm] = useState("");
 
     const filteredStocks = useMemo(() => {
@@ -207,7 +230,13 @@ const StockList = React.memo(({stocks}: { stocks: Stock[] }) => {
                         <TableHeader><TableRow><TableHead>전체 종목</TableHead></TableRow></TableHeader>
                         <TableBody>
                             {filteredStocks.map(stock => (
-                                <TableRow key={stock.code}>
+                                <TableRow
+                                    key={stock.code}
+                                    className={`cursor-pointer hover:bg-gray-50 transition-colors ${
+                                        selectedStock === stock.name ? 'bg-blue-50 border-l-4 border-blue-500' : ''
+                                    }`}
+                                    onClick={() => onStockSelect(stock.name)}
+                                >
                                     <TableCell>
                                         <div className="font-medium">{stock.name}</div>
                                         <div className="text-sm text-muted-foreground">
@@ -232,7 +261,12 @@ const StockList = React.memo(({stocks}: { stocks: Stock[] }) => {
 // ============================================================================
 
 export function StockDashboard() {
-    const {status, data, error} = useDashboardData();
+    const [selectedStockName, setSelectedStockName] = useState(CONSTANTS.DEFAULT_CHART_STOCK_NAME);
+    const {status, data, error} = useDashboardData(selectedStockName);
+
+    const handleStockSelect = (stockName: string) => {
+        setSelectedStockName(stockName);
+    };
 
     if (status === 'loading' || status === 'idle') {
         return <div className="p-4">데이터를 불러오는 중...</div>;
@@ -245,11 +279,21 @@ export function StockDashboard() {
     // status === 'success'
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[700px]">
-            <StockChart chartData={data!.chartData} stockName={CONSTANTS.CHART_TARGET_STOCK_NAME}/>
-            <StockList stocks={data!.stocks}/>
+            <StockChart
+                chartData={data!.chartData}
+                stockName={selectedStockName}
+                isLoading={status === 'loading'}
+            />
+            <StockList
+                stocks={data!.stocks}
+                selectedStock={selectedStockName}
+                onStockSelect={handleStockSelect}
+            />
         </div>
     );
 }
+
+
 
 // 주식 Holding 관련 API 등 목적은 화면에 가져와서 프론트 단에 출력하기, 코드 도입 검토.. ->
 /*
