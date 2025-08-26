@@ -2,20 +2,20 @@ import { useState, useEffect } from "react";
 import {Card, CardContent, CardHeader, CardTitle} from "@/shared/ui/card";
 import {Button} from "@/shared/ui/button";
 import {Badge} from "@/shared/ui/badge";
-import {StockChart} from "@/shared/ui/stock-chart";
+// import {StockChart} from "@/shared/ui/stock-chart";
 import {PortfolioCard} from "@/features/portfolio-card";
 import {TradingInterface} from "@/features/trading-interface";
 import {CommunityHub} from "@/features/community-hub";
 import {BIAssistant} from "@/features/stock-dashboard";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/shared/ui/tabs";
-import {DollarSign, TrendingUp, TrendingDown, AlertCircle, Users, Bot} from "lucide-react";
-import {createChart, AreaSeries, CandlestickSeries} from 'lightweight-charts';
+import {DollarSign, TrendingUp, TrendingDown, AlertCircle, Users } from "lucide-react";
+import {createChart, AreaSeries} from 'lightweight-charts';  // , CandlestickSeries
 
 
 
 
 function myChartFun() {
-    const chartOptions = {width: 320, height: 240};
+    const chartOptions = {height: 240};
     const ele = document.getElementById('my-container');
     const chart = createChart(ele, chartOptions);
     const areaSeries = chart.addSeries(AreaSeries, {
