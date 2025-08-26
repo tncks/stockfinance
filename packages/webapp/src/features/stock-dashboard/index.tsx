@@ -7,7 +7,7 @@ import { supabase } from '@/shared/lib/supabaseClient';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 import { Input } from "@/shared/ui/input";
-import { createChart, LineData } from "lightweight-charts";
+import {createChart, LineData, LineSeries} from "lightweight-charts";
 
 // ============================================================================
 // 1. 상수 및 타입 정의 (Constants & Types)
@@ -154,7 +154,7 @@ const StockChart = React.memo(({ chartData, stockName }: { chartData: LineData[]
             grid: { vertLines: { color: "#334158" }, horzLines: { color: "#334158" } },
         });
 
-        const series = chart.addAreaSeries({
+        const series = chart.addSeries(LineSeries,{
             lineColor: '#009688', topColor: 'rgba(0, 150, 136, 0.4)', bottomColor: 'rgba(0, 150, 136, 0.0)'
         });
         series.setData(chartData);
