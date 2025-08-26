@@ -325,10 +325,10 @@ export function TradingDashboard() {
                 {/* Header */}
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-4xl font-bold bg-clip-text">
+                        <h1 className="text-4xl font-bold" style={{backgroundColor:"white"}}>
                             <img src="/stock_web_logo.svg" alt="로고" className="h-20 min-w-20"/>
                         </h1>
-                        <p className="text-muted-foreground mt-2">$</p>
+                        <p className="text-muted-foreground mt-2">&nbsp;</p>
                     </div>
                     <div className="flex items-center gap-4">
                         <Badge variant="secondary" className="text-lg px-4 py-2">
