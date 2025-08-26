@@ -22,19 +22,19 @@ function myChartFun() {
         autoscaleInfoProvider: undefined,
         baseLineColor: "#ff0000",
         baseLineStyle: undefined,
-        baseLineVisible: false,
+        baseLineVisible: true,
         baseLineWidth: undefined,
         color: "#222222",
         crosshairMarkerBackgroundColor: "#000000",
         crosshairMarkerBorderColor: "#ff0000",
         crosshairMarkerBorderWidth: 0,
         crosshairMarkerRadius: 0,
-        crosshairMarkerVisible: false,
+        crosshairMarkerVisible: true,
         lastPriceAnimation: undefined,
-        lastValueVisible: false,
+        lastValueVisible: true,
         lineStyle: undefined,
         lineType: undefined,
-        lineVisible: false,
+        lineVisible: true,
         lineWidth: undefined,
         pointMarkersRadius: 0,
         pointMarkersVisible: false,
@@ -42,11 +42,11 @@ function myChartFun() {
         priceLineColor: "#ff0000",
         priceLineSource: undefined,
         priceLineStyle: undefined,
-        priceLineVisible: false,
+        priceLineVisible: true,
         priceLineWidth: undefined,
         priceScaleId: "",
         title: "",
-        visible: false,
+        visible: true,
         //topColor: '#2962FF',  //lineColor: '#2962FF',
         //bottomColor: 'rgba(41, 98, 255, 0.28)'
     });
@@ -93,17 +93,7 @@ function myChartFun() {
 
 
 
-// Mock data
-// const stockData = [
-//     {time: '9:30', price: 150},
-//     {time: '10:00', price: 152},
-//     {time: '10:30', price: 148},
-//     {time: '11:00', price: 155},
-//     {time: '11:30', price: 157},
-//     {time: '12:00', price: 159},
-//     {time: '12:30', price: 161},
-//     {time: '1:00', price: 163},
-// ];
+
 
 const portfolioItems = [
     {
