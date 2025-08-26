@@ -2,101 +2,13 @@ import {useState, useEffect} from "react";
 import {Card, CardContent, CardHeader, CardTitle} from "@/shared/ui/card";
 import {Button} from "@/shared/ui/button";
 import {Badge} from "@/shared/ui/badge";
-// import {StockChart} from "@/shared/ui/stock-chart";
 import {PortfolioCard} from "@/features/portfolio-card";
 import {TradingInterface} from "@/features/trading-interface";
 import {CommunityHub} from "@/features/community-hub";
 import {StockDashboard} from "@/features/stock-dashboard";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/shared/ui/tabs";
 import {DollarSign, TrendingUp, TrendingDown, AlertCircle, Users} from "lucide-react";
-import {createChart, LineSeries} from 'lightweight-charts';  // , CandlestickSeries
-
-
-function myChartFun() {
-    const chartOptions = {
-        height: 600,
-        layout: {
-            background: {
-                color: '#000000', // 배경을 검정색으로 설정
-            },
-            textColor: '#FFFFFF'
-        },
-        grid: {
-            vertLines: { color: '#444444' },    // 수직 그리드 회색
-            horzLines: { color: '#444444' },    // 수평 그리드 회색
-        },
-    };
-    const ele = document.getElementById('my-container');
-    const chart = createChart(ele, chartOptions);
-    const lineSeries = chart.addSeries(LineSeries,{
-        autoscaleInfoProvider: undefined,
-        baseLineColor: "#ffff00",
-        baseLineStyle: undefined,
-        baseLineVisible: true,
-        baseLineWidth: undefined,
-        color: "#00ff00",
-        crosshairMarkerBackgroundColor: "#000000",
-        crosshairMarkerBorderColor: "#ff0000",
-        crosshairMarkerBorderWidth: 0,
-        crosshairMarkerRadius: 0,
-        crosshairMarkerVisible: true,
-        lastPriceAnimation: undefined,
-        lastValueVisible: true,
-        lineStyle: undefined,
-        lineType: undefined,
-        lineVisible: true,
-        lineWidth: 2,
-        pointMarkersRadius: 0,
-        pointMarkersVisible: false,
-        priceFormat: { type: 'price', precision: 0, minMove: 1 },
-        priceLineColor: "#ff0000",
-        priceLineSource: undefined,
-        priceLineStyle: undefined,
-        priceLineVisible: true,
-        priceLineWidth: 1,
-        priceScaleId: "",
-        title: "",
-        visible: true,
-    });
-    lineSeries.setData([
-        {time: '2024-12-22', value: 32},
-        {time: '2024-12-23', value: 31},
-        {time: '2024-12-24', value: 27},
-        {time: '2024-12-25', value: 27},
-        {time: '2024-12-26', value: 25},
-        {time: '2024-12-27', value: 28},
-        {time: '2024-12-28', value: 25},
-        {time: '2024-12-29', value: 23},
-        {time: '2024-12-30', value: 22},
-        {time: '2024-12-31', value: 22},
-    ]);
-
-    // const candlestickSeries = chart.addSeries(CandlestickSeries, {
-    //     upColor: '#26a69a', downColor: '#ef5350', borderVisible: false,
-    //     wickUpColor: '#26a69a', wickDownColor: '#ef5350',
-    // });
-    // candlestickSeries.setData([
-    //     {time: '2024-12-22', open: 75.16, high: 82.84, low: 36.16, close: 45.72},
-    //     {time: '2024-12-23', open: 45.12, high: 53.90, low: 45.12, close: 48.09},
-    //     {time: '2024-12-24', open: 60.71, high: 60.71, low: 53.39, close: 59.29},
-    //     {time: '2024-12-25', open: 68.26, high: 68.26, low: 59.04, close: 60.50},
-    //     {time: '2024-12-26', open: 67.71, high: 105.85, low: 66.67, close: 91.04},
-    //     {time: '2024-12-27', open: 91.04, high: 121.40, low: 82.70, close: 111.40},
-    //     {time: '2024-12-28', open: 111.51, high: 142.83, low: 103.34, close: 131.25},
-    //     {time: '2024-12-29', open: 131.33, high: 151.17, low: 77.68, close: 96.43},
-    //     {time: '2024-12-30', open: 106.33, high: 110.20, low: 90.39, close: 98.10},
-    //     {time: '2024-12-31', open: 109.87, high: 114.69, low: 85.66, close: 111.26},
-    // ]);
-
-    chart.timeScale().fitContent();
-    // logo 최소화 숨기기 실행
-    const logo = document.getElementById('tv-attr-logo');
-    if (logo) {
-        logo.style.width = '1px';   // width를 1px로
-        logo.style.overflow = 'hidden';
-    }
-
-}
+//import {createChart, LineSeries} from 'lightweight-charts';  // , CandlestickSeries
 
 
 const portfolioItems = [
@@ -314,10 +226,7 @@ export function TradingDashboard() {
     const totalGain = portfolioItems.reduce((sum, item) => sum + item.gain, 0);
     const totalGainPercent = (totalGain / (totalPortfolioValue - totalGain)) * 100;
 
-    setTimeout(() => {
-        console.log(' ');  // 차트 프론트에 보여주기 기능은 임시 비활성화 상태
-        //myChartFun();
-    }, 1300); //1300 == 1.3초임.
+
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/20">
@@ -400,17 +309,7 @@ export function TradingDashboard() {
                         {/*    change={13}*/}
                         {/*    changePercent={9.17}*/}
                         {/*/>*/}
-                        {/* My Stock Chart */}
-                        <div className="space-y-6">
-                            {/* Debug:Testing chart... */}
-                            <div className="space-y-4">
-                                <br/>
-                                <div id="my-container"></div>
-                                <br/>
-                            </div>
 
-
-                        </div>
 
                         {/* Quick Portfolio Overview */}
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
