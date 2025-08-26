@@ -2,17 +2,24 @@ import {Button} from "@/shared/ui/button";
 import {Input} from "@/shared/ui/input";
 import {Badge} from "@/shared/ui/badge";
 import {ScrollArea} from "@/shared/ui/scroll-area";
-import {Bot, Send} from "lucide-react";
-import {useEffect, useState} from 'react';
+import {useEffect, useState, useRef} from 'react';
 import {supabase} from '@/shared/lib/supabaseClient';
 import {Card, CardContent, CardHeader, CardTitle} from '@/shared/ui/card';
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from '@/shared/ui/table';
+import {createChart, LineSeries} from 'lightweight-charts';  // , CandlestickSeries
+import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/shared/ui/tabs";
 
+let lineSeries;
+
+
+// 잠깐 순서 정리: useEffect() 호출 -> 내부 로직 실행 -> fetchStockData[LivePrice] & fetchChartData[DailyPrices] -> setStocks() 통해 stocks 에 값 담김 -> setSCharts() 통해 scharts 에 값 담김 -> myChartFun() 언제 실행? -> setTimeout 언제 실행? 순서 어케?
 
 export function BIAssistant() {
 
     const [inputMessage, setInputMessage] = useState("");
-
+    const chartContainerRef = useRef<HTMLDivElement>(null);
+    const chartInstanceRef = useRef<any>(null); // 차트 인스턴스 참조용
+    const lineSeriesRef = useRef<any>(null); // lineSeries 인스턴스 참조용
 
     type Stock = {
         stock_code: string;
@@ -21,8 +28,16 @@ export function BIAssistant() {
         stock_lowest: number;
     };
 
+    type SChart = {
+        base_date: number;
+        stock_code: string;
+        stock_name: string;
+        stock_highest: number;
+    };
+
 
     const [stocks, setStocks] = useState<Stock[]>([]);
+    const [scharts, setSCharts] = useState<SChart[]>([]);
 
     const [loading, setLoading] = useState(true);
 
@@ -30,18 +45,113 @@ export function BIAssistant() {
 
 
     useEffect(() => {
+
+        if (chartContainerRef.current && !chartInstanceRef.current) {
+            const chartOptions = {
+                height: 600,
+                layout: {
+                    background: {
+                        color: '#000000', // 배경을 검정색으로 설정
+                    },
+                    textColor: '#FFFFFF'
+                },
+                grid: {
+                    vertLines: {color: '#444444'},    // 수직 그리드 회색
+                    horzLines: {color: '#444444'},    // 수평 그리드 회색
+                },
+            };
+            // const ele = document.getElementById('my-container');
+            const chart = createChart(chartContainerRef.current!  /*ele*/, chartOptions);
+            lineSeries = chart.addSeries(LineSeries, {
+                autoscaleInfoProvider: undefined,
+                baseLineColor: "#ffff00",
+                baseLineStyle: undefined,
+                baseLineVisible: true,
+                baseLineWidth: undefined,
+                color: "#00ff00",
+                crosshairMarkerBackgroundColor: "#000000",
+                crosshairMarkerBorderColor: "#ff0000",
+                crosshairMarkerBorderWidth: 0,
+                crosshairMarkerRadius: 0,
+                crosshairMarkerVisible: true,
+                lastPriceAnimation: undefined,
+                lastValueVisible: true,
+                lineStyle: undefined,
+                lineType: undefined,
+                lineVisible: true,
+                lineWidth: 2,
+                pointMarkersRadius: 0,
+                pointMarkersVisible: false,
+                priceFormat: {type: 'price', precision: 0, minMove: 1},
+                priceLineColor: "#ff0000",
+                priceLineSource: undefined,
+                priceLineStyle: undefined,
+                priceLineVisible: true,
+                priceLineWidth: 1,
+                priceScaleId: "",
+                title: "",
+                visible: true,
+            });
+
+            /*
+            // const candlestickSeries = chart.addSeries(CandlestickSeries, {
+            //     upColor: '#26a69a', downColor: '#ef5350', borderVisible: false,
+            //     wickUpColor: '#26a69a', wickDownColor: '#ef5350',
+            // });
+            // candlestickSeries.setData([
+            //     {time: '2024-12-22', open: 75.16, high: 82.84, low: 36.16, close: 45.72},
+            //     {time: '2024-12-23', open: 45.12, high: 53.90, low: 45.12, close: 48.09},
+            //     {time: '2024-12-24', open: 60.71, high: 60.71, low: 53.39, close: 59.29},
+            //     {time: '2024-12-25', open: 68.26, high: 68.26, low: 59.04, close: 60.50},
+            //     {time: '2024-12-26', open: 67.71, high: 105.85, low: 66.67, close: 91.04},
+            //     {time: '2024-12-27', open: 91.04, high: 121.40, low: 82.70, close: 111.40},
+            //     {time: '2024-12-28', open: 111.51, high: 142.83, low: 103.34, close: 131.25},
+            //     {time: '2024-12-29', open: 131.33, high: 151.17, low: 77.68, close: 96.43},
+            //     {time: '2024-12-30', open: 106.33, high: 110.20, low: 90.39, close: 98.10},
+            //     {time: '2024-12-31', open: 109.87, high: 114.69, low: 85.66, close: 111.26},
+            // ]);
+            */
+
+            chart.timeScale().fitContent();
+
+            chartInstanceRef.current = chart;
+            lineSeriesRef.current = lineSeries;
+
+            return () => {
+                if (chartInstanceRef.current) {
+                    chartInstanceRef.current.remove();
+                    chartInstanceRef.current = null;
+                }
+            };
+        }
+    }, []);
+
+    // // 차트 초기화 함수
+    // const myChartFun = () => {
+    //
+    //     // logo 최소화 숨기기 실행
+    //     const logo = document.getElementById('tv-attr-logo');
+    //     if (logo) {
+    //         logo.style.width = '1px';   // width를 1px로
+    //         logo.style.overflow = 'hidden';
+    //     }
+    //
+    // }
+    //
+    useEffect(() => {
+
         const fetchStockData = async () => {
             try {
-                setLoading(true);
+                //setLoading(true);
                 setError(null);
 
-                // Fetch all columns and all rows from the table
+                // Fetch all columns and all rows from the table1
                 const selecterSTR = "종목코드,종목명,고가,저가";
                 const cols = selecterSTR.split(',');
                 const {data, error: supabaseError} = await supabase
                     .from('StockLivePrice')
-                    .select(selecterSTR);
-
+                    .select(selecterSTR)
+                    .order('종목명', {ascending: true});
 
 
                 // console.log(data);
@@ -76,7 +186,67 @@ export function BIAssistant() {
             }
         };
 
+        const fetchChartData = async () => {
+            try {
+                setError(null);
+
+                // Fetch all columns and all rows from the table2
+                const graphSTR = "기준일자,종목코드,종목명,고가";
+                const Graph_cols_graph = graphSTR.split(',');
+                const {data, error: supabaseError} = await supabase
+                    .from('DailyPrices')
+                    .select(graphSTR)
+                    .gte('기준일자', 20250810)
+                    .eq('종목명', '기아')
+                    .order('기준일자', {ascending: true});
+
+                if (data) {
+                    const mapped = data.map((row) => ({
+                        base_date: row[Graph_cols_graph[0]],
+                        stock_code: row[Graph_cols_graph[1]],
+                        stock_name: row[Graph_cols_graph[2]],
+                        stock_highest: row[Graph_cols_graph[3]],
+                    })) as SChart[];
+                    //console.log('map:');
+                    //console.log(mapped);
+                    /*setSCharts(mapped);*/
+
+                    // added:
+                    const chartKIAsTestData = mapped.map(d => ({
+                        time: `${String(d.base_date).substring(0, 4)}-${String(d.base_date).substring(4, 6)}-${String(d.base_date).substring(6, 8)}`,
+                        value: d.stock_highest
+                    }));
+
+                    //
+                    if (lineSeriesRef.current) {
+                        lineSeriesRef.current.setData(chartKIAsTestData);
+                    }
+
+                }
+
+                if (supabaseError) {
+                    // If Supabase returns an error, throw it to be caught by the catch block
+                    throw supabaseError;
+                }
+
+            } catch (err: unknown) {
+                // If any error occurs during the process, update the error state
+                console.error("Error fetching stock data:", err);
+                if (err instanceof Error) {
+                    setError(`Failed to load data: ${err.message}`);
+                } else {
+                    setError("아직 데이터가 없나 봅니다. 확인해보세요.");
+                }
+            } finally {
+                // Whether it succeeds or fails, stop loading
+                setLoading(false);
+
+            }
+
+        }
+
         fetchStockData();
+        fetchChartData();
     }, []); // The empty dependency array [] means this effect runs only once on mount
 
 
@@ -119,7 +289,8 @@ export function BIAssistant() {
                                         <TableRow key={stock.stock_code}>
                                             <TableCell>
                                                 <div className="font-medium">{stock.stock_name}</div>
-                                                <div className="text-sm text-muted-foreground">{stock.stock_code}&nbsp;&nbsp;{stock.stock_highest}{'원[고가], '}{stock.stock_lowest}{'원[저가]'}</div>
+                                                <div
+                                                    className="text-sm text-muted-foreground">{stock.stock_code}&nbsp;&nbsp;{stock.stock_highest}{'원[고가], '}{stock.stock_lowest}{'원[저가]'}</div>
                                                 {/*<div className="text-sm font-extralight"></div>*/}
                                                 {/*<div className="text-sm font-extralight"></div>*/}
                                             </TableCell>
@@ -146,6 +317,23 @@ export function BIAssistant() {
                     </div>
                 </CardContent>
             </Card>
+
+            <TabsContent value="overview" className="space-y-6">
+
+                {/* My Stock Chart */}
+                <div className="space-y-6">
+                    {/* Debug:Testing chart... */}
+                    <div className="space-y-4">
+                        <br/>
+                        <div ref={chartContainerRef}></div>
+                        <br/>
+                    </div>
+
+
+                </div>
+
+
+            </TabsContent>
 
 
         </div>
@@ -433,3 +621,4 @@ FE에서 직접 Supabase 테이블 쓰면 정책을 정확히 구성해야 함. 
 
 Prisma는 모델명 ↔ 실제 테이블 매핑만 명확히 하면, 클라이언트 코드에서 “없는 속성” 에러는 거의 사라집니다.
 * */
+
