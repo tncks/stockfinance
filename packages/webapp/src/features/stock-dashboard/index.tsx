@@ -1,3 +1,7 @@
+
+
+import { ScrollArea } from "@/shared/ui/scroll-area";
+
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from '@/shared/lib/supabaseClient';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
