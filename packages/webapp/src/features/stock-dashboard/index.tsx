@@ -322,7 +322,7 @@ export function BIAssistant() {
                 </CardContent>
             </Card>
 
-            <TabsContent value="overview" className="space-y-6">
+            {/*<TabsContent value="overview" className="space-y-6">*/}
 
                 {/* My Stock Chart */}
                 <div className="space-y-6">
@@ -337,7 +337,7 @@ export function BIAssistant() {
                 </div>
 
 
-            </TabsContent>
+            {/*</TabsContent>*/}
 
 
         </div>
