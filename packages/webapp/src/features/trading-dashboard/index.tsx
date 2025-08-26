@@ -9,20 +9,48 @@ import {CommunityHub} from "@/features/community-hub";
 import {BIAssistant} from "@/features/stock-dashboard";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/shared/ui/tabs";
 import {DollarSign, TrendingUp, TrendingDown, AlertCircle, Users } from "lucide-react";
-import {createChart, AreaSeries} from 'lightweight-charts';  // , CandlestickSeries
+import {createChart, LineSeries} from 'lightweight-charts';  // , CandlestickSeries
 
 
 
 
 function myChartFun() {
-    const chartOptions = {height: 240};
+    const chartOptions = {height: 600};
     const ele = document.getElementById('my-container');
     const chart = createChart(ele, chartOptions);
-    const areaSeries = chart.addSeries(AreaSeries, {
-        lineColor: '#2962FF', topColor: '#2962FF',
-        bottomColor: 'rgba(41, 98, 255, 0.28)',
+    const lineSeries = chart.addSeries(LineSeries, {
+        autoscaleInfoProvider: undefined,
+        baseLineColor: "#ff0000",
+        baseLineStyle: undefined,
+        baseLineVisible: false,
+        baseLineWidth: undefined,
+        color: "#222222",
+        crosshairMarkerBackgroundColor: "#000000",
+        crosshairMarkerBorderColor: "#ff0000",
+        crosshairMarkerBorderWidth: 0,
+        crosshairMarkerRadius: 0,
+        crosshairMarkerVisible: false,
+        lastPriceAnimation: undefined,
+        lastValueVisible: false,
+        lineStyle: undefined,
+        lineType: undefined,
+        lineVisible: false,
+        lineWidth: undefined,
+        pointMarkersRadius: 0,
+        pointMarkersVisible: false,
+        priceFormat: undefined,
+        priceLineColor: "#ff0000",
+        priceLineSource: undefined,
+        priceLineStyle: undefined,
+        priceLineVisible: false,
+        priceLineWidth: undefined,
+        priceScaleId: "",
+        title: "",
+        visible: false,
+        //topColor: '#2962FF',  //lineColor: '#2962FF',
+        //bottomColor: 'rgba(41, 98, 255, 0.28)'
     });
-    areaSeries.setData([
+    lineSeries.setData([
         {time: '2024-12-22', value: 32},
         {time: '2024-12-23', value: 31},
         {time: '2024-12-24', value: 27},
