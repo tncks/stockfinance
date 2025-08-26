@@ -117,79 +117,81 @@ export function BIAssistant() {
         loadAll();
     }, []);
 
-    // 차트 결과 표시 및 업데이트
     useEffect(() => {
-        console.log("[useEffect chartData] 차트 데이터가 변경됨. 데이터 길이:", chartData.length);
+        console.log("[useEffect chartData] 차트 데이터 변경, 데이터 길이:", chartData.length);
+
         if (!chartContainerRef.current) {
-            console.warn("[useEffect chartData] chartContainerRef가 할당되어 있지 않음");
+            console.warn("[useEffect chartData] chartContainerRef가 아직 할당 안 됨. 차트 초기화를 건너뜀.");
             return;
         }
 
-        // 기존 차트 있으면 제거
-        if (chartRef.current) {
-            console.log("[useEffect chartData] 이전 차트 제거");
-            chartRef.current.remove();
-            chartRef.current = null;
-        }
-
-        const width = chartContainerRef.current.clientWidth || 400;
-        const height = chartContainerRef.current.clientHeight || 400;
-        console.log(`[useEffect chartData] 차트 생성 시작, width: ${width}, height: ${height}`);
-
-        const chart = createChart(chartContainerRef.current, {
-            width,
-            height,
-            layout: {
-                background: { color: "#000000" },
-                textColor: "#FFFFFF",
-            },
-            grid: {
-                vertLines: { color: "#444444" },
-                horzLines: { color: "#444444" },
-            },
-        });
-
-        const lineSeries = chart.addSeries(LineSeries, {
-            color: "#00ff00",
-            lineWidth: 2,
-            priceLineVisible: true,
-        });
-        console.log("[useEffect chartData] 시리즈 추가 완료");
-
-        chart.timeScale().fitContent();
-
-        chartRef.current = chart;
-        lineSeriesRef.current = lineSeries;
-
-        if (chartData && chartData.length > 0) {
-            console.log("[useEffect chartData] 차트 데이터 설정 시작");
-            try {
-                lineSeries.setData(chartData);
-                console.log("[useEffect chartData] 차트 데이터 설정 완료");
-            } catch (error) {
-                console.error("[useEffect chartData] 차트 데이터 설정 중 에러:", error);
-            }
-        } else {
-            console.warn("[useEffect chartData] 차트 데이터가 없거나 빈 배열입니다.");
-        }
-
-        const handleResize = () => {
-            if (chartContainerRef.current && chartRef.current) {
-                const newWidth = chartContainerRef.current.clientWidth;
-                console.log("[handleResize] 창 크기 변경 감지. 새 너비:", newWidth);
-                chartRef.current.applyOptions({ width: newWidth });
-            }
-        };
-        window.addEventListener("resize", handleResize);
-
-        return () => {
-            window.removeEventListener("resize", handleResize);
+        try {
+            // 기존 차트 인스턴스 제거
             if (chartRef.current) {
-                console.log("[useEffect chartData cleanup] 차트 제거");
+                console.log("[useEffect chartData] 기존 차트 제거");
                 chartRef.current.remove();
                 chartRef.current = null;
             }
-        };
+
+            const width = chartContainerRef.current.clientWidth || 400;
+            const height = chartContainerRef.current.clientHeight || 400;
+            console.log(`[useEffect chartData] 차트 생성: width=${width}, height=${height}`);
+
+            const chart = createChart(chartContainerRef.current, {
+                width,
+                height,
+                layout: {
+                    background: { color: "#000000" },
+                    textColor: "#FFFFFF",
+                },
+                grid: {
+                    vertLines: { color: "#444444" },
+                    horzLines: { color: "#444444" },
+                },
+            });
+
+            const lineSeries = chart.addSeries(LineSeries, {
+                color: "#00ff00",
+                lineWidth: 2,
+                priceLineVisible: true,
+            });
+
+            chart.timeScale().fitContent();
+
+            chartRef.current = chart;
+            lineSeriesRef.current = lineSeries;
+
+            if (chartData.length > 0) {
+                console.log("[useEffect chartData] 차트 데이터 설정 시작");
+                lineSeries.setData(chartData);
+                console.log("[useEffect chartData] 차트 데이터 설정 완료");
+            } else {
+                console.warn("[useEffect chartData] 빈 데이터, 차트 데이터 설정 건너뜀");
+            }
+
+            const handleResize = () => {
+                if (chartContainerRef.current && chartRef.current) {
+                    const newWidth = chartContainerRef.current.clientWidth;
+                    console.log("[handleResize] 창 크기 변경 감지, 새 너비:", newWidth);
+                    chartRef.current.applyOptions({ width: newWidth });
+                }
+            };
+
+            window.addEventListener("resize", handleResize);
+
+            return () => {
+                window.removeEventListener("resize", handleResize);
+                if (chartRef.current) {
+                    console.log("[useEffect chartData cleanup] 차트 제거");
+                    chartRef.current.remove();
+                    chartRef.current = null;
+                }
+            };
+
+        } catch (err) {
+            console.error("[useEffect chartData] 차트 초기화 중 예외 발생:", err);
+        }
+
     }, [chartData]);
 
     if (loading) {
