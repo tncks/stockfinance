@@ -1,349 +1,206 @@
-import {Button} from "@/shared/ui/button";
-import {Input} from "@/shared/ui/input";
-import {Badge} from "@/shared/ui/badge";
-import {ScrollArea} from "@/shared/ui/scroll-area";
-import {useEffect, useState, useRef} from 'react';
-import {supabase} from '@/shared/lib/supabaseClient';
-import {Card, CardContent, CardHeader, CardTitle} from '@/shared/ui/card';
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from '@/shared/ui/table';
-import {createChart, LineSeries} from 'lightweight-charts';  // , CandlestickSeries
-import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/shared/ui/tabs";
+import { useEffect, useState, useRef } from 'react';
+import { supabase } from '@/shared/lib/supabaseClient';
 
+import { Button } from "@/shared/ui/button";
+import { Input } from "@/shared/ui/input";
+import { Badge } from "@/shared/ui/badge";
+import { ScrollArea } from "@/shared/ui/scroll-area";
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
+import { createChart, LineSeries } from 'lightweight-charts';
 
+// ----------------------- 타입 정의 ------------------------
+type Stock = {
+    stock_code: string;
+    stock_name: string;
+    stock_highest: number;
+    stock_lowest: number;
+};
 
+type SChart = {
+    base_date: number;
+    stock_code: string;
+    stock_name: string;
+    stock_highest: number;
+};
 
-// 잠깐 순서 정리: useEffect() 호출 -> 내부 로직 실행 -> fetchStockData[LivePrice] & fetchChartData[DailyPrices] -> setStocks() 통해 stocks 에 값 담김 -> setSCharts() 통해 scharts 에 값 담김 -> myChartFun() 언제 실행? -> setTimeout 언제 실행? 순서 어케?
-
+// ----------------------- 메인 컴포넌트 ------------------------
 export function BIAssistant() {
-
-    let lineSeries;
-    const [inputMessage, setInputMessage] = useState("");
-    const chartContainerRef = useRef<HTMLDivElement>(null);
-    const chartInstanceRef = useRef<any>(null); // 차트 인스턴스 참조용
-    const lineSeriesRef = useRef<any>(null); // lineSeries 인스턴스 참조용
-
-    type Stock = {
-        stock_code: string;
-        stock_name: string;
-        stock_highest: number;
-        stock_lowest: number;
-    };
-
-    type SChart = {
-        base_date: number;
-        stock_code: string;
-        stock_name: string;
-        stock_highest: number;
-    };
-
-
     const [stocks, setStocks] = useState<Stock[]>([]);
-    const [scharts, setSCharts] = useState<SChart[]>([]);
-
+    const [inputMessage, setInputMessage] = useState("");
     const [loading, setLoading] = useState(true);
-
     const [error, setError] = useState<string | null>(null);
 
+    // lightweight-charts 관리용 ref
+    const chartContainerRef = useRef<HTMLDivElement>(null);
+    const chartInstanceRef = useRef<ReturnType<typeof createChart> | null>(null);
+    const lineSeriesRef = useRef(null);
 
-    useEffect(() => {
+    // ----------------------- 데이터 가져오기 ------------------------
+    const fetchStockData = async () => {
+        try {
+            setError(null);
+            const selectStr = "종목코드,종목명,고가,저가";
+            const { data, error: supabaseError } = await supabase
+                .from('StockLivePrice')
+                .select(selectStr)
+                .order('종목명', { ascending: true });
 
-        if (chartContainerRef.current && !chartInstanceRef.current) {
-            const chartOptions = {
-                height: 600,
-                layout: {
-                    background: {
-                        color: '#000000', // 배경을 검정색으로 설정
-                    },
-                    textColor: '#FFFFFF'
-                },
-                grid: {
-                    vertLines: {color: '#444444'},    // 수직 그리드 회색
-                    horzLines: {color: '#444444'},    // 수평 그리드 회색
-                },
-            };
-            // const ele = document.getElementById('my-container');
-            const chart = createChart(chartContainerRef.current!  /*ele*/, chartOptions);
-            lineSeries = chart.addSeries(LineSeries, {
-                autoscaleInfoProvider: undefined,
-                baseLineColor: "#ffff00",
-                baseLineStyle: undefined,
-                baseLineVisible: true,
-                baseLineWidth: undefined,
-                color: "#00ff00",
-                crosshairMarkerBackgroundColor: "#000000",
-                crosshairMarkerBorderColor: "#ff0000",
-                crosshairMarkerBorderWidth: 0,
-                crosshairMarkerRadius: 0,
-                crosshairMarkerVisible: true,
-                lastPriceAnimation: undefined,
-                lastValueVisible: true,
-                lineStyle: undefined,
-                lineType: undefined,
-                lineVisible: true,
-                lineWidth: 2,
-                pointMarkersRadius: 0,
-                pointMarkersVisible: false,
-                priceFormat: {type: 'price', precision: 0, minMove: 1},
-                priceLineColor: "#ff0000",
-                priceLineSource: undefined,
-                priceLineStyle: undefined,
-                priceLineVisible: true,
-                priceLineWidth: 1,
-                priceScaleId: "",
-                title: "",
-                visible: true,
-            });
+            if (supabaseError) throw supabaseError;
 
-            /*
-            // const candlestickSeries = chart.addSeries(CandlestickSeries, {
-            //     upColor: '#26a69a', downColor: '#ef5350', borderVisible: false,
-            //     wickUpColor: '#26a69a', wickDownColor: '#ef5350',
-            // });
-            // candlestickSeries.setData([
-            //     {time: '2024-12-22', open: 75.16, high: 82.84, low: 36.16, close: 45.72},
-            //     {time: '2024-12-23', open: 45.12, high: 53.90, low: 45.12, close: 48.09},
-            //     {time: '2024-12-24', open: 60.71, high: 60.71, low: 53.39, close: 59.29},
-            //     {time: '2024-12-25', open: 68.26, high: 68.26, low: 59.04, close: 60.50},
-            //     {time: '2024-12-26', open: 67.71, high: 105.85, low: 66.67, close: 91.04},
-            //     {time: '2024-12-27', open: 91.04, high: 121.40, low: 82.70, close: 111.40},
-            //     {time: '2024-12-28', open: 111.51, high: 142.83, low: 103.34, close: 131.25},
-            //     {time: '2024-12-29', open: 131.33, high: 151.17, low: 77.68, close: 96.43},
-            //     {time: '2024-12-30', open: 106.33, high: 110.20, low: 90.39, close: 98.10},
-            //     {time: '2024-12-31', open: 109.87, high: 114.69, low: 85.66, close: 111.26},
-            // ]);
-            */
-
-            chart.timeScale().fitContent();
-
-            chartInstanceRef.current = chart;
-            lineSeriesRef.current = lineSeries;
-
-            return () => {
-                if (chartInstanceRef.current) {
-                    chartInstanceRef.current.remove();
-                    chartInstanceRef.current = null;
-                }
-            };
+            if (data) {
+                const mapped: Stock[] = data.map((row) => ({
+                    stock_code: row["종목코드"],
+                    stock_name: row["종목명"],
+                    stock_highest: row["고가"],
+                    stock_lowest: row["저가"],
+                }));
+                setStocks(mapped);
+            }
+        } catch (err: any) {
+            console.error("Error fetching stock data:", err);
+            setError(err.message || "주식 데이터를 불러오지 못했습니다.");
         }
+    };
+
+    const fetchChartData = async () => {
+        try {
+            setError(null);
+            const graphStr = "기준일자,종목코드,종목명,고가";
+            const { data, error: supabaseError } = await supabase
+                .from('DailyPrices')
+                .select(graphStr)
+                .gte('기준일자', 20250810)
+                .lte('기준일자', 20250814)
+                .eq('종목명', '기아')
+                .order('기준일자', { ascending: true });
+
+            if (supabaseError) throw supabaseError;
+
+            if (data && lineSeriesRef.current) {
+                const mapped: SChart[] = data.map((row) => ({
+                    base_date: row["기준일자"],
+                    stock_code: row["종목코드"],
+                    stock_name: row["종목명"],
+                    stock_highest: row["고가"],
+                }));
+
+                const chartData = mapped.map((d) => ({
+                    time: `${String(d.base_date).slice(0, 4)}-${String(d.base_date).slice(4, 6)}-${String(d.base_date).slice(6, 8)}`,
+                    value: d.stock_highest,
+                }));
+
+                lineSeriesRef.current.setData(chartData);
+            }
+        } catch (err: any) {
+            console.error("Error fetching chart data:", err);
+            setError(err.message || "차트 데이터를 불러오지 못했습니다.");
+        }
+    };
+
+    // ----------------------- Chart 초기화 ------------------------
+    useEffect(() => {
+        if (!chartContainerRef.current || chartInstanceRef.current) return;
+
+        const chart = createChart(chartContainerRef.current, {
+            height: 600,
+            layout: {
+                background: { color: '#000000' },
+                textColor: '#FFFFFF',
+            },
+            grid: {
+                vertLines: { color: '#444444' },
+                horzLines: { color: '#444444' },
+            },
+        });
+
+        const lineSeries = chart.addSeries(LineSeries, {
+            color: "#00ff00",
+            lineWidth: 2,
+            priceLineVisible: true,
+        });
+
+        chart.timeScale().fitContent();
+
+        chartInstanceRef.current = chart;
+        lineSeriesRef.current = lineSeries;
+
+        return () => chart.remove();
     }, []);
 
-    // // 차트 초기화 함수
-    // const myChartFun = () => {
-    //
-    //     // logo 최소화 숨기기 실행
-    //     const logo = document.getElementById('tv-attr-logo');
-    //     if (logo) {
-    //         logo.style.width = '1px';   // width를 1px로
-    //         logo.style.overflow = 'hidden';
-    //     }
-    //
-    // }
-    //
+    // ----------------------- 데이터 요청 ------------------------
     useEffect(() => {
-
-        const fetchStockData = async () => {
-            try {
-                //setLoading(true);
-                setError(null);
-
-                // Fetch all columns and all rows from the table1
-                const selecterSTR = "종목코드,종목명,고가,저가";
-                const cols = selecterSTR.split(',');
-                const {data, error: supabaseError} = await supabase
-                    .from('StockLivePrice')
-                    .select(selecterSTR)
-                    .order('종목명', {ascending: true});
-
-
-                // console.log(data);
-                if (data) {
-                    const mapped = data.map((row) => ({
-                        stock_code: row[cols[0]],
-                        stock_name: row[cols[1]],
-                        stock_highest: row[cols[2]],
-                        stock_lowest: row[cols[3]],
-                    })) as Stock[];
-                    //console.log('map:');
-                    //console.log(mapped);
-                    setStocks(mapped);
-                }
-
-                if (supabaseError) {
-                    // If Supabase returns an error, throw it to be caught by the catch block
-                    throw supabaseError;
-                }
-
-            } catch (err: unknown) {
-                // If any error occurs during the process, update the error state
-                console.error("Error fetching stock data:", err);
-                if (err instanceof Error) {
-                    setError(`Failed to load data: ${err.message}`);
-                } else {
-                    setError("아직 주식 데이터가 없나 봅니다. 확인해보세요. 혹은 와이파이 연결 문제 등 다른 가능성도 고려할 수 있어요.");
-                }
-            } finally {
-                // Whether it succeeds or fails, stop loading
-                setLoading(false);
-            }
+        const load = async () => {
+            setLoading(true);
+            await Promise.all([fetchStockData(), fetchChartData()]);
+            setLoading(false);
         };
+        load();
+    }, []);
 
-        const fetchChartData = async () => {
-            try {
-                setError(null);
-
-                // Fetch all columns and all rows from the table2
-                const graphSTR = "기준일자,종목코드,종목명,고가";
-                const Graph_cols_graph = graphSTR.split(',');
-                const {data, error: supabaseError} = await supabase
-                    .from('DailyPrices')
-                    .select(graphSTR)
-                    .gte('기준일자', 20250810)
-                    .lte('기준일자', 20250814)
-                    .eq('종목명', '기아')
-                    .order('기준일자', {ascending: true});
-
-                if (data) {
-                    const mapped = data.map((row) => ({
-                        base_date: row[Graph_cols_graph[0]],
-                        stock_code: row[Graph_cols_graph[1]],
-                        stock_name: row[Graph_cols_graph[2]],
-                        stock_highest: row[Graph_cols_graph[3]],
-                    })) as SChart[];
-                    //console.log('map:');
-                    //console.log(mapped);
-                    /*setSCharts(mapped);*/
-
-                    // added:
-                    const chartKIAsTestData = mapped.map(d => ({
-                        time: `${String(d.base_date).substring(0, 4)}-${String(d.base_date).substring(4, 6)}-${String(d.base_date).substring(6, 8)}`,
-                        value: d.stock_highest
-                    }));
-                    console.log('KIA-KIA-consoleLOG:');
-                    console.log(chartKIAsTestData);                    // 예상 콘솔 출력 결과 : 첫번째값: '2024-12-22', 두번째값: 32
-
-                    //
-                    if (lineSeriesRef.current) {
-                        lineSeriesRef.current.setData(chartKIAsTestData);
-                    }
-
-                }
-
-                if (supabaseError) {
-                    // If Supabase returns an error, throw it to be caught by the catch block
-                    throw supabaseError;
-                }
-
-            } catch (err: unknown) {
-                // If any error occurs during the process, update the error state
-                console.error("Error fetching stock data:", err);
-                if (err instanceof Error) {
-                    setError(`Failed to load data: ${err.message}`);
-                } else {
-                    setError("아직 데이터가 없나 봅니다. 확인해보세요.");
-                }
-            } finally {
-                // Whether it succeeds or fails, stop loading
-                setLoading(false);
-
-            }
-
-        }
-
-        fetchStockData();
-        fetchChartData();
-    }, []); // The empty dependency array [] means this effect runs only once on mount
-
-
-    if (loading) {
-        return <div className="p-4">..</div>;
-    }
-
-    if (error) {
-        return <div className="p-4 text-red-500">{error}</div>;
-    }
-
+    // ----------------------- UI 렌더링 ------------------------
+    if (loading) return <div className="p-4">불러오는 중...</div>;
+    if (error) return <div className="p-4 text-red-500">{error}</div>;
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 h-[600px]">
-            {/* Custom Dashboard Interface */}
+            {/* 좌측 카드: 주식 목록 */}
             <Card className="lg:col-span-3 bg-gradient-to-br from-card to-card/80 border-border/50 flex flex-col">
                 <CardHeader className="border-b border-border/50">
                     <CardTitle className="flex items-center gap-2">
-                        <div className="p-1 bg-accent/10 rounded-full">
-                            &nbsp;
-                        </div>
-                        &nbsp;
+                        <div className="p-1 bg-accent/10 rounded-full">&nbsp;</div>
                         <Badge variant="secondary" className="ml-auto">?</Badge>
                     </CardTitle>
                 </CardHeader>
-
                 <CardContent className="flex-1 flex flex-col p-0">
                     <ScrollArea className="flex-1 p-6">
-                        <div className="space-y-4">
-
-
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>종목전체</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {stocks != null ? stocks.map((stock) => (
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>종목 전체</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {stocks.length > 0 ? (
+                                    stocks.map((stock) => (
                                         <TableRow key={stock.stock_code}>
                                             <TableCell>
                                                 <div className="font-medium">{stock.stock_name}</div>
-                                                <div
-                                                    className="text-sm text-muted-foreground">{stock.stock_code}&nbsp;&nbsp;{stock.stock_highest}{'원[고가], '}{stock.stock_lowest}{'원[저가]'}</div>
-                                                {/*<div className="text-sm font-extralight"></div>*/}
-                                                {/*<div className="text-sm font-extralight"></div>*/}
+                                                <div className="text-sm text-muted-foreground">
+                                                    {stock.stock_code}&nbsp;&nbsp;
+                                                    {stock.stock_highest}원[고가], {stock.stock_lowest}원[저가]
+                                                </div>
                                             </TableCell>
-
                                         </TableRow>
-                                    )) : 0 + 0}
-                                </TableBody>
-                            </Table>
-
-
-                        </div>
+                                    ))
+                                ) : (
+                                    <TableRow>
+                                        <TableCell>📉 보유 주식 데이터가 없습니다.</TableCell>
+                                    </TableRow>
+                                )}
+                            </TableBody>
+                        </Table>
                     </ScrollArea>
 
+                    {/* 입력 영역 */}
                     <div className="p-6 border-t border-border/50">
-                        <div className="flex gap-2">
-                            <Input
-                                placeholder="입력..."
-                                value={inputMessage}
-                                onChange={(e) => setInputMessage(e.target.value)}
-                                className="flex-1"
-                            />
-
-                        </div>
+                        <Input
+                            placeholder="입력..."
+                            value={inputMessage}
+                            onChange={(e) => setInputMessage(e.target.value)}
+                            className="flex-1"
+                        />
                     </div>
                 </CardContent>
             </Card>
 
-            {/*<TabsContent value="overview" className="space-y-6">*/}
-
-                {/* My Stock Chart */}
-                <div className="space-y-6">
-                    {/* Debug:Testing chart... */}
-                    <div className="space-y-4">
-                        <br/>
-                        <div ref={chartContainerRef} className="w-full h-[400px]"></div>
-                        <br/>
-                    </div>
-
-
-                </div>
-
-
-            {/*</TabsContent>*/}
-
-
+            {/* 오른쪽 차트 */}
+            <div className="space-y-6">
+                <div ref={chartContainerRef} className="w-full h-[400px]" />
+            </div>
         </div>
     );
-
-
 }
 
 
