@@ -14,11 +14,11 @@ export function BIAssistant() {
     const [inputMessage, setInputMessage] = useState("");
 
 
-
-
     type Stock = {
         stock_code: string;
         stock_name: string;
+        stock_highest: number;
+        stock_lowest: number;
     };
 
 
@@ -35,21 +35,25 @@ export function BIAssistant() {
                 setLoading(true);
                 setError(null);
 
-                // Fetch all columns and all rows from the 'DailyPrices' table
+                // Fetch all columns and all rows from the table
+                const selecterSTR = "종목코드,종목명,고가,저가";
+                const cols = selecterSTR.split(',');
                 const {data, error: supabaseError} = await supabase
                     .from('DailyPrices')
-                    .select("종목코드, 종목명");
+                    .select(selecterSTR);
 
 
-                console.log('data:');
-                console.log(data);
+
+                // console.log(data);
                 if (data) {
                     const mapped = data.map((row) => ({
-                        stock_code: row["종목코드"],
-                        stock_name: row["종목명"],
+                        stock_code: row[cols[0]],
+                        stock_name: row[cols[1]],
+                        stock_highest: row[cols[2]],
+                        stock_lowest: row[cols[3]],
                     })) as Stock[];
-                    console.log('map:');
-                    console.log(mapped);
+                    //console.log('map:');
+                    //console.log(mapped);
                     setStocks(mapped);
                 }
 
@@ -62,9 +66,9 @@ export function BIAssistant() {
                 // If any error occurs during the process, update the error state
                 console.error("Error fetching stock data:", err);
                 if (err instanceof Error) {
-                  setError(`Failed to load data: ${err.message}`);
+                    setError(`Failed to load data: ${err.message}`);
                 } else {
-                  setError("아직 주식 데이터가 없나 봅니다. 확인해보세요. 혹은 와이파이 연결 문제 등 다른 가능성도 고려할 수 있어요.");
+                    setError("아직 주식 데이터가 없나 봅니다. 확인해보세요. 혹은 와이파이 연결 문제 등 다른 가능성도 고려할 수 있어요.");
                 }
             } finally {
                 // Whether it succeeds or fails, stop loading
@@ -76,13 +80,13 @@ export function BIAssistant() {
     }, []); // The empty dependency array [] means this effect runs only once on mount
 
 
-     if (loading) {
-         return <div className="p-4">..</div>;
-     }
+    if (loading) {
+        return <div className="p-4">..</div>;
+    }
 
-     if (error) {
-         return <div className="p-4 text-red-500">{error}</div>;
-     }
+    if (error) {
+        return <div className="p-4 text-red-500">{error}</div>;
+    }
 
 
     return (
@@ -91,10 +95,10 @@ export function BIAssistant() {
             <Card className="lg:col-span-3 bg-gradient-to-br from-card to-card/80 border-border/50 flex flex-col">
                 <CardHeader className="border-b border-border/50">
                     <CardTitle className="flex items-center gap-2">
-                        <div className="p-2 bg-accent/10 rounded-full">
+                        <div className="p-1 bg-accent/10 rounded-full">
                             &nbsp;
                         </div>
-                        주식
+                        &nbsp;
                         <Badge variant="secondary" className="ml-auto">?</Badge>
                     </CardTitle>
                 </CardHeader>
@@ -104,11 +108,10 @@ export function BIAssistant() {
                         <div className="space-y-4">
 
 
-
                             <Table>
                                 <TableHeader>
                                     <TableRow>
-                                        <TableHead>종목</TableHead>
+                                        <TableHead>종목전체</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -116,15 +119,15 @@ export function BIAssistant() {
                                         <TableRow key={stock.stock_code}>
                                             <TableCell>
                                                 <div className="font-medium">{stock.stock_name}</div>
-                                                <div
-                                                    className="text-sm text-muted-foreground">{stock.stock_code}</div>
+                                                <div className="text-sm text-muted-foreground">{stock.stock_code}&nbsp;&nbsp;{stock.stock_highest}{'원[고가], '}{stock.stock_lowest}{'원[저가]'}</div>
+                                                {/*<div className="text-sm font-extralight"></div>*/}
+                                                {/*<div className="text-sm font-extralight"></div>*/}
                                             </TableCell>
 
                                         </TableRow>
-                                    )) : 0+0 }
+                                    )) : 0 + 0}
                                 </TableBody>
                             </Table>
-
 
 
                         </div>
