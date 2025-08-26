@@ -325,8 +325,8 @@ export function TradingDashboard() {
                 {/* Header */}
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                            웹로고넣는위치텍스트를로고로대체하기
+                        <h1 className="text-4xl font-bold bg-clip-text">
+                            <img src="/stock_web_logo.svg" alt="로고" className="h-20 min-w-20"/>
                         </h1>
                         <p className="text-muted-foreground mt-2">$</p>
                     </div>

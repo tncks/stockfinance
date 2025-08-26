@@ -39,7 +39,7 @@ export function BIAssistant() {
                 const selecterSTR = "종목코드,종목명,고가,저가";
                 const cols = selecterSTR.split(',');
                 const {data, error: supabaseError} = await supabase
-                    .from('StockLivePrices')
+                    .from('StockLivePrice')
                     .select(selecterSTR);
 
 
