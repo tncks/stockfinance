@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import {useState, useEffect} from "react";
 import {Card, CardContent, CardHeader, CardTitle} from "@/shared/ui/card";
 import {Button} from "@/shared/ui/button";
 import {Badge} from "@/shared/ui/badge";
@@ -8,23 +8,33 @@ import {TradingInterface} from "@/features/trading-interface";
 import {CommunityHub} from "@/features/community-hub";
 import {BIAssistant} from "@/features/stock-dashboard";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/shared/ui/tabs";
-import {DollarSign, TrendingUp, TrendingDown, AlertCircle, Users } from "lucide-react";
+import {DollarSign, TrendingUp, TrendingDown, AlertCircle, Users} from "lucide-react";
 import {createChart, LineSeries} from 'lightweight-charts';  // , CandlestickSeries
 
 
-
-
 function myChartFun() {
-    const chartOptions = {height: 600};
+    const chartOptions = {
+        height: 600,
+        layout: {
+            background: {
+                color: '#000000', // 배경을 검정색으로 설정
+            },
+            textColor: '#FFFFFF'
+        },
+        grid: {
+            vertLines: { color: '#444444' },    // 수직 그리드 회색
+            horzLines: { color: '#444444' },    // 수평 그리드 회색
+        },
+    };
     const ele = document.getElementById('my-container');
     const chart = createChart(ele, chartOptions);
-    const lineSeries = chart.addSeries(LineSeries, {
+    const lineSeries = chart.addSeries(LineSeries,{
         autoscaleInfoProvider: undefined,
-        baseLineColor: "#ff0000",
+        baseLineColor: "#ffff00",
         baseLineStyle: undefined,
         baseLineVisible: true,
         baseLineWidth: undefined,
-        color: "#222222",
+        color: "#00ff00",
         crosshairMarkerBackgroundColor: "#000000",
         crosshairMarkerBorderColor: "#ff0000",
         crosshairMarkerBorderWidth: 0,
@@ -35,20 +45,18 @@ function myChartFun() {
         lineStyle: undefined,
         lineType: undefined,
         lineVisible: true,
-        lineWidth: undefined,
+        lineWidth: 2,
         pointMarkersRadius: 0,
         pointMarkersVisible: false,
-        priceFormat: undefined,
+        priceFormat: { type: 'price', precision: 0, minMove: 1 },
         priceLineColor: "#ff0000",
         priceLineSource: undefined,
         priceLineStyle: undefined,
         priceLineVisible: true,
-        priceLineWidth: undefined,
+        priceLineWidth: 1,
         priceScaleId: "",
         title: "",
         visible: true,
-        //topColor: '#2962FF',  //lineColor: '#2962FF',
-        //bottomColor: 'rgba(41, 98, 255, 0.28)'
     });
     lineSeries.setData([
         {time: '2024-12-22', value: 32},
@@ -89,10 +97,6 @@ function myChartFun() {
     }
 
 }
-
-
-
-
 
 
 const portfolioItems = [
@@ -239,12 +243,12 @@ const useGoogleAuth = () => {
         setError(null);
     };
 
-    return { user, isLoading, error, initiateGoogleLogin, logout };
+    return {user, isLoading, error, initiateGoogleLogin, logout};
 };
 
 // 구글 로그인 버튼 컴포넌트
 const GoogleLoginButton = () => {
-    const { user, isLoading, error, initiateGoogleLogin, logout } = useGoogleAuth();
+    const {user, isLoading, error, initiateGoogleLogin, logout} = useGoogleAuth();
 
     if (user) {
         return (
@@ -268,7 +272,7 @@ const GoogleLoginButton = () => {
         <div className="space-y-2">
             {error && (
                 <div className="flex items-center gap-2 text-red-500 text-sm">
-                    <AlertCircle className="h-4 w-4" />
+                    <AlertCircle className="h-4 w-4"/>
                     {error}
                 </div>
             )}
@@ -283,10 +287,14 @@ const GoogleLoginButton = () => {
                     <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-500"></div>
                 ) : (
                     <svg className="h-5 w-5" viewBox="0 0 24 24">
-                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                        <path fill="#4285F4"
+                              d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853"
+                              d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05"
+                              d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                        <path fill="#EA4335"
+                              d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                     </svg>
                 )}
                 <span className="text-gray-700 font-medium">
@@ -326,7 +334,7 @@ export function TradingDashboard() {
                         <Badge variant="secondary" className="text-lg px-4 py-2">
                             모의예수금: &#8361;5,000,000
                         </Badge>
-                        <GoogleLoginButton />
+                        <GoogleLoginButton/>
                     </div>
                 </div>
 
@@ -432,7 +440,6 @@ export function TradingDashboard() {
                         <BIAssistant/>
                     </TabsContent>
                 </Tabs>
-
 
 
             </div>
