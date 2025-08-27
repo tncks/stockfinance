@@ -50,24 +50,30 @@ export const StockList = React.memo(({stocks, selectedStock, onStockSelect}: Sto
                                 >
                                     <TableCell>
                                         <div className="font-medium">{stock.name}</div>
-                                        {/*
-                                        * 아래 div는 고가와 저가 정보를 표시하는 영역입니다.
-                                        * C언어의 printf("%10d", value)처럼 고정된 너비와 정렬을 위해
-                                        * Tailwind CSS 클래스를 추가했습니다.
-                                        */}
-                                        <div className="flex gap-3 text-sm text-muted-foreground">
-                                            {/*
-                                            * "tabular-nums": 모든 숫자의 너비를 동일하게 만듭니다.
-                                            * "min-w-[120px]": 최소 너비를 지정하여, 숫자가 적어도 공간을 확보합니다.
-                                            * "text-right": 텍스트를 오른쪽으로 정렬하여, 숫자가 항상 끝에 맞춰지게 합니다.
-                                            * "inline-block": min-w 속성이 정상적으로 작동하도록 block 속성을 추가합니다.
-                                            */}
-                                            <span className="text-red-500 tabular-nums min-w-[120px] text-right inline-block">
-                                                고가: {stock.high.toLocaleString()}원
-                                            </span>
-                                            <span className="text-blue-500 tabular-nums min-w-[120px] text-right inline-block">
-                                                저가: {stock.low.toLocaleString()}원
-                                            </span>
+                                        <div className="text-xs text-muted-foreground flex justify-between mt-1">
+                                            <span>{stock.code}</span>
+                                            <div className="grid grid-cols-2 gap-4">
+                                                {/* 고가 */}
+                                                <div className="flex items-center justify-end space-x-1">
+                                                    <span className="text-red-600 text-[11px] font-medium bg-red-50 px-1.5 py-0.5 rounded">
+                                                      고가
+                                                    </span>
+                                                    <span className="font-mono tabular-nums text-red-600 text-sm text-right">
+                                                      {stock.high.toLocaleString()}
+                                                    </span>
+                                                    <span className="text-xs text-muted-foreground">원</span>
+                                                </div>
+                                                {/* 저가 */}
+                                                <div className="flex items-center justify-end space-x-1">
+                                                    <span className="text-blue-600 text-[11px] font-medium bg-blue-50 px-1.5 py-0.5 rounded">
+                                                      저가
+                                                    </span>
+                                                    <span className="font-mono tabular-nums text-blue-600 text-sm text-right">
+                                                      {stock.low.toLocaleString()}
+                                                    </span>
+                                                    <span className="text-xs text-muted-foreground">원</span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </TableCell>
                                 </TableRow>
