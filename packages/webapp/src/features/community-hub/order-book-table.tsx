@@ -38,26 +38,25 @@ import {toast} from "sonner";
 // --- OrderBookTable 컴포넌트: shadcn/ui 기반으로 재구성 ---
 export function OrderBookTable({ data }) {
     // Determine max volume for dynamic bar width
-    const allVolumes = data.flatMap(item => [item.askVol, item.bidVol]);
+    const allVolumes = data.flatMap(item => [item.vol]);
     const maxVolume = Math.max(...allVolumes);
 
     return (
         <Table className="text-right">
             <TableHeader>
                 <TableRow>
-                    <TableHead className="w-[35%] text-center text-white dark:text-white">매도잔량</TableHead>
+                    <TableHead className="w-[35%] text-center text-red-600 dark:text-red-400">매도잔량</TableHead>
                     <TableHead className="w-[30%] text-center font-bold">가격</TableHead>
-                    <TableHead className="w-[35%] text-center text-white dark:text-white">매수잔량</TableHead>
+                    <TableHead className="w-[35%] text-center text-blue-600 dark:text-blue-400">매수잔량</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {data.map(({ askVol, askPrice, bidVol, bidPrice }, idx) => (
+                {data.map(({ price, vol, type }, idx) => (
                     <OrderBookRow
                         key={idx}
-                        askVol={askVol}
-                        askPrice={askPrice}
-                        bidVol={bidVol}
-                        bidPrice={bidPrice}
+                        price={price}
+                        vol={vol}
+                        type={type}
                         maxVolume={maxVolume}
                     />
                 ))}
@@ -67,38 +66,40 @@ export function OrderBookTable({ data }) {
 }
 
 // --- OrderBookRow 컴포넌트: 호가 가격 및 잔량 시각화 ---
-export function OrderBookRow({ askVol, askPrice, bidVol, bidPrice, maxVolume }) {
+export function OrderBookRow({ price, vol, type, maxVolume }) {
     // Calculate dynamic bar widths based on max volume
-    const askWidth = (askVol / maxVolume) * 100;
-    const bidWidth = (bidVol / maxVolume) * 100;
+    const width = (vol / maxVolume) * 100;
+    const isAsk = type === 'ask';
 
     return (
         <TableRow className="relative">
             {/* 매도잔량 (Ask Volume) */}
             <TableCell className="p-0 text-right">
-                <div
-                    className="relative z-10 p-2 overflow-hidden"
-                    style={{ background: `linear-gradient(to right, transparent ${100 - askWidth}%, rgba(252,165,165,0.4) ${100 - askWidth}%)` }}
-                >
-                    <span className="relative z-20 text-sm text-foreground">{askVol.toLocaleString()}</span>
-                </div>
+                {isAsk && (
+                    <div
+                        className="relative z-10 p-2 overflow-hidden"
+                        style={{ background: `linear-gradient(to right, transparent ${100 - width}%, rgba(252,165,165,0.4) ${100 - width}%)` }}
+                    >
+                        <span className="relative z-20 text-sm text-foreground">{vol.toLocaleString()}</span>
+                    </div>
+                )}
             </TableCell>
 
             {/* 호가 (Price) */}
-            <TableCell className="p-0 text-center font-bold text-lg border-x-2 border-gray-200 dark:border-zinc-700">
-                <span className="text-red-600 dark:text-red-400">{askPrice.toLocaleString()}</span>
-                <br/>
-                <span className="text-blue-600 dark:text-blue-400">{bidPrice.toLocaleString()}</span>
+            <TableCell className={`p-0 text-center font-bold text-lg border-x-2 border-gray-200 dark:border-zinc-700 ${isAsk ? 'text-red-600 dark:text-red-400' : 'text-blue-600 dark:text-blue-400'}`}>
+                {price.toLocaleString()}
             </TableCell>
 
             {/* 매수잔량 (Bid Volume) */}
             <TableCell className="p-0 text-left">
-                <div
-                    className="relative z-10 p-2 overflow-hidden"
-                    style={{ background: `linear-gradient(to left, transparent ${100 - bidWidth}%, rgba(147,197,253,0.4) ${100 - bidWidth}%)` }}
-                >
-                    <span className="relative z-20 text-sm text-foreground">{bidVol.toLocaleString()}</span>
-                </div>
+                {!isAsk && (
+                    <div
+                        className="relative z-10 p-2 overflow-hidden"
+                        style={{ background: `linear-gradient(to left, transparent ${100 - width}%, rgba(147,197,253,0.4) ${100 - width}%)` }}
+                    >
+                        <span className="relative z-20 text-sm text-foreground">{vol.toLocaleString()}</span>
+                    </div>
+                )}
             </TableCell>
         </TableRow>
     );
