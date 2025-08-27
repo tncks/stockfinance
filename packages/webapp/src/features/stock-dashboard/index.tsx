@@ -1,4 +1,5 @@
 import { ScrollArea } from "@/shared/ui/scroll-area";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, } from "@/shared/ui/tooltip";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/shared/lib/supabaseClient";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
@@ -171,9 +172,11 @@ const StockChart = React.memo(({ chartData, stockName, isLoading }: StockChartPr
                 grid: { vertLines: { color: "#334158" }, horzLines: { color: "#334158" } },
             });
 
-            
 
+
+            // @ts-ignore
             seriesRef.current = chart.addSeries(LineSeries, {
+                // @ts-ignore
                 lineColor: '#009688', topColor: 'rgba(0, 150, 136, 0.4)', bottomColor: 'rgba(0, 150, 136, 0.0)',
                 priceFormat: { type: 'price', precision: 0, minMove: 1 }
             });

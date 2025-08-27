@@ -7,6 +7,16 @@ import {Avatar, AvatarFallback} from "@/shared/ui/avatar";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/shared/ui/tabs";
 import {MessageSquare, TrendingUp, TrendingDown, Heart, Share} from "lucide-react";
 import {toast} from "sonner";
+import { OrderBookTable } from './order-book-table';
+
+const data = [
+    { askVol: 91729, askPrice: 70900, bidPrice: 70400, bidVol: 82046 },
+    { askVol: 65877, askPrice: 70800, bidPrice: 70300, bidVol: 72087 },
+    { askVol: 96919, askPrice: 70700, bidPrice: 70200, bidVol: 64875 },
+    { askVol: 100489, askPrice: 70600, bidPrice: 70100, bidVol: 45038 },
+    { askVol: 24056, askPrice: 70500, bidPrice: 70000, bidVol: 79493 }
+];
+
 
 
 const communityPosts = [
@@ -122,6 +132,12 @@ export function CommunityHub() {
                             </CardContent>
                         </Card>
                     ))}
+                </div>
+            </div>
+
+            <div>
+                <div>
+                    <OrderBookTable data={data} />
                 </div>
             </div>
 
