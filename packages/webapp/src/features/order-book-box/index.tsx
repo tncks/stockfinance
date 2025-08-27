@@ -3,9 +3,6 @@ import {Card, CardContent, CardHeader, CardTitle} from "@/shared/ui/card";
 import {Button} from "@/shared/ui/button";
 import {Textarea} from "@/shared/ui/textarea";
 import {Badge} from "@/shared/ui/badge";
-// import {Avatar, AvatarFallback} from "@/shared/ui/avatar";
-// import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/shared/ui/tabs";
-// import {MessageSquare, TrendingUp, TrendingDown, Heart, Share} from "lucide-react";
 import {toast} from "sonner";
 import {OrderBookTable, OrderBookRow} from './order-book-table';
 import {Input} from "@/shared/ui/input.tsx";
@@ -37,8 +34,8 @@ type Stock = {
 
 type StockListProps = {
     stocks: Stock[];
-    selectedStock: Stock | null; // 종목 객체 전체를 받도록 수정
-    onStockSelect: (stock: Stock) => void; // 종목 객체 전체를 전달하도록 수정
+    selectedStock: Stock | null;
+    onStockSelect: (stock: Stock) => void;
 };
 
 type StockApiResponse = Record<typeof CONSTANTS.API_KEYS[keyof typeof CONSTANTS.API_KEYS], any>;
@@ -47,10 +44,7 @@ type StockApiResponse = Record<typeof CONSTANTS.API_KEYS[keyof typeof CONSTANTS.
 ///////////////////////////////////////////////////////////////////////////////////////////
 
 
-// const INITIAL_ORDER_BOOK_DATA = {
-//     currentPrice: 70000,   // 기준 가격 (low)
-//     currentPrice2: 71000,  // 기준 가격 (high)
-// };
+
 
 // 50000 ~ 90000 사이 랜덤 정수 생성 함수
 const getRandomVol = () =>
@@ -164,17 +158,18 @@ const StockList = React.memo(({stocks, selectedStock, onStockSelect}: StockListP
 StockList.displayName = "StockList";
 
 
-export function CommunityHub() {
-    //const [data, setData] = useState([]);
+export function OrderBookBox() {
+
     const [selectedStock, setSelectedStock] = useState<Stock | null>(null);
     const [orderBookData, setOrderBookData] = useState([]);
     const stockListState = useStockList();
 
 
     const getPriceStep = (lowPrice, highPrice) => {
+
         const priceRange = highPrice - lowPrice;
         if (priceRange <= 100) {
-            return 10;
+            return Math.floor(priceRange/10);
         } else if (priceRange <= 500) {
             return 50;
         } else if (priceRange <= 1000) {
@@ -213,7 +208,7 @@ export function CommunityHub() {
     };
 
     useEffect(() => {
-        if (stockListState.status === "success" && stockListState.data && !selectedStock) {   //개선가능: 조건문 괄호 내용 업데이트> !selectedStock && stockListState.data.length > 0
+        if (stockListState.status === "success" && stockListState.data && !selectedStock) {
             const firstStock = stockListState.data[0];
             setSelectedStock(firstStock);
         }

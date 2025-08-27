@@ -4,7 +4,7 @@ import {Button} from "@/shared/ui/button";
 import {Badge} from "@/shared/ui/badge";
 import {PortfolioCard} from "@/features/portfolio-card";
 import {TradingInterface} from "@/features/trading-interface";
-import {CommunityHub} from "@/features/community-hub";
+import {OrderBookBox} from "@/features/order-book-box";
 import {StockDashboard} from "@/features/stock-dashboard";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/shared/ui/tabs";
 import {DollarSign, TrendingUp, TrendingDown, AlertCircle, Users} from "lucide-react";
@@ -296,7 +296,7 @@ export function TradingDashboard() {
                         <TabsTrigger value="overview">컴포넌트-A(오버뷰)</TabsTrigger>
                         <TabsTrigger value="trade">컴포넌트-B(트레이드)</TabsTrigger>
                         <TabsTrigger value="portfolio">컴포넌트-C(포트폴리오)</TabsTrigger>
-                        <TabsTrigger value="community">컴포넌트-D(커뮤니티)</TabsTrigger>
+                        <TabsTrigger value="orderbookx">컴포넌트-D(호가)</TabsTrigger>
                         <TabsTrigger value="sboard">컴포넌트-E(종목화면)</TabsTrigger>
                     </TabsList>
 
@@ -331,8 +331,8 @@ export function TradingDashboard() {
                         </div>
                     </TabsContent>
 
-                    <TabsContent value="community">
-                        <CommunityHub/>
+                    <TabsContent value="orderbookx">
+                        <OrderBookBox/>
                     </TabsContent>
 
                     <TabsContent value="sboard">

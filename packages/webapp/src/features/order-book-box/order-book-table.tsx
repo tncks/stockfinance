@@ -3,16 +3,13 @@ import {Card, CardContent, CardHeader, CardTitle} from "@/shared/ui/card";
 import {Button} from "@/shared/ui/button";
 import {Textarea} from "@/shared/ui/textarea";
 import {Badge} from "@/shared/ui/badge";
-// import {Avatar, AvatarFallback} from "@/shared/ui/avatar";
-// import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/shared/ui/tabs";
-// import {MessageSquare, TrendingUp, TrendingDown, Heart, Share} from "lucide-react";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/shared/ui/table";
 import {Input} from "@/shared/ui/input";
 import {toast} from "sonner";
 
 // --- OrderBookTable 컴포넌트 ---
 export function OrderBookTable({data}) {
-    // Determine max volume for dynamic bar width
+
     const allVolumes = data.flatMap(item => [item.vol]);
     const maxVolume = Math.max(...allVolumes);
 
@@ -40,7 +37,7 @@ export function OrderBookTable({data}) {
     );
 }
 
-// --- OrderBookRow 컴포넌트: 호가 가격 및 잔량 시각화 ---
+// --- OrderBookRow 컴포넌트 ---
 export function OrderBookRow({price, vol, type, maxVolume}) {
     // Calculate dynamic bar widths based on max volume
     const width = (vol / maxVolume) * 100;
