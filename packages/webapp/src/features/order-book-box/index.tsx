@@ -176,10 +176,22 @@ export function OrderBookBox() {
             return 50;
         } else if (priceRange <= 2000) {
             return 100;
-        } else if (priceRange <= 10000) {
+        } else if (priceRange <= 3000) {
             return 200;
-        } else {
+        } else if (priceRange <= 4000) {
+            return 300;
+        } else if (priceRange <= 5000) {
+            return 400;
+        } else if (priceRange <= 6000) {
             return 500;
+        } else if (priceRange <= 7000) {
+            return 600;
+        } else if (priceRange <= 8000) {
+            return 700;
+        } else if (priceRange <= 10000) {
+            return 800;
+        } else {
+            return Math.floor(priceRange/10);
         }
     };
 
