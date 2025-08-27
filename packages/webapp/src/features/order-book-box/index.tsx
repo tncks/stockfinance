@@ -171,13 +171,13 @@ export function OrderBookBox() {
         if (priceRange <= 100) {
             return Math.floor(priceRange/10);
         } else if (priceRange <= 500) {
-            return 50;
+            return 10;
         } else if (priceRange <= 1000) {
-            return 100;
+            return 50;
         } else if (priceRange <= 2000) {
-            return 200;
+            return 100;
         } else if (priceRange <= 10000) {
-            return 250;
+            return 200;
         } else {
             return 500;
         }
