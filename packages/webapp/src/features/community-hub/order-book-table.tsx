@@ -45,9 +45,9 @@ export function OrderBookTable({ data }) {
         <Table className="text-right">
             <TableHeader>
                 <TableRow>
-                    <TableHead className="w-[35%] text-center text-red-600 dark:text-red-400">매도잔량</TableHead>
+                    <TableHead className="w-[35%] text-center text-white dark:text-white">매도잔량</TableHead>
                     <TableHead className="w-[30%] text-center font-bold">가격</TableHead>
-                    <TableHead className="w-[35%] text-center text-blue-600 dark:text-blue-400">매수잔량</TableHead>
+                    <TableHead className="w-[35%] text-center text-white dark:text-white">매수잔량</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
