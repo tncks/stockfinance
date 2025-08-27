@@ -29,17 +29,17 @@ export function CommunityHub() {
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Left side Feed */}
-            <div className="lg:col-span-2 space-y-6 bg-gray-700">
-                <br/>
-                <br/>
+            <div className="lg:col-span-2 space-y-4 ">
+                <Card className="shadow-lg">
+                    <CardHeader>
+                        <CardTitle>호가창</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <OrderBookTable data={INITIAL_ORDER_BOOK_DATA} />
+                    </CardContent>
+                </Card>
             </div>
 
-            {/* Right side Feed */}
-            <div>
-                <div className="max-w-md mx-auto p-4 bg-black rounded shadow">
-                    <OrderBookTable data={INITIAL_ORDER_BOOK_DATA}/>
-                </div>
-            </div>
 
 
         </div>
