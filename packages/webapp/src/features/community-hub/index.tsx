@@ -44,7 +44,6 @@ type StockListProps = {
 type StockApiResponse = Record<typeof CONSTANTS.API_KEYS[keyof typeof CONSTANTS.API_KEYS], any>;
 
 
-
 ///////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -58,18 +57,9 @@ const getRandomVol = () =>
     Math.floor(Math.random() * (90000 - 50000 + 1)) + 50000;
 
 
-
-
-
-
-
-
-
-
-
 const stockService = {
     async getStocks(): Promise<Stock[]> {
-        const { data, error } = await supabase
+        const {data, error} = await supabase
             .from(CONSTANTS.DB_TABLES.LIVE_PRICES)
             .select("종목코드,종목명,고가,저가")
             .order("종목명");
@@ -106,19 +96,20 @@ function useStockList() {
     });
 
     useEffect(() => {
-        setState((s) => ({ ...s, status: "loading", data: null }));
+        setState((s) => ({...s, status: "loading", data: null}));
         stockService.getStocks()
             .then((data) => {
-                setState({ status: "success", data, error: null });
+                setState({status: "success", data, error: null});
             })
             .catch((error) => {
-                setState({ status: "error", data: null, error: error.message });
+                setState({status: "error", data: null, error: error.message});
             });
     }, []);
 
     return state;
 }
-const StockList = React.memo(({ stocks, selectedStock, onStockSelect }: StockListProps) => {
+
+const StockList = React.memo(({stocks, selectedStock, onStockSelect}: StockListProps) => {
     const [searchTerm, setSearchTerm] = useState("");
 
     const filteredStocks = useMemo(() => {
@@ -202,16 +193,6 @@ export function CommunityHub() {
     }, []);
 
 
-
-
-
-
-
-
-
-
-
-
     useEffect(() => {
         if (stockListState.data && stockListState.data.length > 0 && !selectedStockName) {
             setSelectedStockName(stockListState.data[0].name);
@@ -233,16 +214,16 @@ export function CommunityHub() {
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Left side Feed */}
-            <div>
-                <Card className="max-w-md mx-auto shadow-lg">
-                    <CardHeader>
-                        <CardTitle>호가</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <OrderBookTable data={data}/>
-                    </CardContent>
-                </Card>
-            </div>
+
+            <Card className="min-w-96 max-w-md mx-auto shadow-lg lg:col-span-2 flex flex-col h-full relative">
+                <CardHeader>
+                    <CardTitle>호가</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <OrderBookTable data={data}/>
+                </CardContent>
+            </Card>
+
             {/* {Right side Feed} */}
             <div>
                 <StockList
