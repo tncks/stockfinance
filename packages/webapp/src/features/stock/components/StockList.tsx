@@ -53,8 +53,8 @@ export const StockList = React.memo(({ stocks, selectedStock, onStockSelect }: S
                                         <div className="text-xs text-muted-foreground flex justify-between mt-1">
                                             <span>{stock.code}</span>
                                             <div className="flex gap-3">
-                                                <span className="text-red-500">고가: {stock.high.toLocaleString()}</span>
-                                                <span className="text-blue-500">저가: {stock.low.toLocaleString()}</span>
+                                                <span className="text-red-500 w-32 text-right font-mono">고가: {stock.high.toLocaleString()} 원</span>
+                                                <span className="text-blue-500 w-32 text-right font-mono">저가: {stock.low.toLocaleString()} 원</span>
                                             </div>
                                         </div>
                                     </TableCell>
