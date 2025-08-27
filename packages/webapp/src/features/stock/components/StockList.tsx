@@ -26,7 +26,7 @@ export const StockList = React.memo(({stocks, selectedStock, onStockSelect}: Sto
         <Card className="lg:col-span-1 flex flex-col h-full">
             <CardHeader>
                 <Input
-                    placeholder="종목명 검색..."
+                    placeholder="종목 검색..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />

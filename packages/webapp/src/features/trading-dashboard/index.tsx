@@ -67,13 +67,13 @@ const useGoogleAuth = () => {
     }, []);
 
     const checkAuthStatus = async () => {
-        const myUrl = `http://49.50.132.4:3000`;
+        const CLOUD_LINUX_NODE_URL = `http://49.50.132.4:3000`;
         try {
             const token = localStorage.getItem('authToken');
             if (token) {
                 console.log('checkAuthStatus 함수 내부: token이 실제 정상 존재합니다! 성공.')
                 // 토큰 검증 및 사용자 정보 가져오기
-                const response = await fetch(myUrl + '/api/v1/auth/verify', {
+                const response = await fetch(CLOUD_LINUX_NODE_URL + '/api/v1/auth/verify', {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -114,11 +114,11 @@ const useGoogleAuth = () => {
         setError(null);
 
         // 환경 변수 설정
-        const API_BASE_URL = `http://49.50.132.4:3000`;
+        const CLOUD_LINUX_NODE_URL = `http://49.50.132.4:3000`;
 
         // 현재 페이지 URL을 redirect_uri로 설정
         const currentUrl = window.location.origin + window.location.pathname;
-        const authUrl = `${API_BASE_URL}/api/v1/auth/google?redirect_uri=${encodeURIComponent(currentUrl)}`;
+        const authUrl = `${CLOUD_LINUX_NODE_URL}/api/v1/auth/google?redirect_uri=${encodeURIComponent(currentUrl)}`;
 
         // 팝업으로 로그인 창 열기 (404 에러 방지)
         const popup = window.open(authUrl, 'googleLogin', 'width=500,height=600');
@@ -298,7 +298,7 @@ export function TradingDashboard() {
                         <TabsTrigger value="trade">컴포넌트-B(트레이드)</TabsTrigger>
                         <TabsTrigger value="portfolio">컴포넌트-C(포트폴리오)</TabsTrigger>
                         <TabsTrigger value="orderbookx">컴포넌트-D(호가)</TabsTrigger>
-                        <TabsTrigger value="sboard">컴포넌트-E(종목화면)</TabsTrigger>
+                        <TabsTrigger value="sboard">컴포넌트-E(차트)</TabsTrigger>
                     </TabsList>
 
                     <TabsContent value="overview" className="space-y-6">

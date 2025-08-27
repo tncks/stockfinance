@@ -73,7 +73,7 @@ export function TradingInterface() {
       {/* Stock List */}
       <Card className="lg:col-span-2 bg-gradient-to-br from-card to-card/80 border-border/50">
         <CardHeader>
-          <CardTitle>주식 상황</CardTitle>
+          <CardTitle>매수매도 홈</CardTitle>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
@@ -127,10 +127,10 @@ export function TradingInterface() {
           <Tabs value={action} onValueChange={setAction}>
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="buy" className="data-[state=active]:bg-bull data-[state=active]:text-white">
-                Buy
+                매수
               </TabsTrigger>
               <TabsTrigger value="sell" className="data-[state=active]:bg-bear data-[state=active]:text-white">
-                Sell
+                매도
               </TabsTrigger>
             </TabsList>
             
@@ -152,14 +152,14 @@ export function TradingInterface() {
               </div>
 
               <div className="space-y-2">
-                <Label>주문의 종류</Label>
+                <Label>주문방식</Label>
                 <Select value={orderType} onValueChange={setOrderType}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="market">Market Order</SelectItem>
-                    <SelectItem value="limit">Limit Order</SelectItem>
+                    <SelectItem value="market">시장가 (선택)</SelectItem>
+                    <SelectItem value="limit">지정가 (선택)</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -168,7 +168,7 @@ export function TradingInterface() {
                 <Label>주문수량</Label>
                   <Input
                     type="number"
-                    placeholder="1"
+                    placeholder="0"
                     value={quantity}
                     onChange={(e) => setQuantity(e.target.value)}
                     min="1"
@@ -178,7 +178,7 @@ export function TradingInterface() {
 
               {orderType === 'limit' && (
                 <div className="space-y-2">
-                  <Label>Limit Price</Label>
+                  <Label>희망지정가</Label>
                     <Input
                       type="number"
                       placeholder="Price per share"
@@ -193,15 +193,15 @@ export function TradingInterface() {
 
               {selectedStock && quantity && (
                 <div className="p-3 bg-secondary/50 rounded-md">
-                  <div className="text-sm text-muted-foreground">Estimated Total</div>
+                  <div className="text-sm text-muted-foreground">거래금액</div>
                   <div className="text-lg font-bold">
                     $
                     {(
                       parseInt(quantity) * 
                       (orderType === 'market' 
                         ? stockList.find(s => s.symbol === selectedStock)!.price 
-                        : parseFloat(price) || 0)
-                    ).toFixed(2)}
+                        : parseInt(price) || 0)
+                    )}
                   </div>
                 </div>
               )}

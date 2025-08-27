@@ -13,9 +13,9 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 router.get('/google', async (req, res) => {
     // 프로덕션/개발 환경에 따른 서버 URL 설정
-    const serverUrl = `http://49.50.132.4:3000`;
+    const CLOUD_LINUX_NODE_URL = `http://49.50.132.4:3000`;
 
-    const redirectTo = `${serverUrl}/api/v1/auth/google_callback`;
+    const redirectTo = `${CLOUD_LINUX_NODE_URL}/api/v1/auth/google_callback`;
 
     const clientURLFromRequest = req.query.redirect_uri;
 
