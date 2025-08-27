@@ -50,29 +50,27 @@ export const StockList = React.memo(({stocks, selectedStock, onStockSelect}: Sto
                                 >
                                     <TableCell>
                                         <div className="font-medium">{stock.name}</div>
-                                        <div className="text-xs text-muted-foreground flex justify-between mt-1">
-                                            <span>{stock.code}</span>
-                                            <div className="grid grid-cols-2 gap-4">
-                                                {/* 고가 */}
-                                                <div className="flex items-center justify-end space-x-1">
-                                                    <span className="text-red-600 text-[11px] font-medium bg-red-50 px-1.5 py-0.5 rounded">
-                                                      고가
-                                                    </span>
-                                                    <span className="font-mono tabular-nums text-red-600 text-sm text-right">
-                                                      {stock.high.toLocaleString()}
-                                                    </span>
-                                                    <span className="text-xs text-muted-foreground">원</span>
-                                                </div>
-                                                {/* 저가 */}
-                                                <div className="flex items-center justify-end space-x-1">
-                                                    <span className="text-blue-600 text-[11px] font-medium bg-blue-50 px-1.5 py-0.5 rounded">
-                                                      저가
-                                                    </span>
-                                                    <span className="font-mono tabular-nums text-blue-600 text-sm text-right">
-                                                      {stock.low.toLocaleString()}
-                                                    </span>
-                                                    <span className="text-xs text-muted-foreground">원</span>
-                                                </div>
+                                        {/*
+                                        * 고가/저가 정보를 두 줄로 분리하여 표현하는 새로운 UI입니다.
+                                        * flex-col과 flex-row를 조합하여 `고가: {가격}`과 `저가: {가격}`을
+                                        * 각각 다른 줄에 배치했습니다.
+                                        * 이 방식은 가격의 자릿수에 상관없이 레이블과 가격이 항상 같은 줄에서 정렬되고,
+                                        * 종목명 아래에 명확하게 구분되어 보입니다.
+                                        */}
+                                        <div className="flex flex-col text-sm text-muted-foreground mt-1">
+                                            {/* 고가 섹션 */}
+                                            <div className="flex justify-between items-center w-full">
+                                                <span className="text-red-500">고가</span>
+                                                <span className="text-right text-red-500 font-semibold tabular-nums">
+                                                    {stock.high.toLocaleString()}원
+                                                </span>
+                                            </div>
+                                            {/* 저가 섹션 */}
+                                            <div className="flex justify-between items-center w-full mt-1">
+                                                <span className="text-blue-500">저가</span>
+                                                <span className="text-right text-blue-500 font-semibold tabular-nums">
+                                                    {stock.low.toLocaleString()}원
+                                                </span>
                                             </div>
                                         </div>
                                     </TableCell>
