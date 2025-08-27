@@ -48,8 +48,8 @@ type StockApiResponse = Record<typeof CONSTANTS.API_KEYS[keyof typeof CONSTANTS.
 
 
 const INITIAL_ORDER_BOOK_DATA = {
-    currentPrice: 70500, // 기준 가격
-    priceStep: 100,      // 호가 단위
+    currentPrice: 70000, // 기준 가격 //low
+    currentPrice2: 71000, // 기준 가격(  //high
 };
 
 // 50000 ~ 90000 사이 랜덤 정수 생성 함수
@@ -170,25 +170,66 @@ export function CommunityHub() {
     const stockListState = useStockList();
 
 
+
+
+
+
+
+    const getPriceStep = (lowPrice, highPrice) => {
+        const priceRange = highPrice - lowPrice;
+        if (priceRange <= 100) {
+            return 5;
+        } else if (priceRange <= 500) {
+            return 10;
+        } else if (priceRange <= 2000) {
+            return 50;
+        } else if (priceRange <= 10000) {
+            return 100;
+        } else {
+            return 500;
+        }
+    };
+
+
     // Function to generate mock order book data based on a current price
-    const generateOrderBookData = (currentPrice) => {
-        const numLevels = 5;
+    const generateOrderBookData = (currentPrice1, currentPrice2) => {
 
-        // Generate ask and bid prices
-        const askPrices = Array.from({length: numLevels}, (_, i) => currentPrice + (i + 1) * INITIAL_ORDER_BOOK_DATA.priceStep).reverse();
-        const bidPrices = Array.from({length: numLevels}, (_, i) => currentPrice - (i + 1) * INITIAL_ORDER_BOOK_DATA.priceStep);
-
-        // Combine ask and bid data into a single array
         const combinedData = [];
-        askPrices.forEach(price => combinedData.push({price, vol: getRandomVol(), type: 'ask'}));
-        bidPrices.forEach(price => combinedData.push({price, vol: getRandomVol(), type: 'bid'}));
+        const priceStep = getPriceStep(currentPrice1, currentPrice2);   //low, high 순
 
+        // // Generate ask and bid prices
+        // const askPrices = 1;//Array.from({length: numLevels}, (_, i) => currentPrice1 + (i + 1) * INITIAL_ORDER_BOOK_DATA.priceStep).reverse();
+        // const bidPrices = 1;//Array.from({length: numLevels}, (_, i) => currentPrice1 - (i + 1) * INITIAL_ORDER_BOOK_DATA.priceStep);
+        //
+        //
+        //
+        // askPrices.forEach(price => combinedData.push({price, vol: getRandomVol(), type: 'ask'}));
+        // bidPrices.forEach(price => combinedData.push({price, vol: getRandomVol(), type: 'bid'}));
+
+        // Generate ask prices (from high to low)
+        for (let i = 0; i < 5; i++) {
+            const price = currentPrice2 - i * priceStep;
+            combinedData.push({ price, vol: getRandomVol(), type: 'ask' });
+        }
+
+        // Generate bid prices (from low to high)
+        for (let i = 0; i < 5; i++) {
+            const price = currentPrice1 + i * priceStep;
+            combinedData.push({ price, vol: getRandomVol(), type: 'bid' });
+        }
+
+
+
+
+
+
+        combinedData.sort((a, b) => b.price - a.price); // SORT!!
         return combinedData;
     };
 
     useEffect(() => {
         // Initial data generation
-        const initialData = generateOrderBookData(INITIAL_ORDER_BOOK_DATA.currentPrice);
+        const initialData = generateOrderBookData(INITIAL_ORDER_BOOK_DATA.currentPrice, INITIAL_ORDER_BOOK_DATA.currentPrice2);
         setData(initialData);
     }, []);
 
