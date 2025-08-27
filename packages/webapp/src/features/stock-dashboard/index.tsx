@@ -118,7 +118,8 @@ const StockChart = React.memo(({ chartData, stockName, isLoading }: StockChartPr
             });
 
             // @ts-ignore
-            seriesRef.current = chart.addAreaSeries({
+            seriesRef.current = chart.addSeries(LineSeries, {
+                // @ts-ignore
                 lineColor: '#009688', topColor: 'rgba(0, 150, 136, 0.4)', bottomColor: 'rgba(0, 150, 136, 0.0)',
                 priceFormat: { type: 'price', precision: 0, minMove: 1 }
             });
