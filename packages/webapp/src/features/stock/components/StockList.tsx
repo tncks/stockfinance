@@ -65,9 +65,12 @@ export const StockList = React.memo(({stocks, selectedStock, onStockSelect}: Sto
                                                 <span className="text-right text-red-500 font-semibold tabular-nums">
                                                     {stock.high.toLocaleString()}원
                                                 </span>
+                                                <span className="inline-flex items-center justify-center rounded-md bg-red-200 w-5 h-5 text-red-700 text-xs font-bold leading-none">고</span>
                                                 <span className="text-right text-blue-500 font-semibold tabular-nums">
                                                     {stock.low.toLocaleString()}원
                                                 </span>
+                                                <span className="inline-flex items-center justify-center rounded-md bg-blue-200 w-5 h-5 text-blue-700 text-xs font-bold leading-none">저</span>
+
                                             </div>
                                         </div>
                                     </TableCell>
