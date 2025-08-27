@@ -240,55 +240,56 @@ export function TradingDashboard() {
                         <p className="text-muted-foreground mt-2">&nbsp;</p>
                     </div>
                     <div className="flex items-center gap-4">
-                        <Badge variant="secondary" className="text-lg px-4 py-2">
-                            모의예수금: &#8361;5,000,000
-                        </Badge>
+                        {/*<Badge variant="secondary" className="text-lg px-4 py-2">*/}
+                        {/*    모의예수금: &#8361;5,000,000*/}
+                        {/*</Badge>*/}
                         <GoogleLoginButton/>
                     </div>
                 </div>
 
-                {/* Portfolio Summary */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <Card className="bg-gradient-to-br from-card to-card/80 border-border/50">
-                        <CardHeader className="flex flex-row items-center justify-between pb-2">
-                            <CardTitle className="text-sm font-medium">포트폴리오 자산</CardTitle>
-                            <DollarSign className="h-4 w-4 text-muted-foreground"/>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold">${totalPortfolioValue.toFixed(2)}</div>
-                            <p className="text-xs text-muted-foreground">합산투자금액(예상값)</p>
-                        </CardContent>
-                    </Card>
+                {/* (debug info: This component is currently disabled) Portfolio Summary */}
+                {/*<div className="grid grid-cols-1 md:grid-cols-3 gap-6">*/}
+                {/*    <Card className="bg-gradient-to-br from-card to-card/80 border-border/50">*/}
+                {/*        <CardHeader className="flex flex-row items-center justify-between pb-2">*/}
+                {/*            <CardTitle className="text-sm font-medium">포트폴리오 자산</CardTitle>*/}
+                {/*            <DollarSign className="h-4 w-4 text-muted-foreground"/>*/}
+                {/*        </CardHeader>*/}
+                {/*        <CardContent>*/}
+                {/*            <div className="text-2xl font-bold">${totalPortfolioValue.toFixed(2)}</div>*/}
+                {/*            <p className="text-xs text-muted-foreground">합산투자금액(예상값)</p>*/}
+                {/*        </CardContent>*/}
+                {/*    </Card>*/}
 
-                    <Card className="bg-gradient-to-br from-card to-card/80 border-border/50">
-                        <CardHeader className="flex flex-row items-center justify-between pb-2">
-                            <CardTitle className="text-sm font-medium">오늘의 등락</CardTitle>
-                            {totalGain >= 0 ?
-                                <TrendingUp className="h-4 w-4 text-bull"/> :
-                                <TrendingDown className="h-4 w-4 text-bear"/>
-                            }
-                        </CardHeader>
-                        <CardContent>
-                            <div className={`text-2xl font-bold ${totalGain >= 0 ? 'text-bull' : 'text-bear'}`}>
-                                {totalGain >= 0 ? '+' : ''}${totalGain.toFixed(2)}
-                            </div>
-                            <p className="text-xs text-muted-foreground">
-                                {totalGain >= 0 ? '+' : ''}{totalGainPercent.toFixed(2)}%
-                            </p>
-                        </CardContent>
-                    </Card>
+                {/*    <Card className="bg-gradient-to-br from-card to-card/80 border-border/50">*/}
+                {/*        <CardHeader className="flex flex-row items-center justify-between pb-2">*/}
+                {/*            <CardTitle className="text-sm font-medium">오늘의 등락</CardTitle>*/}
+                {/*            {totalGain >= 0 ?*/}
+                {/*                <TrendingUp className="h-4 w-4 text-bull"/> :*/}
+                {/*                <TrendingDown className="h-4 w-4 text-bear"/>*/}
+                {/*            }*/}
+                {/*        </CardHeader>*/}
+                {/*        <CardContent>*/}
+                {/*            <div className={`text-2xl font-bold ${totalGain >= 0 ? 'text-bull' : 'text-bear'}`}>*/}
+                {/*                {totalGain >= 0 ? '+' : ''}${totalGain.toFixed(2)}*/}
+                {/*            </div>*/}
+                {/*            <p className="text-xs text-muted-foreground">*/}
+                {/*                {totalGain >= 0 ? '+' : ''}{totalGainPercent.toFixed(2)}%*/}
+                {/*            </p>*/}
+                {/*        </CardContent>*/}
+                {/*    </Card>*/}
 
-                    <Card className="bg-gradient-to-br from-card to-card/80 border-border/50">
-                        <CardHeader className="flex flex-row items-center justify-between pb-2">
-                            <CardTitle className="text-sm font-medium">랭킹</CardTitle>
-                            <Users className="h-4 w-4 text-muted-foreground"/>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold text-accent">#127</div>
-                            <p className="text-xs text-muted-foreground">글로벌 리더보드</p>
-                        </CardContent>
-                    </Card>
-                </div>
+                {/*    <Card className="bg-gradient-to-br from-card to-card/80 border-border/50">*/}
+                {/*        <CardHeader className="flex flex-row items-center justify-between pb-2">*/}
+                {/*            <CardTitle className="text-sm font-medium">랭킹</CardTitle>*/}
+                {/*            <Users className="h-4 w-4 text-muted-foreground"/>*/}
+                {/*        </CardHeader>*/}
+                {/*        <CardContent>*/}
+                {/*            <div className="text-2xl font-bold text-accent">#127</div>*/}
+                {/*            <p className="text-xs text-muted-foreground">글로벌 리더보드</p>*/}
+                {/*        </CardContent>*/}
+                {/*    </Card>*/}
+                {/*</div>*/}
+                {/* end of display disabled comment */}
 
                 {/* Main Content Tabs */}
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
