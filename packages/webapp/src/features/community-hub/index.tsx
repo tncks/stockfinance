@@ -37,8 +37,8 @@ type Stock = {
 
 type StockListProps = {
     stocks: Stock[];
-    selectedStock: string | null;
-    onStockSelect: (stockName: string) => void;
+    selectedStock: Stock | null; // 종목 객체 전체를 받도록 수정
+    onStockSelect: (stock: Stock) => void; // 종목 객체 전체를 전달하도록 수정
 };
 
 type StockApiResponse = Record<typeof CONSTANTS.API_KEYS[keyof typeof CONSTANTS.API_KEYS], any>;
@@ -47,10 +47,10 @@ type StockApiResponse = Record<typeof CONSTANTS.API_KEYS[keyof typeof CONSTANTS.
 ///////////////////////////////////////////////////////////////////////////////////////////
 
 
-const INITIAL_ORDER_BOOK_DATA = {
-    currentPrice: 70000, // 기준 가격 //low
-    currentPrice2: 71000, // 기준 가격(  //high
-};
+// const INITIAL_ORDER_BOOK_DATA = {
+//     currentPrice: 70000,   // 기준 가격 (low)
+//     currentPrice2: 71000,  // 기준 가격 (high)
+// };
 
 // 50000 ~ 90000 사이 랜덤 정수 생성 함수
 const getRandomVol = () =>
@@ -141,9 +141,9 @@ const StockList = React.memo(({stocks, selectedStock, onStockSelect}: StockListP
                                 <TableRow
                                     key={stock.code}
                                     className={`cursor-pointer hover:bg-muted/50 transition-colors ${
-                                        selectedStock === stock.name ? "bg-muted" : ""
+                                        selectedStock?.code === stock.code ? "bg-muted" : ""
                                     }`}
-                                    onClick={() => onStockSelect(stock.name)}
+                                    onClick={() => onStockSelect(stock)}
                                 >
                                     <TableCell>
                                         <div className="font-medium">{stock.name}</div>
@@ -165,26 +165,24 @@ StockList.displayName = "StockList";
 
 
 export function CommunityHub() {
-    const [data, setData] = useState([]);
-    const [selectedStockName, setSelectedStockName] = useState<string | null>(null);
+    //const [data, setData] = useState([]);
+    const [selectedStock, setSelectedStock] = useState<Stock | null>(null);
+    const [orderBookData, setOrderBookData] = useState([]);
     const stockListState = useStockList();
-
-
-
-
-
 
 
     const getPriceStep = (lowPrice, highPrice) => {
         const priceRange = highPrice - lowPrice;
         if (priceRange <= 100) {
-            return 5;
-        } else if (priceRange <= 500) {
             return 10;
-        } else if (priceRange <= 2000) {
+        } else if (priceRange <= 500) {
             return 50;
-        } else if (priceRange <= 10000) {
+        } else if (priceRange <= 1000) {
             return 100;
+        } else if (priceRange <= 2000) {
+            return 200;
+        } else if (priceRange <= 10000) {
+            return 250;
         } else {
             return 500;
         }
@@ -192,35 +190,22 @@ export function CommunityHub() {
 
 
     // Function to generate mock order book data based on a current price
-    const generateOrderBookData = (currentPrice1, currentPrice2) => {
+    const generateOrderBookData = (low, high) => {
 
         const combinedData = [];
-        const priceStep = getPriceStep(currentPrice1, currentPrice2);   //low, high 순
-
-        // // Generate ask and bid prices
-        // const askPrices = 1;//Array.from({length: numLevels}, (_, i) => currentPrice1 + (i + 1) * INITIAL_ORDER_BOOK_DATA.priceStep).reverse();
-        // const bidPrices = 1;//Array.from({length: numLevels}, (_, i) => currentPrice1 - (i + 1) * INITIAL_ORDER_BOOK_DATA.priceStep);
-        //
-        //
-        //
-        // askPrices.forEach(price => combinedData.push({price, vol: getRandomVol(), type: 'ask'}));
-        // bidPrices.forEach(price => combinedData.push({price, vol: getRandomVol(), type: 'bid'}));
+        const priceStep = getPriceStep(low, high);   //low, high 순
 
         // Generate ask prices (from high to low)
         for (let i = 0; i < 5; i++) {
-            const price = currentPrice2 - i * priceStep;
-            combinedData.push({ price, vol: getRandomVol(), type: 'ask' });
+            const price = high - i * priceStep;
+            combinedData.push({price, vol: getRandomVol(), type: 'ask'});
         }
 
         // Generate bid prices (from low to high)
         for (let i = 0; i < 5; i++) {
-            const price = currentPrice1 + i * priceStep;
-            combinedData.push({ price, vol: getRandomVol(), type: 'bid' });
+            const price = low + i * priceStep;
+            combinedData.push({price, vol: getRandomVol(), type: 'bid'});
         }
-
-
-
-
 
 
         combinedData.sort((a, b) => b.price - a.price); // SORT!!
@@ -228,20 +213,23 @@ export function CommunityHub() {
     };
 
     useEffect(() => {
-        // Initial data generation
-        const initialData = generateOrderBookData(INITIAL_ORDER_BOOK_DATA.currentPrice, INITIAL_ORDER_BOOK_DATA.currentPrice2);
-        setData(initialData);
-    }, []);
-
+        if (stockListState.status === "success" && stockListState.data && !selectedStock) {   //개선가능: 조건문 괄호 내용 업데이트> !selectedStock && stockListState.data.length > 0
+            const firstStock = stockListState.data[0];
+            setSelectedStock(firstStock);
+        }
+    }, [stockListState.status, stockListState.data, selectedStock]);
 
     useEffect(() => {
-        if (stockListState.data && stockListState.data.length > 0 && !selectedStockName) {
-            setSelectedStockName(stockListState.data[0].name);
+        if(selectedStock) {
+            const { low, high } = selectedStock;
+            const newOrderBookData = generateOrderBookData(low, high);
+            setOrderBookData(newOrderBookData);
         }
-    }, [stockListState.data, selectedStockName]);
 
-    const handleStockSelect = (stockName: string) => {
-        setSelectedStockName(stockName);
+    }, [selectedStock]);
+
+    const handleStockSelect = (stock: Stock) => {
+        setSelectedStock(stock);
     };
 
     if (stockListState.status === "loading" || stockListState.status === "idle") {
@@ -261,7 +249,7 @@ export function CommunityHub() {
                     <CardTitle>호가</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <OrderBookTable data={data}/>
+                    <OrderBookTable data={orderBookData}/>
                 </CardContent>
             </Card>
 
@@ -269,7 +257,7 @@ export function CommunityHub() {
             <div>
                 <StockList
                     stocks={stockListState.data || []}
-                    selectedStock={selectedStockName}
+                    selectedStock={selectedStock}
                     onStockSelect={handleStockSelect}
                 />
             </div>
