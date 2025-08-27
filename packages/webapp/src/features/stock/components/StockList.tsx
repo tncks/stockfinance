@@ -17,7 +17,8 @@ export const StockList = React.memo(({ stocks, selectedStock, onStockSelect }: S
     const filteredStocks = useMemo(() => {
         if (!searchTerm) return stocks;
         return stocks.filter((stock) =>
-            stock.name.toLowerCase().includes(searchTerm.toLowerCase())
+            stock.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            stock.code.includes(searchTerm)
         );
     }, [stocks, searchTerm]);
 
