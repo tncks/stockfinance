@@ -49,25 +49,22 @@ export const StockList = React.memo(({stocks, selectedStock, onStockSelect}: Sto
                                     onClick={() => onStockSelect(stock)}
                                 >
                                     <TableCell>
-                                        <div className="font-medium">{stock.name}</div>
-                                        {/*
-                                        * 고가/저가 정보를 두 줄로 분리하여 표현하는 새로운 UI입니다.
-                                        * flex-col과 flex-row를 조합하여 `고가: {가격}`과 `저가: {가격}`을
-                                        * 각각 다른 줄에 배치했습니다.
-                                        * 이 방식은 가격의 자릿수에 상관없이 레이블과 가격이 항상 같은 줄에서 정렬되고,
-                                        * 종목명 아래에 명확하게 구분되어 보입니다.
+                                        {/* * 사용자의 피드백에 따라 2x2 그리드 레이아웃으로 변경했습니다.
+                                        * 좌측에는 종목명(상단)과 종목코드(하단, 작게)를,
+                                        * 우측에는 고가(상단)와 저가(하단)를 배치합니다.
+                                        * flexbox를 사용하여 좌우 정렬을 완벽하게 구현합니다.
                                         */}
-                                        <div className="flex flex-col text-sm text-muted-foreground mt-1">
-                                            {/* 고가 섹션 */}
-                                            <div className="flex justify-between items-center w-full">
-                                                <span className="text-red-500">고가</span>
+                                        <div className="flex justify-between items-center">
+                                            {/* 좌측: 종목명 (상) & 종목코드 (하, 작게) */}
+                                            <div className="flex flex-col">
+                                                <span className="font-medium text-base">{stock.name}</span>
+                                                <span className="text-sm text-muted-foreground">{stock.code}</span>
+                                            </div>
+                                            {/* 우측: 고가 (상) & 저가 (하) */}
+                                            <div className="flex flex-col items-end">
                                                 <span className="text-right text-red-500 font-semibold tabular-nums">
                                                     {stock.high.toLocaleString()}원
                                                 </span>
-                                            </div>
-                                            {/* 저가 섹션 */}
-                                            <div className="flex justify-between items-center w-full mt-1">
-                                                <span className="text-blue-500">저가</span>
                                                 <span className="text-right text-blue-500 font-semibold tabular-nums">
                                                     {stock.low.toLocaleString()}원
                                                 </span>
