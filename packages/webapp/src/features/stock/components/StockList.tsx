@@ -61,16 +61,17 @@ export const StockList = React.memo(({stocks, selectedStock, onStockSelect}: Sto
                                                 <span className="text-sm text-muted-foreground">{stock.code}</span>
                                             </div>
                                             {/* 우측: 고가 (상) & 저가 (하) */}
-                                            <div className="flex flex-col items-end">
-                                                <span className="text-right text-red-500 font-semibold tabular-nums">
-                                                    {stock.high.toLocaleString()}원
-                                                </span>
-                                                <span className="inline-flex items-center justify-center rounded-md bg-red-200 w-5 h-5 text-red-700 text-xs font-bold leading-none">고</span>
-                                                <span className="text-right text-blue-500 font-semibold tabular-nums">
-                                                    {stock.low.toLocaleString()}원
-                                                </span>
-                                                <span className="inline-flex items-center justify-center rounded-md bg-blue-200 w-5 h-5 text-blue-700 text-xs font-bold leading-none">저</span>
-
+                                            <div className="flex flex-col items-end space-y-1">
+                                                <div className="flex items-center space-x-1">
+                                                    <span className="text-red-500 font-semibold tabular-nums text-right">{stock.high.toLocaleString()}원</span>
+                                                    {/* 고가 배지 추가 - 더 현대적이고 예쁜 디자인으로 수정 */}
+                                                    <span className="inline-flex items-center justify-center rounded-md bg-red-200 w-5 h-5 text-red-700 text-xs font-bold leading-none">고</span>
+                                                </div>
+                                                <div className="flex items-center space-x-1">
+                                                    <span className="text-blue-500 font-semibold tabular-nums text-right">{stock.low.toLocaleString()}원</span>
+                                                    {/* 저가 배지 추가 - 더 현대적이고 예쁜 디자인으로 수정 */}
+                                                    <span className="inline-flex items-center justify-center rounded-md bg-blue-200 w-5 h-5 text-blue-700 text-xs font-bold leading-none">저</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </TableCell>
