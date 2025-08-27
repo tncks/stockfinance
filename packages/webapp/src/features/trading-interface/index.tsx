@@ -9,6 +9,8 @@ import {Search, TrendingUp, TrendingDown} from "lucide-react";
 import {toast} from "sonner";
 import {ZodError} from "zod";
 import {tradeOrderSchema} from "@/shared/lib/validations";
+import "../../assets/styles/master.css";
+import "../../styles/master.css";
 
 const stockList = [
     {symbol: 'AAPL', name: '애플', price: 163, change: 2, changePercent: 1.52},
