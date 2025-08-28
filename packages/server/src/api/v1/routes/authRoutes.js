@@ -17,13 +17,13 @@ router.get('/google', async (req, res) => {
 
     const redirectTo = `${CLOUD_LINUX_NODE_URL}/api/v1/auth/google_callback`;
 
-    const clientURLFromRequest = req.query.redirect_uri;
+    //const clientURLFromRequest = req.query.redirect_uri;
 
     const {data, error} = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
             redirectTo,
-            state: clientURLFromRequest
+            //state: clientURLFromRequest
             // queryParams: {
             //     access_type: 'offline',
             //     prompt: 'consent',
@@ -36,6 +36,9 @@ router.get('/google', async (req, res) => {
         return res.status(500).json({error: 'Internal server error 500'})
     }
 
+    console.log('39th line log:');
+    console.log(data.url);
+    console.log('------------');
     res.redirect(data.url);
 });
 
