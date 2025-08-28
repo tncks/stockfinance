@@ -4,10 +4,9 @@ import {TradingInterface} from "@/features/trading-interface";
 import {OrderBookBox} from "@/features/order-book-box";
 import {StockDashboard} from "@/features/stock-dashboard";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/shared/ui/tabs";
-import { createClient } from '@supabase/supabase-js';
+import { supabase } from '@/shared/lib/supabaseClient';
 import type { accounts, CredentialResponse } from 'google-one-tap'
 declare const google: { accounts: accounts }
-const supabase_ = createClient(`https://ruxnzwuyjfwilwqrqfzl.supabase.co`,`eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ1eG56d3V5amZ3aWx3cXJxZnpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU3NTM0NzcsImV4cCI6MjA3MTMyOTQ3N30.QM36RTmrB93igO1U7Ok9beqlsh6tDrqHuFvmeBkej8Q`);
 const generateNonce = async (): Promise<string[]> => {
     const nonce = btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(32))))
     const encoder = new TextEncoder()
@@ -61,17 +60,17 @@ const GoogleLoginButton = () => {
             console.log("Nonce: ", nonce, hashedNonce);
 
             // 세션 확인
-            const { data, error } = await supabase_.auth.getSession();
+            const { data, error } = await supabase.auth.getSession();
             if (error) {
                 console.error("Error getting session", error);
             }
 
             if (typeof window !== "undefined" && (window as any).google) {
                 (window as any).google.accounts.id.initialize({
-                    client_id: `171446773526-9lsgvbh4hnlhc5nrjp8tbm7scnv3a22l.apps.googleusercontent.com`, // Vite 기준
+                    client_id: `171446773526-9lsgvbh4hnlhc5nrjp8tbm7scnv3a22l.apps.googleusercontent.com`,
                     callback: async (response: any) => {
                         try {
-                            const { data, error } = await supabase_.auth.signInWithIdToken({
+                            const { data, error } = await supabase.auth.signInWithIdToken({
                                 provider: "google",
                                 token: response.credential,
                                 nonce, // 문자열만 전달
@@ -98,7 +97,7 @@ const GoogleLoginButton = () => {
         document.body.appendChild(script);
     }, []);
 
-    return null; // 버튼 UI가 필요하면 따로 div나 button 만들어 넣으면 됨
+    return null;
 };
 
 
@@ -106,10 +105,32 @@ export function TradingDashboard() {
 
 
     const [activeTab, setActiveTab] = useState("overview");
+    const [user, setUser] = useState<any>(null);
 
     const totalPortfolioValue = portfolioItems.reduce((sum, item) => sum + item.totalValue, 0);
     const totalGain = portfolioItems.reduce((sum, item) => sum + item.gain, 0);
     const totalGainPercent = (totalGain / (totalPortfolioValue - totalGain)) * 100;
+
+
+    // 로그인/로그아웃 상태 감지
+    useEffect(() => {
+        const {
+            data: { subscription },
+        } = supabase.auth.onAuthStateChange((_event, session) => {
+            setUser(session?.user ?? null);
+        });
+
+        // cleanup
+        return () => {
+            subscription.unsubscribe();
+        };
+    }, []);
+
+    const handleLogout = /*async*/ () => {
+        return;
+        //await supabase.auth.signOut();
+        //setUser(null);
+    };
 
 
 
@@ -128,7 +149,19 @@ export function TradingDashboard() {
                         {/*<Badge variant="secondary" className="text-lg px-4 py-2">*/}
                         {/*    모의예수금: &#8361;5,000,000*/}
                         {/*</Badge>*/}
-                        <GoogleLoginButton/>
+                        {user ? (
+                            <>
+                                <span className="text-sm">👋 {user.email}</span>
+                                <button
+                                    onClick={handleLogout}
+                                    className="px-4 py-2 bg-red-500 text-white rounded-lg"
+                                >
+                                    로그아웃
+                                </button>
+                            </>
+                        ) : (
+                            <GoogleLoginButton />
+                        )}
                     </div>
                 </div>
 
