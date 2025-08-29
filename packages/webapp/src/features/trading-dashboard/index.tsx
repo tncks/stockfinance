@@ -4,8 +4,9 @@ import {TradingInterface} from "@/features/trading-interface";
 import {OrderBookBox} from "@/features/order-book-box";
 import {StockDashboard} from "@/features/stock-dashboard";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/shared/ui/tabs";
-import { supabase } from '@/shared/lib/supabaseClient';
-import type { accounts, CredentialResponse } from 'google-one-tap'
+import {supabase} from '@/shared/lib/supabaseClient';
+import type {accounts, CredentialResponse} from 'google-one-tap'
+
 declare const google: { accounts: accounts }
 const generateNonce = async (): Promise<string[]> => {
     const nonce = btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(32))))
@@ -60,7 +61,7 @@ const GoogleLoginButton = () => {
             console.log("Nonce: ", nonce, hashedNonce);
 
             // 세션 확인
-            const { data, error } = await supabase.auth.getSession();
+            const {data, error} = await supabase.auth.getSession();
             if (error) {
                 console.error("Error getting session", error);
             }
@@ -70,7 +71,7 @@ const GoogleLoginButton = () => {
                     client_id: `171446773526-9lsgvbh4hnlhc5nrjp8tbm7scnv3a22l.apps.googleusercontent.com`,
                     callback: async (response: any) => {
                         try {
-                            const { data, error } = await supabase.auth.signInWithIdToken({
+                            const {data, error} = await supabase.auth.signInWithIdToken({
                                 provider: "google",
                                 token: response.credential,
                                 nonce, // 문자열만 전달
@@ -115,7 +116,7 @@ export function TradingDashboard() {
     // 로그인/로그아웃 상태 감지
     useEffect(() => {
         const {
-            data: { subscription },
+            data: {subscription},
         } = supabase.auth.onAuthStateChange((_event, session) => {
             setUser(session?.user ?? null);
         });
@@ -133,14 +134,13 @@ export function TradingDashboard() {
     };
 
 
-
     return (
         <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/20">
             <div className="container mx-auto p-6 space-y-6">
                 {/* Header */}
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-4xl font-bold" style={{backgroundColor:"white"}}>
+                        <h1 className="text-4xl font-bold" style={{backgroundColor: "white"}}>
                             <img src="/stock_web_logo.svg" alt="로고" className="h-20 min-w-20"/>
                         </h1>
                         <p className="text-muted-foreground mt-2">&nbsp;</p>
@@ -160,54 +160,38 @@ export function TradingDashboard() {
                                 </button>
                             </>
                         ) : (
-                            <GoogleLoginButton />
+
+                            <div>
+                                <GoogleLoginButton/>
+                                <>
+                                    <div
+                                        id="g_id_onload"
+                                        data-client_id="<client ID>"
+                                        data-context="signin"
+                                        data-ux_mode="popup"
+                                        data-callback="handleSignInWithGoogle"
+                                        data-nonce=""
+                                        data-auto_select="true"
+                                        data-itp_support="true"
+                                        data-use_fedcm_for_prompt="true"
+                                        style={{visibility: 'hidden'}}
+                                    ></div>
+                                    <div
+                                        className="g_id_signin"
+                                        data-type="standard"
+                                        data-shape="pill"
+                                        data-theme="outline"
+                                        data-text="signin_with"
+                                        data-size="large"
+                                        data-logo_alignment="left"
+                                        style={{visibility: 'hidden'}}
+                                    ></div>
+                                </>
+                            </div>
                         )}
                     </div>
                 </div>
 
-                {/* (debug info: This component is currently disabled) Portfolio Summary */}
-                {/*<div className="grid grid-cols-1 md:grid-cols-3 gap-6">*/}
-                {/*    <Card className="bg-gradient-to-br from-card to-card/80 border-border/50">*/}
-                {/*        <CardHeader className="flex flex-row items-center justify-between pb-2">*/}
-                {/*            <CardTitle className="text-sm font-medium">포트폴리오 자산</CardTitle>*/}
-                {/*            <DollarSign className="h-4 w-4 text-muted-foreground"/>*/}
-                {/*        </CardHeader>*/}
-                {/*        <CardContent>*/}
-                {/*            <div className="text-2xl font-bold">${totalPortfolioValue.toFixed(2)}</div>*/}
-                {/*            <p className="text-xs text-muted-foreground">합산투자금액(예상값)</p>*/}
-                {/*        </CardContent>*/}
-                {/*    </Card>*/}
-
-                {/*    <Card className="bg-gradient-to-br from-card to-card/80 border-border/50">*/}
-                {/*        <CardHeader className="flex flex-row items-center justify-between pb-2">*/}
-                {/*            <CardTitle className="text-sm font-medium">오늘의 등락</CardTitle>*/}
-                {/*            {totalGain >= 0 ?*/}
-                {/*                <TrendingUp className="h-4 w-4 text-bull"/> :*/}
-                {/*                <TrendingDown className="h-4 w-4 text-bear"/>*/}
-                {/*            }*/}
-                {/*        </CardHeader>*/}
-                {/*        <CardContent>*/}
-                {/*            <div className={`text-2xl font-bold ${totalGain >= 0 ? 'text-bull' : 'text-bear'}`}>*/}
-                {/*                {totalGain >= 0 ? '+' : ''}${totalGain.toFixed(2)}*/}
-                {/*            </div>*/}
-                {/*            <p className="text-xs text-muted-foreground">*/}
-                {/*                {totalGain >= 0 ? '+' : ''}{totalGainPercent.toFixed(2)}%*/}
-                {/*            </p>*/}
-                {/*        </CardContent>*/}
-                {/*    </Card>*/}
-
-                {/*    <Card className="bg-gradient-to-br from-card to-card/80 border-border/50">*/}
-                {/*        <CardHeader className="flex flex-row items-center justify-between pb-2">*/}
-                {/*            <CardTitle className="text-sm font-medium">랭킹</CardTitle>*/}
-                {/*            <Users className="h-4 w-4 text-muted-foreground"/>*/}
-                {/*        </CardHeader>*/}
-                {/*        <CardContent>*/}
-                {/*            <div className="text-2xl font-bold text-accent">#127</div>*/}
-                {/*            <p className="text-xs text-muted-foreground">글로벌 리더보드</p>*/}
-                {/*        </CardContent>*/}
-                {/*    </Card>*/}
-                {/*</div>*/}
-                {/* end of display disabled comment */}
 
                 {/* Main Content Tabs */}
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
@@ -220,17 +204,6 @@ export function TradingDashboard() {
                     </TabsList>
 
                     <TabsContent value="overview" className="space-y-6">
-                        {/* Featured Stock Chart */}
-                        {/*<StockChart*/}
-                        {/*    symbol="AAPL"*/}
-                        {/*    data={stockData}*/}
-                        {/*    currentPrice={163}*/}
-                        {/*    change={13}*/}
-                        {/*    changePercent={9.17}*/}
-                        {/*/>*/}
-
-
-                        {/* Quick Portfolio Overview */}
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                             {portfolioItems.map((item) => (
                                 <PortfolioCard key={item.symbol} item={item}/>
@@ -258,6 +231,8 @@ export function TradingDashboard() {
                         <StockDashboard/>
                     </TabsContent>
                 </Tabs>
+
+                <div><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/></div>
 
 
             </div>
