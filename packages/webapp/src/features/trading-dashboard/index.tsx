@@ -127,110 +127,89 @@ export function TradingDashboard() {
     };
 
     return (
-        <>
-            {/* IMPROVEMENT: Added a style tag for scrollbar-hide and fade-in animation */}
-            <style>{`
-                .scrollbar-hide::-webkit-scrollbar {
-                    display: none;
-                }
-                .scrollbar-hide {
-                    -ms-overflow-style: none;
-                    scrollbar-width: none;
-                }                
-            `}</style>
-            <div className="min-h-screen bg-background text-foreground font-sans">
-                <div className="container mx-auto p-4 md:p-6 space-y-6">
-                    {/* Header */}
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                        <div>
-                            <h1 className="text-4xl font-bold">
-                                <img src="https://placehold.co/150x60/white/black?text=Logo" alt="로고"
-                                     className="h-16 min-w-16"/>
-                            </h1>
-                        </div>
-                        <div className="flex items-center gap-4">
-                            {user ? (
-                                <>
-                                    <span className="text-sm text-muted-foreground">👋 {user.email}</span>
-                                    <button
-                                        onClick={handleLogout}
-                                        className="px-4 py-2 bg-destructive text-destructive-foreground rounded-lg hover:bg-destructive/90 transition-colors"
-                                    >
-                                        로그아웃
-                                    </button>
-                                </>
-                            ) : (
-                                <div>
-                                    <GoogleLoginButton/>
-                                    <div className="px-4 py-2 border rounded-lg">로그인 해주세요</div>
-                                </div>
-                            )}
-                        </div>
+        <div className="min-h-screen bg-background text-foreground font-sans">
+            <div className="container mx-auto p-4 md:p-6 space-y-6">
+                {/* Header */}
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div>
+                        <h1 className="text-4xl font-bold">
+                            <img src="https://placehold.co/150x60/white/black?text=Logo" alt="로고" className="h-16 min-w-16"/>
+                        </h1>
                     </div>
-
-                    {/* Main Content with Vertical Tabs */}
-                    <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col md:flex-row gap-6">
-                        {/* IMPROVEMENT: Mobile optimized TabsList as suggested */}
-                        <TabsList
-                            className="flex flex-row overflow-x-auto md:flex-col md:w-48 p-2 bg-muted/50 rounded-lg scrollbar-hide">
-                            <TabsTrigger value="overview">
-                                <span className="md:hidden">오버뷰</span>
-                                <span className="hidden md:inline">컴포넌트-A(오버뷰)</span>
-                            </TabsTrigger>
-                            <TabsTrigger value="trade">
-                                <span className="md:hidden">트레이드</span>
-                                <span className="hidden md:inline">컴포넌트-B(트레이드)</span>
-                            </TabsTrigger>
-                            <TabsTrigger value="portfolio">
-                                <span className="md:hidden">포트폴리오</span>
-                                <span className="hidden md:inline">컴포넌트-C(포트폴리오)</span>
-                            </TabsTrigger>
-                            <TabsTrigger value="orderbookx">
-                                <span className="md:hidden">호가</span>
-                                <span className="hidden md:inline">컴포넌트-D(호가)</span>
-                            </TabsTrigger>
-                            <TabsTrigger value="sboard">
-                                <span className="md:hidden">차트</span>
-                                <span className="hidden md:inline">컴포넌트-E(차트)</span>
-                            </TabsTrigger>
-                        </TabsList>
-
-                        {/* Tab Content Area */}
-                        <div className="flex-1 min-w-0">
-                            <TabsContent value="overview"
-                                         className="mt-0 space-y-6 animate-fade-in">
-                                <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                                    {portfolioItems.map((item) => (
-                                        <PortfolioCard key={item.symbol} item={item}/>
-                                    ))}
-                                </div>
-                            </TabsContent>
-
-                            <TabsContent value="trade" className="mt-0 animate-fade-in">
-                                <TradingInterface/>
-                            </TabsContent>
-
-                            <TabsContent value="portfolio"
-                                         className="mt-0 space-y-6 animate-fade-in">
-                                <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                                    {portfolioItems.map((item) => (
-                                        <PortfolioCard key={item.symbol} item={item}/>
-                                    ))}
-                                </div>
-                            </TabsContent>
-
-                            <TabsContent value="orderbookx" className="mt-0 animate-fade-in">
-                                <OrderBookBox/>
-                            </TabsContent>
-
-                            <TabsContent value="sboard" className="mt-0 animate-fade-in">
-                                <StockDashboard/>
-                            </TabsContent>
-                        </div>
-                    </Tabs>
+                    <div className="flex items-center gap-4">
+                        {user ? (
+                            <>
+                                <span className="text-sm text-muted-foreground">👋 {user.email}</span>
+                                <button
+                                    onClick={handleLogout}
+                                    className="px-4 py-2 bg-destructive text-destructive-foreground rounded-lg hover:bg-destructive/90 transition-colors"
+                                >
+                                    로그아웃
+                                </button>
+                            </>
+                        ) : (
+                            <div>
+                                <GoogleLoginButton/>
+                                <div className="px-4 py-2 border rounded-lg">로그인 해주세요</div>
+                            </div>
+                        )}
+                    </div>
                 </div>
+
+                {/* Main Content with Fixed Vertical Tabs */}
+                <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col md:flex-row gap-6">
+                    {/* Updated TabsList: Always vertical, no scroll, fixed width on md screens */}
+                    <TabsList className="flex flex-col md:w-48 p-2 bg-muted/50 rounded-lg">
+                        <TabsTrigger value="overview">
+                            컴포넌트-A(오버뷰)
+                        </TabsTrigger>
+                        <TabsTrigger value="trade">
+                            컴포넌트-B(트레이드)
+                        </TabsTrigger>
+                        <TabsTrigger value="portfolio">
+                            컴포넌트-C(포트폴리오)
+                        </TabsTrigger>
+                        <TabsTrigger value="orderbookx">
+                            컴포넌트-D(호가)
+                        </TabsTrigger>
+                        <TabsTrigger value="sboard">
+                            컴포넌트-E(차트)
+                        </TabsTrigger>
+                    </TabsList>
+
+                    {/* Tab Content Area - no fade-in animation */}
+                    <div className="flex-1 min-w-0">
+                        <TabsContent value="overview" className="mt-0 space-y-6">
+                            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                                {portfolioItems.map((item) => (
+                                    <PortfolioCard key={item.symbol} item={item}/>
+                                ))}
+                            </div>
+                        </TabsContent>
+
+                        <TabsContent value="trade" className="mt-0">
+                            <TradingInterface/>
+                        </TabsContent>
+
+                        <TabsContent value="portfolio" className="mt-0 space-y-6">
+                            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                                {portfolioItems.map((item) => (
+                                    <PortfolioCard key={item.symbol} item={item}/>
+                                ))}
+                            </div>
+                        </TabsContent>
+
+                        <TabsContent value="orderbookx" className="mt-0">
+                            <OrderBookBox/>
+                        </TabsContent>
+
+                        <TabsContent value="sboard" className="mt-0">
+                            <StockDashboard/>
+                        </TabsContent>
+                    </div>
+                </Tabs>
             </div>
-        </>
+        </div>
     );
 }
 
