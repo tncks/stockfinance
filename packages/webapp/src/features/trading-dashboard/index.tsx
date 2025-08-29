@@ -142,7 +142,7 @@ export function TradingDashboard() {
                                 <span className="text-sm text-muted-foreground">👋 {user.email}</span>
                                 <button
                                     onClick={handleLogout}
-                                    className="px-4 py-2 bg-destructive text-destructive-foreground rounded-lg hover:bg-destructive/90 transition-colors"
+                                    className="px-4 py-2 bg-destructive text-destructive-foreground rounded-lg hover:bg-destructive/90"
                                 >
                                     로그아웃
                                 </button>
@@ -156,199 +156,94 @@ export function TradingDashboard() {
                     </div>
                 </div>
 
-                {/* Main Content with Fixed Vertical Tabs */}
-                <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col md:flex-row gap-6">
-                    {/* Updated TabsList: Always vertical, no scroll, fixed width on md screens */}
-                    <TabsList className="flex flex-col md:w-48 p-2 bg-muted/50 rounded-lg">
-                        <TabsTrigger value="overview">
-                            컴포넌트-A(오버뷰)
-                        </TabsTrigger>
-                        <TabsTrigger value="trade">
-                            컴포넌트-B(트레이드)
-                        </TabsTrigger>
-                        <TabsTrigger value="portfolio">
-                            컴포넌트-C(포트폴리오)
-                        </TabsTrigger>
-                        <TabsTrigger value="orderbookx">
-                            컴포넌트-D(호가)
-                        </TabsTrigger>
-                        <TabsTrigger value="sboard">
-                            컴포넌트-E(차트)
-                        </TabsTrigger>
-                    </TabsList>
-
-                    {/* Tab Content Area - no fade-in animation */}
-                    <div className="flex-1 min-w-0">
-                        <TabsContent value="overview" className="mt-0 space-y-6">
-                            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                                {portfolioItems.map((item) => (
-                                    <PortfolioCard key={item.symbol} item={item}/>
-                                ))}
-                            </div>
-                        </TabsContent>
-
-                        <TabsContent value="trade" className="mt-0">
-                            <TradingInterface/>
-                        </TabsContent>
-
-                        <TabsContent value="portfolio" className="mt-0 space-y-6">
-                            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                                {portfolioItems.map((item) => (
-                                    <PortfolioCard key={item.symbol} item={item}/>
-                                ))}
-                            </div>
-                        </TabsContent>
-
-                        <TabsContent value="orderbookx" className="mt-0">
-                            <OrderBookBox/>
-                        </TabsContent>
-
-                        <TabsContent value="sboard" className="mt-0">
-                            <StockDashboard/>
-                        </TabsContent>
+                {/* Main Content with Fixed Sidebar Layout */}
+                <div className="flex gap-6">
+                    {/* Fixed Left Sidebar */}
+                    <div className="w-60 flex-shrink-0">
+                        <div className="bg-muted/50 rounded-lg p-2 space-y-1">
+                            <button
+                                onClick={() => setActiveTab("overview")}
+                                className={`w-full px-4 py-3 text-left rounded-md focus:outline-none focus:ring-2 focus:ring-ring ${
+                                    activeTab === "overview"
+                                        ? "bg-primary text-primary-foreground font-semibold"
+                                        : "hover:bg-muted"
+                                }`}
+                            >
+                                컴포넌트-A(오버뷰)
+                            </button>
+                            <button
+                                onClick={() => setActiveTab("trade")}
+                                className={`w-full px-4 py-3 text-left rounded-md focus:outline-none focus:ring-2 focus:ring-ring ${
+                                    activeTab === "trade"
+                                        ? "bg-primary text-primary-foreground font-semibold"
+                                        : "hover:bg-muted"
+                                }`}
+                            >
+                                컴포넌트-B(트레이드)
+                            </button>
+                            <button
+                                onClick={() => setActiveTab("portfolio")}
+                                className={`w-full px-4 py-3 text-left rounded-md focus:outline-none focus:ring-2 focus:ring-ring ${
+                                    activeTab === "portfolio"
+                                        ? "bg-primary text-primary-foreground font-semibold"
+                                        : "hover:bg-muted"
+                                }`}
+                            >
+                                컴포넌트-C(포트폴리오)
+                            </button>
+                            <button
+                                onClick={() => setActiveTab("orderbookx")}
+                                className={`w-full px-4 py-3 text-left rounded-md focus:outline-none focus:ring-2 focus:ring-ring ${
+                                    activeTab === "orderbookx"
+                                        ? "bg-primary text-primary-foreground font-semibold"
+                                        : "hover:bg-muted"
+                                }`}
+                            >
+                                컴포넌트-D(호가)
+                            </button>
+                            <button
+                                onClick={() => setActiveTab("sboard")}
+                                className={`w-full px-4 py-3 text-left rounded-md focus:outline-none focus:ring-2 focus:ring-ring ${
+                                    activeTab === "sboard"
+                                        ? "bg-primary text-primary-foreground font-semibold"
+                                        : "hover:bg-muted"
+                                }`}
+                            >
+                                컴포넌트-E(차트)
+                            </button>
+                        </div>
                     </div>
-                </Tabs>
+
+                    {/* Main Content Area */}
+                    <div className="flex-1 min-w-0">
+                        {activeTab === "overview" && (
+                            <div className="space-y-6">
+                                <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                                    {portfolioItems.map((item) => (
+                                        <PortfolioCard key={item.symbol} item={item}/>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {activeTab === "trade" && <TradingInterface/>}
+
+                        {activeTab === "portfolio" && (
+                            <div className="space-y-6">
+                                <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                                    {portfolioItems.map((item) => (
+                                        <PortfolioCard key={item.symbol} item={item}/>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {activeTab === "orderbookx" && <OrderBookBox/>}
+
+                        {activeTab === "sboard" && <StockDashboard/>}
+                    </div>
+                </div>
             </div>
         </div>
     );
 }
-
-
-//
-// export function TradingDashboard() {
-//
-//
-//     const [activeTab, setActiveTab] = useState("overview");
-//     const [user, setUser] = useState<any>(null);
-//
-//     const totalPortfolioValue = portfolioItems.reduce((sum, item) => sum + item.totalValue, 0);
-//     const totalGain = portfolioItems.reduce((sum, item) => sum + item.gain, 0);
-//     const totalGainPercent = (totalGain / (totalPortfolioValue - totalGain)) * 100;
-//
-//
-//     // 로그인/로그아웃 상태 감지
-//     useEffect(() => {
-//         const {
-//             data: {subscription},
-//         } = supabase.auth.onAuthStateChange((_event, session) => {
-//             setUser(session?.user ?? null);
-//         });
-//
-//         // cleanup
-//         return () => {
-//             subscription.unsubscribe();
-//         };
-//     }, []);
-//
-//     const handleLogout = /*async*/ () => {
-//         return;
-//         //await supabase.auth.signOut();
-//         //setUser(null);
-//     };
-//
-//
-//     return (
-//         <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/20">
-//             <div className="container mx-auto p-6 space-y-6">
-//                 {/* Header */}
-//                 <div className="flex items-center justify-between">
-//                     <div>
-//                         <h1 className="text-4xl font-bold" style={{backgroundColor: "white"}}>
-//                             <img src="/stock_web_logo.svg" alt="로고" className="h-20 min-w-20"/>
-//                         </h1>
-//                         <p className="text-muted-foreground mt-2">&nbsp;</p>
-//                     </div>
-//                     <div className="flex items-center gap-4">
-//                         {/*<Badge variant="secondary" className="text-lg px-4 py-2">*/}
-//                         {/*    모의예수금: &#8361;5,000,000*/}
-//                         {/*</Badge>*/}
-//                         {user ? (
-//                             <>
-//                                 <span className="text-sm">👋 {user.email}</span>
-//                                 <button
-//                                     onClick={handleLogout}
-//                                     className="px-4 py-2 bg-red-500 text-white rounded-lg"
-//                                 >
-//                                     로그아웃
-//                                 </button>
-//                             </>
-//                         ) : (
-//
-//                             <div>
-//                                 <GoogleLoginButton/>
-//                                 <>
-//                                     <div
-//                                         id="g_id_onload"
-//                                         data-client_id="<client ID>"
-//                                         data-context="signin"
-//                                         data-ux_mode="popup"
-//                                         data-callback="handleSignInWithGoogle"
-//                                         data-nonce=""
-//                                         data-auto_select="true"
-//                                         data-itp_support="true"
-//                                         data-use_fedcm_for_prompt="true"
-//                                         style={{visibility: 'hidden'}}
-//                                     ></div>
-//                                     <div
-//                                         className="g_id_signin"
-//                                         data-type="standard"
-//                                         data-shape="pill"
-//                                         data-theme="outline"
-//                                         data-text="signin_with"
-//                                         data-size="large"
-//                                         data-logo_alignment="left"
-//                                         style={{visibility: 'hidden'}}
-//                                     ></div>
-//                                 </>
-//                             </div>
-//                         )}
-//                     </div>
-//                 </div>
-//
-//
-//                 {/* Main Content Tabs */}
-//                 <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-//                     <TabsList className="grid w-full grid-cols-5 bg-secondary/50">
-//                         <TabsTrigger value="overview">컴포넌트-A(오버뷰)</TabsTrigger>
-//                         <TabsTrigger value="trade">컴포넌트-B(트레이드)</TabsTrigger>
-//                         <TabsTrigger value="portfolio">컴포넌트-C(포트폴리오)</TabsTrigger>
-//                         <TabsTrigger value="orderbookx">컴포넌트-D(호가)</TabsTrigger>
-//                         <TabsTrigger value="sboard">컴포넌트-E(차트)</TabsTrigger>
-//                     </TabsList>
-//
-//                     <TabsContent value="overview" className="space-y-6">
-//                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-//                             {portfolioItems.map((item) => (
-//                                 <PortfolioCard key={item.symbol} item={item}/>
-//                             ))}
-//                         </div>
-//                     </TabsContent>
-//
-//                     <TabsContent value="trade">
-//                         <TradingInterface/>
-//                     </TabsContent>
-//
-//                     <TabsContent value="portfolio" className="space-y-6">
-//                         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-//                             {portfolioItems.map((item) => (
-//                                 <PortfolioCard key={item.symbol} item={item}/>
-//                             ))}
-//                         </div>
-//                     </TabsContent>
-//
-//                     <TabsContent value="orderbookx">
-//                         <OrderBookBox/>
-//                     </TabsContent>
-//
-//                     <TabsContent value="sboard">
-//                         <StockDashboard/>
-//                     </TabsContent>
-//                 </Tabs>
-//
-//                 <div><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/></div>
-//
-//
-//             </div>
-//         </div>
-//     );
-// }
