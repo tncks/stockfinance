@@ -5,7 +5,8 @@ import {OrderBookBox} from "@/features/order-book-box";
 import {StockDashboard} from "@/features/stock-dashboard";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/shared/ui/tabs";
 import {supabase} from '@/shared/lib/supabaseClient';
-import type {accounts, CredentialResponse} from 'google-one-tap'
+import type {accounts, CredentialResponse} from 'google-one-tap';
+import {DailyMissionSection} from "@/features/daily-mission-section";
 
 declare const google: { accounts: accounts }
 const generateNonce = async (): Promise<string[]> => {
@@ -219,9 +220,7 @@ export function TradingDashboard() {
                         {activeTab === "overview" && (
                             <div className="space-y-6">
                                 <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                                    {portfolioItems.map((item) => (
-                                        <PortfolioCard key={item.symbol} item={item}/>
-                                    ))}
+                                    <DailyMissionSection/>
                                 </div>
                             </div>
                         )}
