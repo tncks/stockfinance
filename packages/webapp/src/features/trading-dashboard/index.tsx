@@ -219,8 +219,35 @@ export function TradingDashboard() {
                     <div className="flex-1 min-w-0">
                         {activeTab === "overview" && (
                             <div className="space-y-6">
-                                <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                                    <DailyMissionSection/>
+                                {/* Today Course Section */}
+                                <div>
+                                    <h2 className="text-xl font-semibold text-gray-700 mb-6">Today Course</h2>
+
+                                    <div className="space-y-4">
+                                        {/* Mission Card */}
+                                        <DailyMissionSection
+                                            title="오늘의 MISSION"
+                                            description="이건 첫번째 lesson, 금융 관련 주식 뉴스 찾아보고 3개 사보기"
+                                            backgroundColor="bg-green-100"
+                                            textColor="text-gray-700"
+                                        />
+
+                                        {/* Stock Terms Card */}
+                                        <DailyMissionSection
+                                            title="오늘의 주식 용어"
+                                            description="주식? 배당? 무슨 뜻일까? 찾아보라 가기"
+                                            backgroundColor="bg-orange-100"
+                                            textColor="text-gray-700"
+                                        />
+
+                                        {/* Article Card */}
+                                        <DailyMissionSection
+                                            title="오늘의 ARTICLE"
+                                            description="주식과 관련된 아티클 보러가기"
+                                            backgroundColor="bg-pink-100"
+                                            textColor="text-gray-700"
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         )}

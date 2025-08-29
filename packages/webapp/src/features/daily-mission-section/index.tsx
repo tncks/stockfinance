@@ -2,84 +2,28 @@ import React from "react";
 import {Card, CardContent} from "@/shared/ui/card";
 import {Button} from "@/shared/ui/button";
 
+
 interface DailyMissionSectionProps {
-    userName?: string;
-    dayCount?: number;
+    title: string;
+    description: string;
+    backgroundColor: string;
+    textColor?: string;
 }
-
-export function DailyMissionSection({
-                                        userName = "길동",
-                                        dayCount = 1,
-                                    }: DailyMissionSectionProps) {
+export function DailyMissionSection({ title, description, backgroundColor, textColor = "text-gray-700" }: DailyMissionSectionProps) {
     return (
-        <div>
-
-            {/*<div>*/}
-            {/*    <p>Today-Course</p>*/}
-            {/*</div>*/}
-            {/* Mission Card */}
-            <Card className="mt-8 bg-orange-50 border-none overflow-hidden">
-                <CardContent className="p-0">
-                    <div className="flex justify-between items-center p-4">
-                        <div className="space-y-2">
-                            <h3 className="text-lg font-bold">오늘의 MISSION</h3>
-                            <p className="text-sm text-gray-700">
-                                이전 첫번째 lesson, 금융 관련 주식 뉴스 찾아보고 3개 사보기
-                            </p>
-                        </div>
-                        <div className="flex-shrink-0">
-                            <img
-                                src="https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=200&q=80"
-                                alt="Mission Character"
-                                className="w-16 h-16 object-contain"
-                            />
-                        </div>
+        <Card className={`${backgroundColor} border-none shadow-sm cursor-pointer hover:shadow-md transition-all duration-200`}>
+            <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                        <h3 className={`text-lg font-bold mb-2 ${textColor}`}>{title}</h3>
+                        <p className={`text-sm ${textColor}`}>{description}</p>
                     </div>
-                </CardContent>
-            </Card>
-
-            {/* Stock Terms Card */}
-            <Card className="bg-orange-50 border-none overflow-hidden">
-                <CardContent className="p-0">
-                    <div className="flex justify-between items-center p-4">
-                        <div className="space-y-2">
-                            <h3 className="text-lg font-bold">오늘의 주식 용어</h3>
-                            <p className="text-sm text-gray-700">
-                                주식? 매도? 무슨 뜻일까? 찾아보러 가기
-                            </p>
-                        </div>
-                        <div className="flex-shrink-0">
-                            <img
-                                src="https://api.dicebear.com/7.x/avataaars/svg?seed=bear1"
-                                alt="Stock Terms Character"
-                                className="w-16 h-16 object-contain"
-                            />
-                        </div>
+                    <div className="ml-4">
+                        <img src="https://placehold.co/150x60/FF0000/FFFFFF?text=MyLogo" alt={title} className="w-16 h-16" />
                     </div>
-                </CardContent>
-            </Card>
-
-            {/* Article Card */}
-            <Card className="bg-orange-50 border-none overflow-hidden">
-                <CardContent className="p-0">
-                    <div className="flex justify-between items-center p-4">
-                        <div className="space-y-2">
-                            <h3 className="text-lg font-bold">오늘의 ARTICLE</h3>
-                            <p className="text-sm text-gray-700">
-                                주식과 관련된 아티클 보러가기
-                            </p>
-                        </div>
-                        <div className="flex-shrink-0">
-                            <img
-                                src="https://api.dicebear.com/7.x/avataaars/svg?seed=bear2"
-                                alt="Article Character"
-                                className="w-16 h-16 object-contain"
-                            />
-                        </div>
-                    </div>
-                </CardContent>
-            </Card>
-        </div>
+                </div>
+            </CardContent>
+        </Card>
     );
 }
 //
