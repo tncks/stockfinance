@@ -225,19 +225,17 @@ export function TradingDashboard() {
                                     <div
                                         className="bg-white rounded-xl p-6 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between space-y-4 md:space-y-0 md:space-x-4">
                                         <div className="flex-1">
-                                            <p className="text-lg font-bold text-gray-800 mb-1">안녕하세요, 주리니님!</p>
-                                            <p className="text-2xl font-extrabold text-gray-900 mb-3">주식 잡수 1일차에요!</p>
+                                            <p className="text-lg font-bold text-gray-900 mb-1">안녕하세요, 주리니님!</p>
+                                            <p className="text-2xl font-extrabold text-gray-900 mb-3">주식 잠수 {1}일차에요!</p>
                                             <p className="text-sm text-gray-600">오늘의 미션에 도전해 봐요!</p>
-                                            <p className="text-xs text-gray-500 mt-1">시작하기를 누르면 모의투자 페이지로 이동하게 됨.</p>
                                             <button
-                                                className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out shadow-md">
+                                                className="mt-4 px-6 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition duration-300 ease-in-out shadow-md">
                                                 시작하기
                                             </button>
                                         </div>
                                         <div
                                             className="relative p-2 bg-purple-100 rounded-full text-purple-700 text-sm font-medium whitespace-nowrap">
-                                            연꽃잎 머리에 쓴 린니
-                                            {/* PNG 이미지의 추상적인 요소 구현 */}
+                                            장식
                                             <div
                                                 className="absolute -top-2 -right-2 w-8 h-8 bg-purple-200 rounded-full opacity-50"></div>
                                         </div>
@@ -245,12 +243,12 @@ export function TradingDashboard() {
 
 
                                     <div>
-                                        <h2 className="text-xl font-semibold text-gray-700 mb-4">Today Course</h2>
+                                        <h2 className="text-xl font-semibold text-white mb-4">Today Course</h2>
                                         <div className="space-y-4">
                                             <DailyMissionSection
                                                 title="오늘의 MISSION"
                                                 description="이건 첫번째 lesson, 금융 관련 주식 뉴스 찾아보고 3개 사보기"
-                                                backgroundColor="bg-green-100"
+                                                backgroundColor="bg-orange-100"
                                                 textColor="text-gray-700"
                                             />
 
@@ -266,7 +264,7 @@ export function TradingDashboard() {
                                             <DailyMissionSection
                                                 title="오늘의 ARTICLE"
                                                 description="주식과 관련된 아티클 보러가기"
-                                                backgroundColor="bg-pink-100"
+                                                backgroundColor="bg-orange-100"
                                                 textColor="text-gray-700"
                                             />
                                         </div>
@@ -284,7 +282,6 @@ export function TradingDashboard() {
                                             <img src="https://placehold.co/150x60/FF0000/FFFFFF?text=MyLogo"
                                                  alt="place logo" className="w-16 h-16"/>
                                             <div>
-                                                <p className="text-purple-600 text-sm mb-1">한국 수 익어 월스트리트</p>
                                                 <h3 className="font-bold text-lg">나의 자산 현황</h3>
                                             </div>
                                         </div>
@@ -314,7 +311,7 @@ export function TradingDashboard() {
                                             </div>
                                         </div>
 
-                                        <div className="grid grid-cols-2 gap-4 text-sm">
+                                        <div className="grid grid-cols-2 gap-4 text-center text-sm">
                                             <div>
                                                 <p className="text-muted-foreground">보유 종목</p>
                                                 <p className="font-medium">국내</p>
@@ -326,36 +323,36 @@ export function TradingDashboard() {
 
                                         {/* Holdings */}
                                         <div className="space-y-3">
-                                            <div className="flex justify-between items-center py-2">
+                                            <div className="flex justify-between items-center py-2 px-1.5">
                                                 <div className="flex items-center space-x-2">
-                                                    <div className="w-8 h-8 bg-gray-300 rounded"></div>
+
                                                     <span className="font-medium">삼성증권</span>
                                                 </div>
                                                 <div className="text-right">
-                                                    <p className="font-semibold">100,200원</p>
-                                                    <p className="text-red-500 text-xs">+200원 200%</p>
+                                                    <p className="font-semibold">0원</p>
+                                                    <p className="text-white text-xs">+200원 200%</p>
                                                 </div>
                                             </div>
 
-                                            <div className="flex justify-between items-center py-2">
+                                            <div className="flex justify-between items-center py-2 px-1.5">
                                                 <div className="flex items-center space-x-2">
-                                                    <div className="w-8 h-8 bg-gray-300 rounded"></div>
+
                                                     <span className="font-medium">엘지전자</span>
                                                 </div>
                                                 <div className="text-right">
-                                                    <p className="font-semibold">200,200원</p>
-                                                    <p className="text-blue-500 text-xs">-200원 -200%</p>
+                                                    <p className="font-semibold">0원</p>
+                                                    <p className="text-white text-xs">-200원 -200%</p>
                                                 </div>
                                             </div>
 
-                                            <div className="flex justify-between items-center py-2">
+                                            <div className="flex justify-between items-center py-2 px-1.5">
                                                 <div className="flex items-center space-x-2">
-                                                    <div className="w-8 h-8 bg-gray-300 rounded"></div>
-                                                    <span className="font-medium">예술</span>
+
+                                                    <span className="font-medium">현대자동차</span>
                                                 </div>
                                                 <div className="text-right">
-                                                    <p className="font-semibold">100,200원</p>
-                                                    <p className="text-xs text-muted-foreground">+200원 100%</p>
+                                                    <p className="font-semibold">0원</p>
+                                                    <p className="text-white text-xs">+200원 100%</p>
                                                 </div>
                                             </div>
                                         </div>
