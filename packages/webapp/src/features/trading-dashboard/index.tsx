@@ -326,13 +326,13 @@ export function TradingDashboard() {
                                                 </div>
                                             </div>
                                             <div className="space-y-3">
-                                                <Card className="bg-white lg:col-span-1 flex flex-col h-[200px]">
+                                                <Card className="bg-white lg:col-span-1 flex flex-col h-full">
                                                     <CardHeader className="text-black">
                                                         &nbsp;
                                                     </CardHeader>
                                                     <CardContent className="flex-1 p-0">
                                                         <ScrollArea className="h-[200px]">
-                                                            <Table>
+                                                            <Table className="border-0">
                                                                 <TableHeader>
                                                                     <TableRow>
                                                                         <TableHead className="text-muted-foreground">국내</TableHead>
