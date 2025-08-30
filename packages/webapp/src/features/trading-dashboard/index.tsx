@@ -218,12 +218,12 @@ export function TradingDashboard() {
                     {/* Main Content Area */}
                     <div className="flex-1 min-w-0">
                         {activeTab === "overview" && (
-                            <div className="space-y-6">
+                            <div className="flex space-x-6">
                                 {/* Today Course Section */}
-                                <div>
-                                    <h2 className="text-xl font-semibold text-gray-700 mb-6">Today Course</h2>
 
-                                    <div className="space-y-4">
+                                    {/*<h2 className="text-xl font-semibold text-gray-700 mb-6">Today Course</h2>*/}
+
+                                    <div className="flex-1 space-y-4">
                                         {/* Mission Card */}
                                         <DailyMissionSection
                                             title="오늘의 MISSION"
@@ -235,7 +235,7 @@ export function TradingDashboard() {
                                         {/* Stock Terms Card */}
                                         <DailyMissionSection
                                             title="오늘의 주식 용어"
-                                            description="주식? 배당? 무슨 뜻일까? 찾아보라 가기"
+                                            description="주식? 배당? 무슨 뜻일까? 찾아보러 가기"
                                             backgroundColor="bg-orange-100"
                                             textColor="text-gray-700"
                                         />
@@ -248,7 +248,93 @@ export function TradingDashboard() {
                                             textColor="text-gray-700"
                                         />
                                     </div>
-                                </div>
+                                    <div className="flex-1 space-y-2">
+                                        {/* Profile Section */}
+                                        <div className="bg-orange-light/30 rounded-xl p-6 mb-6 relative overflow-hidden">
+                                            <div className="absolute top-4 right-4">
+                                                <div className="w-24 h-16 bg-orange-secondary/40 rounded-full"></div>
+                                            </div>
+                                            <div className="flex items-center space-x-4">
+                                                <img src="https://placehold.co/150x60/FF0000/FFFFFF?text=MyLogo" alt="place logo" className="w-16 h-16" />
+                                                <div>
+                                                    <p className="text-purple-600 text-sm mb-1">한국 수 익어 월스트리트</p>
+                                                    <h3 className="font-bold text-lg">나의 자산 현황</h3>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Asset Information */}
+                                        <div className="space-y-4">
+                                            {/* Total Assets */}
+                                            <div className="text-right">
+                                                <p className="text-sm text-muted-foreground">총 자산</p>
+                                                <p className="text-2xl font-bold text-orange-primary">10,967,862 원</p>
+                                            </div>
+
+                                            {/* Performance Metrics */}
+                                            <div className="grid grid-cols-3 gap-4 text-center text-sm">
+                                                <div>
+                                                    <p className="text-muted-foreground">어제까지</p>
+                                                    <p className="text-red-500 font-semibold">-3,055,080원</p>
+                                                </div>
+                                                <div>
+                                                    <p className="text-muted-foreground">손익</p>
+                                                    <p className="text-orange-primary font-semibold">1,692원</p>
+                                                </div>
+                                                <div>
+                                                    <p className="text-muted-foreground">수익률</p>
+                                                    <p className="text-orange-primary font-semibold">0.01%</p>
+                                                </div>
+                                            </div>
+
+                                            <div className="grid grid-cols-2 gap-4 text-sm">
+                                                <div>
+                                                    <p className="text-muted-foreground">보유 종목</p>
+                                                    <p className="font-medium">국내</p>
+                                                </div>
+                                                <div>
+                                                    <p className="text-muted-foreground">평가손익</p>
+                                                </div>
+                                            </div>
+
+                                            {/* Holdings */}
+                                            <div className="space-y-3">
+                                                <div className="flex justify-between items-center py-2">
+                                                    <div className="flex items-center space-x-2">
+                                                        <div className="w-8 h-8 bg-gray-300 rounded"></div>
+                                                        <span className="font-medium">삼성증권</span>
+                                                    </div>
+                                                    <div className="text-right">
+                                                        <p className="font-semibold">100,200원</p>
+                                                        <p className="text-red-500 text-xs">+200원 200%</p>
+                                                    </div>
+                                                </div>
+
+                                                <div className="flex justify-between items-center py-2">
+                                                    <div className="flex items-center space-x-2">
+                                                        <div className="w-8 h-8 bg-gray-300 rounded"></div>
+                                                        <span className="font-medium">엘지전자</span>
+                                                    </div>
+                                                    <div className="text-right">
+                                                        <p className="font-semibold">200,200원</p>
+                                                        <p className="text-blue-500 text-xs">-200원 -200%</p>
+                                                    </div>
+                                                </div>
+
+                                                <div className="flex justify-between items-center py-2">
+                                                    <div className="flex items-center space-x-2">
+                                                        <div className="w-8 h-8 bg-gray-300 rounded"></div>
+                                                        <span className="font-medium">예술</span>
+                                                    </div>
+                                                    <div className="text-right">
+                                                        <p className="font-semibold">100,200원</p>
+                                                        <p className="text-xs text-muted-foreground">+200원 100%</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                             </div>
                         )}
 
