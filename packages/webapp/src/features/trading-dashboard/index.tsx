@@ -1,4 +1,4 @@
-import {useState, useEffect} from "react";
+import React, {useState, useEffect} from "react";
 import {PortfolioCard} from "@/features/portfolio-card";
 import {TradingInterface} from "@/features/trading-interface";
 import {OrderBookBox} from "@/features/order-book-box";
@@ -8,6 +8,10 @@ import {supabase} from '@/shared/lib/supabaseClient';
 import type {accounts, CredentialResponse} from 'google-one-tap';
 import {DailyMissionSection} from "@/features/daily-mission-section";
 import {GreetingCard} from "@/features/greeting-card";
+import {Card, CardContent, CardHeader} from "@/shared/ui/card.tsx";
+import {Input} from "@/shared/ui/input.tsx";
+import {ScrollArea} from "@/shared/ui/scroll-area.tsx";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/shared/ui/table.tsx";
 
 declare const google: { accounts: accounts }
 const generateNonce = async (): Promise<string[]> => {
@@ -256,7 +260,7 @@ export function TradingDashboard() {
 
 
                                 <div className="flex flex-col space-y-6 flex-shrink-0 md:basis-[2%]">
-                                    <div className="bg-gray-300 p-0.5">
+                                    <div className="bg-black p-0.5">
 
                                         <div className="space-y-1">
                                             {/* Empty for margin space */}
@@ -269,20 +273,15 @@ export function TradingDashboard() {
 
                                 <div className="flex flex-col space-y-6 flex-shrink-0 md:basis-[38%]">
                                     <div className="bg-white rounded-xl p-6 shadow-sm">
-
-
                                         <div className="space-y-4">
-
-                                            <div className="grid grid-cols-2 gap-4 text-center text-sm">
-                                                <div>
+                                            <div className="grid grid-cols-2 gap-4 text-sm">
+                                                <div className="text-left">
                                                     <p className="text-muted-foreground">보유 종목</p>
                                                 </div>
-                                                <div>
-                                                    <p className="text-muted-foreground">평가손익</p>
+                                                <div className="text-right">
+                                                    <p className="text-muted-foreground text-right">평가손익</p>
                                                 </div>
                                             </div>
-
-
                                             <div className="space-y-3">
                                                 <div className="flex justify-between items-center py-2 px-1.5">
                                                     <div className="flex items-center space-x-2">
@@ -294,7 +293,6 @@ export function TradingDashboard() {
                                                         <p className="text-black text-xs">+200원 200%</p>
                                                     </div>
                                                 </div>
-
                                                 <div className="flex justify-between items-center py-2 px-1.5">
                                                     <div className="flex items-center space-x-2">
 
@@ -305,7 +303,6 @@ export function TradingDashboard() {
                                                         <p className="text-black text-xs">-200원 -200%</p>
                                                     </div>
                                                 </div>
-
                                                 <div className="flex justify-between items-center py-2 px-1.5">
                                                     <div className="flex items-center space-x-2">
 
@@ -316,6 +313,64 @@ export function TradingDashboard() {
                                                         <p className="text-black text-xs">+200원 100%</p>
                                                     </div>
                                                 </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-4">
+                                            <div className="grid grid-cols-2 gap-4 text-sm">
+                                                <div className="text-left">
+                                                    <p className="text-muted-foreground">보유 종목</p>
+                                                </div>
+                                                <div className="text-right">
+                                                    <p className="text-muted-foreground text-right">평가손익</p>
+                                                </div>
+                                            </div>
+                                            <div className="space-y-3">
+                                                <Card className="lg:col-span-1 flex flex-col h-[250px]">
+                                                    <CardHeader>
+                                                        보종_평손
+                                                    </CardHeader>
+                                                    <CardContent className="flex-1 p-0">
+                                                        <ScrollArea className="h-[200px]">
+                                                            <Table>
+                                                                <TableHeader>
+                                                                    <TableRow>
+                                                                        <TableHead>전_</TableHead>
+                                                                    </TableRow>
+                                                                </TableHeader>
+                                                                <TableBody>
+                                                                    <TableRow className={`cursor-pointer hover:bg-muted/50 transition-colors`}>
+                                                                        <TableCell>
+                                                                            <div className="flex justify-between items-center">
+                                                                                <div className="flex flex-col">
+                                                                                    <span className="text-red-600 font-medium text-base">{1}</span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </TableCell>
+                                                                    </TableRow>
+                                                                    <TableRow className={`cursor-pointer hover:bg-muted/50 transition-colors`}>
+                                                                        <TableCell>
+                                                                            <div className="flex justify-between items-center">
+                                                                                <div className="flex flex-col">
+                                                                                    <span className="text-red-600 font-medium text-base">{2}</span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </TableCell>
+                                                                    </TableRow>
+                                                                    <TableRow className={`cursor-pointer hover:bg-muted/50 transition-colors`}>
+                                                                        <TableCell>
+                                                                            <div className="flex justify-between items-center">
+                                                                                <div className="flex flex-col">
+                                                                                    <span className="text-red-600 font-medium text-base">{3}</span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </TableCell>
+                                                                    </TableRow>
+                                                                </TableBody>
+                                                            </Table>
+                                                        </ScrollArea>
+                                                    </CardContent>
+                                                </Card>
                                             </div>
                                         </div>
                                     </div>
@@ -346,3 +401,11 @@ export function TradingDashboard() {
         </div>
     );
 }
+
+
+
+
+
+
+
+
