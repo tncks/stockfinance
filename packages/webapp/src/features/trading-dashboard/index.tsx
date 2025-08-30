@@ -326,16 +326,16 @@ export function TradingDashboard() {
                                                 </div>
                                             </div>
                                             <div className="space-y-3">
-                                                <Card className="lg:col-span-1 flex flex-col h-[250px]">
-                                                    <CardHeader>
-                                                        보종_평손
+                                                <Card className="bg-white lg:col-span-1 flex flex-col h-[200px]">
+                                                    <CardHeader className="text-black">
+                                                        &nbsp;
                                                     </CardHeader>
                                                     <CardContent className="flex-1 p-0">
                                                         <ScrollArea className="h-[200px]">
                                                             <Table>
                                                                 <TableHeader>
                                                                     <TableRow>
-                                                                        <TableHead>전_</TableHead>
+                                                                        <TableHead className="text-muted-foreground">국내</TableHead>
                                                                     </TableRow>
                                                                 </TableHeader>
                                                                 <TableBody>
@@ -343,7 +343,7 @@ export function TradingDashboard() {
                                                                         <TableCell>
                                                                             <div className="flex justify-between items-center">
                                                                                 <div className="flex flex-col">
-                                                                                    <span className="text-red-600 font-medium text-base">{1}</span>
+                                                                                    <span className="text-black font-medium text-base">{`삼성`}</span>
                                                                                 </div>
                                                                             </div>
                                                                         </TableCell>
@@ -352,7 +352,7 @@ export function TradingDashboard() {
                                                                         <TableCell>
                                                                             <div className="flex justify-between items-center">
                                                                                 <div className="flex flex-col">
-                                                                                    <span className="text-red-600 font-medium text-base">{2}</span>
+                                                                                    <span className="text-black font-medium text-base">{`엘지`}</span>
                                                                                 </div>
                                                                             </div>
                                                                         </TableCell>
@@ -361,7 +361,16 @@ export function TradingDashboard() {
                                                                         <TableCell>
                                                                             <div className="flex justify-between items-center">
                                                                                 <div className="flex flex-col">
-                                                                                    <span className="text-red-600 font-medium text-base">{3}</span>
+                                                                                    <span className="text-black font-medium text-base">{`현대`}</span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </TableCell>
+                                                                    </TableRow>
+                                                                    <TableRow className={`cursor-pointer hover:bg-muted/50 transition-colors`}>
+                                                                        <TableCell>
+                                                                            <div className="flex justify-between items-center">
+                                                                                <div className="flex flex-col">
+                                                                                    <span className="text-black font-medium text-base">{`기아`}</span>
                                                                                 </div>
                                                                             </div>
                                                                         </TableCell>
