@@ -7,6 +7,7 @@ import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/shared/ui/tabs";
 import {supabase} from '@/shared/lib/supabaseClient';
 import type {accounts, CredentialResponse} from 'google-one-tap';
 import {DailyMissionSection} from "@/features/daily-mission-section";
+import {GreetingCard} from "@/features/greeting-card";
 
 declare const google: { accounts: accounts }
 const generateNonce = async (): Promise<string[]> => {
@@ -221,25 +222,7 @@ export function TradingDashboard() {
                         {activeTab === "overview" && (
                             <div className="flex flex-col md:flex-row md:space-y-0">
                                 <div className="flex flex-col space-y-6 flex-shrink-0 md:basis-[60%]">
-                                    {/*<WelcomeSection/>==*/}
-                                    <div
-                                        className="bg-white rounded-xl p-6 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between space-y-4 md:space-y-0 md:space-x-4">
-                                        <div className="flex-1">
-                                            <p className="text-lg font-bold text-gray-900 mb-1">안녕하세요, 주리니님!</p>
-                                            <p className="text-2xl font-extrabold text-gray-900 mb-3">주식 잠수 {1}일차에요!</p>
-                                            <p className="text-sm text-gray-600">오늘의 미션에 도전해 봐요!</p>
-                                            <button
-                                                className="mt-4 px-6 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition duration-300 ease-in-out shadow-md">
-                                                시작하기
-                                            </button>
-                                        </div>
-                                        <div
-                                            className="relative p-2 bg-purple-100 rounded-full text-purple-700 text-sm font-medium whitespace-nowrap">
-                                            장식
-                                            <div
-                                                className="absolute -top-2 -right-2 w-8 h-8 bg-purple-200 rounded-full opacity-50"></div>
-                                        </div>
-                                    </div>
+                                    <GreetingCard/>
 
 
                                     <div>
@@ -289,27 +272,6 @@ export function TradingDashboard() {
 
                                     {/* Asset Information */}
                                     <div className="space-y-4">
-                                        {/* Total Assets */}
-                                        <div className="text-right">
-                                            <p className="text-sm text-muted-foreground">총 자산</p>
-                                            <p className="text-2xl font-bold text-orange-primary">1 원</p>
-                                        </div>
-
-                                        {/* Performance Metrics */}
-                                        <div className="grid grid-cols-3 gap-4 text-center text-sm">
-                                            <div>
-                                                <p className="text-muted-foreground">어제까지</p>
-                                                <p className="text-red-500 font-semibold">0원</p>
-                                            </div>
-                                            <div>
-                                                <p className="text-muted-foreground">손익</p>
-                                                <p className="text-orange-primary font-semibold">0원</p>
-                                            </div>
-                                            <div>
-                                                <p className="text-muted-foreground">수익률</p>
-                                                <p className="text-orange-primary font-semibold">0.01%</p>
-                                            </div>
-                                        </div>
 
                                         <div className="grid grid-cols-2 gap-4 text-center text-sm">
                                             <div>
