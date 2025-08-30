@@ -316,6 +316,8 @@ export function TradingDashboard() {
                                             </div>
                                         </div>
 
+                                        <hr className="h-1 border-2"/>
+
                                         <div className="space-y-4">
                                             <div className="grid grid-cols-2 gap-4 text-sm">
                                                 <div className="text-left">
@@ -326,19 +328,19 @@ export function TradingDashboard() {
                                                 </div>
                                             </div>
                                             <div className="space-y-3">
-                                                <Card className="bg-white lg:col-span-1 flex flex-col h-full">
-                                                    <CardHeader className="text-black">
+                                                <Card className="bg-white lg:col-span-1 flex flex-col h-full border-white">
+                                                    <CardHeader className="text-black h-0.5 max-h-0.5">
                                                         &nbsp;
                                                     </CardHeader>
                                                     <CardContent className="flex-1 p-0">
                                                         <ScrollArea className="h-[200px]">
-                                                            <Table className="border-0">
+                                                            <Table className="border-0 border-white">
                                                                 <TableHeader>
                                                                     <TableRow>
                                                                         <TableHead className="text-muted-foreground">국내</TableHead>
                                                                     </TableRow>
                                                                 </TableHeader>
-                                                                <TableBody>
+                                                                <TableBody className="border-0 border-white">
                                                                     <TableRow className={`cursor-pointer hover:bg-muted/50 transition-colors`}>
                                                                         <TableCell>
                                                                             <div className="flex justify-between items-center">
