@@ -276,41 +276,41 @@ export function TradingDashboard() {
                                         <div className="space-y-4">
                                             <div className="grid grid-cols-2 gap-4 text-sm">
                                                 <div className="text-left">
-                                                    <p className="text-muted-foreground">보유 종목</p>
+                                                    <p className="text-muted-foreground">&nbsp;</p>
                                                 </div>
                                                 <div className="text-right">
-                                                    <p className="text-muted-foreground text-right">평가손익</p>
+                                                    <p className="text-muted-foreground text-right">&nbsp;</p>
                                                 </div>
                                             </div>
                                             <div className="space-y-3">
                                                 <div className="flex justify-between items-center py-2 px-1.5">
                                                     <div className="flex items-center space-x-2">
 
-                                                        <span className="text-black font-medium">삼성증권</span>
+                                                        <span className="text-black font-medium">&nbsp;</span>
                                                     </div>
                                                     <div className="text-right">
-                                                        <p className="text-black font-semibold">0원</p>
-                                                        <p className="text-black text-xs">+200원 200%</p>
+                                                        <p className="text-black font-semibold">&nbsp;</p>
+                                                        <p className="text-black text-xs">&nbsp;</p>
                                                     </div>
                                                 </div>
                                                 <div className="flex justify-between items-center py-2 px-1.5">
                                                     <div className="flex items-center space-x-2">
 
-                                                        <span className="text-black font-medium">엘지전자</span>
+                                                        <span className="text-black font-medium">&nbsp;</span>
                                                     </div>
                                                     <div className="text-right">
-                                                        <p className="text-black font-semibold">0원</p>
-                                                        <p className="text-black text-xs">-200원 -200%</p>
+                                                        <p className="text-black font-semibold">&nbsp;</p>
+                                                        <p className="text-black text-xs">&nbsp;</p>
                                                     </div>
                                                 </div>
                                                 <div className="flex justify-between items-center py-2 px-1.5">
                                                     <div className="flex items-center space-x-2">
 
-                                                        <span className="text-black font-medium">현대자동차</span>
+                                                        <span className="text-black font-medium">&nbsp;</span>
                                                     </div>
                                                     <div className="text-right">
-                                                        <p className="text-black font-semibold">0원</p>
-                                                        <p className="text-black text-xs">+200원 100%</p>
+                                                        <p className="text-black font-semibold">&nbsp;</p>
+                                                        <p className="text-black text-xs">&nbsp;</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -319,23 +319,26 @@ export function TradingDashboard() {
                                         <hr className="h-0.5 bg-gray-100 border-gray-100"/>
 
                                         <div className="space-y-4">
-                                            <div className="grid grid-cols-2 gap-4 text-sm">
-                                                <div className="text-left">
-                                                    <p className="text-muted-foreground">&nbsp;</p>
+                                            <div>
+                                                <div className="grid grid-cols-2 gap-4 text-sm">
+                                                    <div className="text-left">
+                                                        <p className="text-muted-foreground text-sm">보유 종목</p>
+                                                    </div>
+                                                    <div className="text-right">
+                                                        <p className="text-muted-foreground text-right text-sm">평가손익&nbsp;&nbsp;</p>
+                                                    </div>
                                                 </div>
-                                                <div className="text-right">
-                                                    <p className="text-muted-foreground text-right">&nbsp;</p>
-                                                </div>
+                                                <p className="text-muted-foreground text-left pl-1.5 pb-0.5 pt-0.5">국내</p>
                                             </div>
                                             <div className="space-y-3">
                                                 <Card className="bg-white lg:col-span-1 flex flex-col h-full border-white">
                                                     <CardHeader className="text-black h-0.5 max-h-0.5 pt-0 pb-0 pl-0 pr-0 mt-0 mb-0 ml-0 mr-0">
                                                         <div className="grid grid-cols-2 gap-4 text-sm">
                                                             <div className="text-left">
-                                                                <p className="text-muted-foreground text-sm">보유 종목</p>
+                                                                <p className="text-muted-foreground text-sm">&nbsp;</p>
                                                             </div>
                                                             <div className="text-right">
-                                                                <p className="text-muted-foreground text-right text-sm">평가손익</p>
+                                                                <p className="text-muted-foreground text-right text-sm">&nbsp;</p>
                                                             </div>
                                                         </div>
                                                     </CardHeader>
@@ -343,7 +346,7 @@ export function TradingDashboard() {
                                                         <ScrollArea className="h-[200px]">
                                                             <Table className="border-0 border-white">
                                                                 <TableHeader className="border-0 border-white">
-                                                                    <TableRow className="hover:bg-muted/95 transition-colors border-0 border-white">
+                                                                    <TableRow className="hover:bg-white transition-colors border-0 border-white">
                                                                         <TableHead className="text-muted-foreground">&nbsp;</TableHead>
                                                                     </TableRow>
                                                                 </TableHeader>
@@ -352,7 +355,7 @@ export function TradingDashboard() {
                                                                         <TableCell>
                                                                             <div className="flex justify-between items-center">
                                                                                 <div className="flex flex-col">
-                                                                                    <span className="text-black font-medium text-base">{`삼성`}</span>
+                                                                                    <span className="text-black font-medium text-base">{`삼성증권`}</span>
                                                                                 </div>
                                                                             </div>
                                                                         </TableCell>
@@ -361,7 +364,7 @@ export function TradingDashboard() {
                                                                         <TableCell>
                                                                             <div className="flex justify-between items-center">
                                                                                 <div className="flex flex-col">
-                                                                                    <span className="text-black font-medium text-base">{`엘지`}</span>
+                                                                                    <span className="text-black font-medium text-base">{`엘지전자`}</span>
                                                                                 </div>
                                                                             </div>
                                                                         </TableCell>
@@ -370,7 +373,7 @@ export function TradingDashboard() {
                                                                         <TableCell>
                                                                             <div className="flex justify-between items-center">
                                                                                 <div className="flex flex-col">
-                                                                                    <span className="text-black font-medium text-base">{`현대`}</span>
+                                                                                    <span className="text-black font-medium text-base">{`현대자동차`}</span>
                                                                                 </div>
                                                                             </div>
                                                                         </TableCell>
