@@ -3,13 +3,13 @@ import {PortfolioCard} from "@/features/portfolio-card";
 import {TradingInterface} from "@/features/trading-interface";
 import {OrderBookBox} from "@/features/order-book-box";
 import {StockDashboard} from "@/features/stock-dashboard";
-import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/shared/ui/tabs";
+//import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/shared/ui/tabs";
 import {supabase} from '@/shared/lib/supabaseClient';
 import type {accounts, CredentialResponse} from 'google-one-tap';
 import {DailyMissionSection} from "@/features/daily-mission-section";
 import {GreetingCard} from "@/features/greeting-card";
 import {Card, CardContent, CardHeader} from "@/shared/ui/card.tsx";
-import {Input} from "@/shared/ui/input.tsx";
+//import {Input} from "@/shared/ui/input.tsx";
 import {ScrollArea} from "@/shared/ui/scroll-area.tsx";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/shared/ui/table.tsx";
 
@@ -55,6 +55,22 @@ const portfolioItems = [
         totalValue: 7952,
         gain: 452,
         gainPercent: 6.03
+    }
+];
+
+
+const dummyTableMockData = [
+    {
+        test_name: '삼성증권',
+    },
+    {
+        test_name: '엘지전자',
+    },
+    {
+        test_name: '현대자동차',
+    },
+    {
+        test_name: '기아',
     }
 ];
 
@@ -351,42 +367,16 @@ export function TradingDashboard() {
                                                                     </TableRow>
                                                                 </TableHeader>
                                                                 <TableBody className="border-0 border-white">
-                                                                    <TableRow className={`cursor-pointer hover:bg-muted/50 transition-colors border-0 border-white`}>
-                                                                        <TableCell>
-                                                                            <div className="flex justify-between items-center">
-                                                                                <div className="flex flex-col">
-                                                                                    <span className="text-black font-medium text-base">{`삼성증권`}</span>
-                                                                                </div>
+                                                                    {dummyTableMockData.map((row, idx) => (
+                                                                        <TableRow
+                                                                            key={idx}
+                                                                            className={`cursor-pointer hover:bg-muted/50 transition-colors border-0 border-white`}><TableCell><div className="flex justify-between items-center">
+                                                                            <div className="flex flex-col">
+                                                                                <span className="text-black font-medium text-base">{row.test_name}</span>
                                                                             </div>
-                                                                        </TableCell>
-                                                                    </TableRow>
-                                                                    <TableRow className={`cursor-pointer hover:bg-muted/50 transition-colors border-0 border-white`}>
-                                                                        <TableCell>
-                                                                            <div className="flex justify-between items-center">
-                                                                                <div className="flex flex-col">
-                                                                                    <span className="text-black font-medium text-base">{`엘지전자`}</span>
-                                                                                </div>
-                                                                            </div>
-                                                                        </TableCell>
-                                                                    </TableRow>
-                                                                    <TableRow className={`cursor-pointer hover:bg-muted/50 transition-colors border-0 border-white`}>
-                                                                        <TableCell>
-                                                                            <div className="flex justify-between items-center">
-                                                                                <div className="flex flex-col">
-                                                                                    <span className="text-black font-medium text-base">{`현대자동차`}</span>
-                                                                                </div>
-                                                                            </div>
-                                                                        </TableCell>
-                                                                    </TableRow>
-                                                                    <TableRow className={`cursor-pointer hover:bg-muted/50 transition-colors border-0 border-white`}>
-                                                                        <TableCell>
-                                                                            <div className="flex justify-between items-center">
-                                                                                <div className="flex flex-col">
-                                                                                    <span className="text-black font-medium text-base">{`기아`}</span>
-                                                                                </div>
-                                                                            </div>
-                                                                        </TableCell>
-                                                                    </TableRow>
+                                                                        </div></TableCell></TableRow>
+
+                                                                    ))}
                                                                 </TableBody>
                                                             </Table>
                                                         </ScrollArea>
