@@ -316,21 +316,28 @@ export function TradingDashboard() {
                                             </div>
                                         </div>
 
-                                        <hr className="h-1 border-2"/>
+                                        <hr className="h-0.5 bg-gray-100 border-gray-100"/>
 
                                         <div className="space-y-4">
                                             <div className="grid grid-cols-2 gap-4 text-sm">
                                                 <div className="text-left">
-                                                    <p className="text-muted-foreground">보유 종목</p>
+                                                    <p className="text-muted-foreground">&nbsp;</p>
                                                 </div>
                                                 <div className="text-right">
-                                                    <p className="text-muted-foreground text-right">평가손익</p>
+                                                    <p className="text-muted-foreground text-right">&nbsp;</p>
                                                 </div>
                                             </div>
                                             <div className="space-y-3">
                                                 <Card className="bg-white lg:col-span-1 flex flex-col h-full border-white">
-                                                    <CardHeader className="text-black h-0.5 max-h-0.5">
-                                                        &nbsp;
+                                                    <CardHeader className="text-black h-0.5 max-h-0.5 pt-0 pb-0 mt-0 mb-0">
+                                                        <div className="grid grid-cols-2 gap-4 text-sm">
+                                                            <div className="text-left">
+                                                                <p className="text-muted-foreground text-sm">보유 종목</p>
+                                                            </div>
+                                                            <div className="text-right">
+                                                                <p className="text-muted-foreground text-right text-sm">평가손익</p>
+                                                            </div>
+                                                        </div>
                                                     </CardHeader>
                                                     <CardContent className="flex-1 p-0">
                                                         <ScrollArea className="h-[200px]">
@@ -341,7 +348,7 @@ export function TradingDashboard() {
                                                                     </TableRow>
                                                                 </TableHeader>
                                                                 <TableBody className="border-0 border-white">
-                                                                    <TableRow className={`cursor-pointer hover:bg-muted/50 transition-colors`}>
+                                                                    <TableRow className={`cursor-pointer hover:bg-muted/50 transition-colors border-0 border-white`}>
                                                                         <TableCell>
                                                                             <div className="flex justify-between items-center">
                                                                                 <div className="flex flex-col">
@@ -350,7 +357,7 @@ export function TradingDashboard() {
                                                                             </div>
                                                                         </TableCell>
                                                                     </TableRow>
-                                                                    <TableRow className={`cursor-pointer hover:bg-muted/50 transition-colors`}>
+                                                                    <TableRow className={`cursor-pointer hover:bg-muted/50 transition-colors border-0 border-white`}>
                                                                         <TableCell>
                                                                             <div className="flex justify-between items-center">
                                                                                 <div className="flex flex-col">
@@ -359,7 +366,7 @@ export function TradingDashboard() {
                                                                             </div>
                                                                         </TableCell>
                                                                     </TableRow>
-                                                                    <TableRow className={`cursor-pointer hover:bg-muted/50 transition-colors`}>
+                                                                    <TableRow className={`cursor-pointer hover:bg-muted/50 transition-colors border-0 border-white`}>
                                                                         <TableCell>
                                                                             <div className="flex justify-between items-center">
                                                                                 <div className="flex flex-col">
@@ -368,7 +375,7 @@ export function TradingDashboard() {
                                                                             </div>
                                                                         </TableCell>
                                                                     </TableRow>
-                                                                    <TableRow className={`cursor-pointer hover:bg-muted/50 transition-colors`}>
+                                                                    <TableRow className={`cursor-pointer hover:bg-muted/50 transition-colors border-0 border-white`}>
                                                                         <TableCell>
                                                                             <div className="flex justify-between items-center">
                                                                                 <div className="flex flex-col">
