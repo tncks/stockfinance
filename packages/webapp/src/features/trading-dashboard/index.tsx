@@ -255,67 +255,65 @@ export function TradingDashboard() {
                                 </div>
 
 
-                                <div className="flex flex-col space-y-6 flex-shrink-0 md:basis-[40%]">
-                                    <div className="bg-white rounded-xl p-6 shadow-sm">
-                                        {/* Profile Section */}
-                                        <div className="bg-orange-light/30 rounded-xl p-6 mb-6 relative overflow-hidden">
-                                            <div className="absolute top-4 right-4">
-                                                <div className="w-24 h-16 bg-orange-secondary/40 rounded-full"></div>
-                                            </div>
-                                            <div className="flex items-center space-x-4">
-                                                <img src="https://placehold.co/150x60/FF0000/FFFFFF?text=MyLogo"
-                                                     alt="place logo" className="w-16 h-16"/>
-                                                <div>
-                                                    <h3 className="font-bold text-lg">나의 자산 현황</h3>
-                                                </div>
-                                            </div>
+                                <div className="flex flex-col space-y-6 flex-shrink-0 md:basis-[2%]">
+                                    <div className="bg-gray-300 p-0.5">
+
+                                        <div className="space-y-1">
+                                            {/* Empty for margin space */}
                                         </div>
 
-                                        {/* Asset Information */}
+                                    </div>
+
+                                </div>
+
+
+                                <div className="flex flex-col space-y-6 flex-shrink-0 md:basis-[38%]">
+                                    <div className="bg-white rounded-xl p-6 shadow-sm">
+
+
                                         <div className="space-y-4">
 
                                             <div className="grid grid-cols-2 gap-4 text-center text-sm">
                                                 <div>
                                                     <p className="text-muted-foreground">보유 종목</p>
-                                                    <p className="font-medium">국내</p>
                                                 </div>
                                                 <div>
                                                     <p className="text-muted-foreground">평가손익</p>
                                                 </div>
                                             </div>
 
-                                            {/* Holdings */}
+
                                             <div className="space-y-3">
                                                 <div className="flex justify-between items-center py-2 px-1.5">
                                                     <div className="flex items-center space-x-2">
 
-                                                        <span className="font-medium">삼성증권</span>
+                                                        <span className="text-black font-medium">삼성증권</span>
                                                     </div>
                                                     <div className="text-right">
-                                                        <p className="font-semibold">0원</p>
-                                                        <p className="text-white text-xs">+200원 200%</p>
+                                                        <p className="text-black font-semibold">0원</p>
+                                                        <p className="text-black text-xs">+200원 200%</p>
                                                     </div>
                                                 </div>
 
                                                 <div className="flex justify-between items-center py-2 px-1.5">
                                                     <div className="flex items-center space-x-2">
 
-                                                        <span className="font-medium">엘지전자</span>
+                                                        <span className="text-black font-medium">엘지전자</span>
                                                     </div>
                                                     <div className="text-right">
-                                                        <p className="font-semibold">0원</p>
-                                                        <p className="text-white text-xs">-200원 -200%</p>
+                                                        <p className="text-black font-semibold">0원</p>
+                                                        <p className="text-black text-xs">-200원 -200%</p>
                                                     </div>
                                                 </div>
 
                                                 <div className="flex justify-between items-center py-2 px-1.5">
                                                     <div className="flex items-center space-x-2">
 
-                                                        <span className="font-medium">현대자동차</span>
+                                                        <span className="text-black font-medium">현대자동차</span>
                                                     </div>
                                                     <div className="text-right">
-                                                        <p className="font-semibold">0원</p>
-                                                        <p className="text-white text-xs">+200원 100%</p>
+                                                        <p className="text-black font-semibold">0원</p>
+                                                        <p className="text-black text-xs">+200원 100%</p>
                                                     </div>
                                                 </div>
                                             </div>
