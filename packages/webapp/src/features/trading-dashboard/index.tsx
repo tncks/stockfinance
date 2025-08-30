@@ -329,7 +329,7 @@ export function TradingDashboard() {
                                             </div>
                                             <div className="space-y-3">
                                                 <Card className="bg-white lg:col-span-1 flex flex-col h-full border-white">
-                                                    <CardHeader className="text-black h-0.5 max-h-0.5 pt-0 pb-0 mt-0 mb-0">
+                                                    <CardHeader className="text-black h-0.5 max-h-0.5 pt-0 pb-0 pl-0 pr-0 mt-0 mb-0 ml-0 mr-0">
                                                         <div className="grid grid-cols-2 gap-4 text-sm">
                                                             <div className="text-left">
                                                                 <p className="text-muted-foreground text-sm">보유 종목</p>
@@ -342,9 +342,9 @@ export function TradingDashboard() {
                                                     <CardContent className="flex-1 p-0">
                                                         <ScrollArea className="h-[200px]">
                                                             <Table className="border-0 border-white">
-                                                                <TableHeader>
-                                                                    <TableRow>
-                                                                        <TableHead className="text-muted-foreground">국내</TableHead>
+                                                                <TableHeader className="border-0 border-white">
+                                                                    <TableRow className="hover:bg-muted/95 transition-colors border-0 border-white">
+                                                                        <TableHead className="text-muted-foreground">&nbsp;</TableHead>
                                                                     </TableRow>
                                                                 </TableHeader>
                                                                 <TableBody className="border-0 border-white">
